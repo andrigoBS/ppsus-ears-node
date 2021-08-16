@@ -1,6 +1,6 @@
 # PPSUS EARS NODE (in development)
 ***
-###Description
+### Description
 **PT/BR:** Projeto desenvolvido na universidade do vale do itajaí
 voltado ao sistema de saude brasileiro, que visa acompanhar e
 analizar cosos de bebês que falham no teste da orelhinha.
@@ -16,13 +16,13 @@ analizar cosos de bebês que falham no teste da orelhinha.
 - swagger-ui-express ^4.1.6
 
 ## Installation
-- **1.** Run: **npm install**
-- **2.** Copy **".env.exemple"**, save with name **".env"** and configure yours environment variables.
+**1.** Run: `npm install` \
+**2.** Copy **".env.exemple"**, save with name **".env"** and configure yours environment variables. \
 
 ## Running
-- **1.** Run: **npm start**
+**1.** Run: `npm start` \
 
 ## Links to learn
-- https://www.npmjs.com/package/swagger-autogen   
-- https://swagger.io/docs
-- https://sequelize.org/master/manual/getting-started.html
+https://www.npmjs.com/package/swagger-autogen \
+https://swagger.io/docs \
+https://sequelize.org/master/manual/getting-started.html \

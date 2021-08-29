@@ -2,9 +2,8 @@
   "name": "ppsus-ears-node",
   "version": "0.0.1",
   "private": true,
-  "main": "src/server.js",
   "scripts": {
-    "start": "nodemon src/server.js --ignore docAutoGen"
+    "start": "nodemon -L --watch ./src --nolazy ./src/server.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

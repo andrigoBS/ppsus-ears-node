@@ -3,7 +3,7 @@ const router = express.Router();
 const swaggerFile = require('../../docAutoGen/swaggerOutput.json');
 const swaggerUI = require("swagger-ui-express");
 
-router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerFile));
+router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerFile))
 
 router.use('/admin', require('./admin/routes'));
 router.use('/institution', require('./institution/routes'));

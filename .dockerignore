@@ -1,0 +1,11 @@
+.idea
+.dockerignore
+node_modules
+npm-debug.log
+Dockerfile
+.git
+.gitignore
+.npmrc
+LICENSE
+README.md
+

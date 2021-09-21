@@ -1,4 +1,6 @@
+import "reflect-metadata";
 import Express, {Application} from 'express';
+import {createConnection} from "typeorm";
 import Dotenv from 'dotenv';
 import BodyParser from "body-parser";
 import Cors from './configs/Cors';
@@ -11,6 +13,9 @@ const server: Application = Express();
 
 /* Setup dot env */
 Dotenv.config();
+
+/* connect db. see .env for typeorm config */
+createConnection().then(() => console.log("DB Connect"))
 
 /* Setup CORS, adding this options to all response headers. */
 server.use(Cors);

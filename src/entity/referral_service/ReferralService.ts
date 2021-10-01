@@ -12,7 +12,7 @@ import {ReferralServiceEmail as Email} from "./ReferralServiceEmail";
 import {ReferralServiceAddress as Address} from "./ReferralServiceAddress";
 import {ReferralServicePhone as Phone} from "./ReferralServicePhone";
 
-@Entity( "referral_service")
+@Entity( "servico_referencia")
 export class ReferralService extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_servico"})

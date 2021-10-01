@@ -22,8 +22,8 @@ export class ReferralServiceEmail extends BaseEntity {
     @Column({name: "email", type: "varchar", length: 255, unique: true})
     email: string;
 
-    @Column({name: "nome_contato", type: "varchar", length: 45, nullable: true})
-    contactName: string;
+    @Column({name: "isPrincipal", type: "boolean", default: true})
+    isMainEmail: boolean;
 
     @JoinColumn({name: "id_servico"})
     @Index("fk_email_servico_referencia_servico_referencia_idx")

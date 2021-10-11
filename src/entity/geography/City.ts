@@ -8,7 +8,7 @@ export class City extends BaseEntity{
     id: number;
 
     @JoinColumn({name: "fk_regiao"})
-    @Index("`fk_municipio_regiao1_idx")
+    @Index("fk_municipio_regiao1_idx")
     @ManyToOne(() => Zone, zone => zone.cities)
     zone: Zone;
 

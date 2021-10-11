@@ -48,7 +48,7 @@ export class AddressComponent extends BaseEntity {
     cityId: number;
 
     @JoinColumn({name: "fk_municipio"})
-    @Index("`fk_endereco_municipio1_idx")
+    @Index("fk_endereco_municipio1_idx")
     @ManyToOne(() => City)
     city: City;
 }

@@ -1,41 +1,21 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    BaseEntity,
-    DeleteDateColumn,
-    ManyToOne,
-    Index,
-    JoinColumn, CreateDateColumn
-} from "typeorm";
-import {IsEmail} from "class-validator";
+import {Column, Entity, Index, JoinColumn, ManyToOne} from "typeorm";
 
 import {ReferralService} from "./ReferralService";
+import {Email} from "../decorators/Email";
 
 @Entity( "email_servico_referencia")
-export class ReferralServiceEmail extends BaseEntity {
+export class ReferralServiceEmail extends Email {
 
-    @PrimaryGeneratedColumn({name: "id_email"})
-    id: number;
+    @Column({name: "fk_servico", select: false,
+        comment: "Chave estrangeira do servico de referencia que tem esse email"
+    })
+    serviceId: number;
 
-    @IsEmail()
-    @Column({name: "email", type: "varchar", length: 255, unique: true})
-    email: string;
-
-    @Column({name: "isPrincipal", type: "boolean", default: true})
-    isMainEmail: boolean;
-
-    @JoinColumn({name: "id_servico"})
+    @JoinColumn({name: "fk_servico"})
     @Index("fk_email_servico_referencia_servico_referencia_idx")
     @ManyToOne(() => ReferralService, service => service.emails, {
         nullable: false
     })
     service: ReferralService;
-
-    @CreateDateColumn({name: "data_cadastro", type: "datetime"})
-    registrationDate: Date;
-
-    @DeleteDateColumn({name: "data_desativado", type: "datetime", nullable: true})
-    disableDate: Date;
 
 }

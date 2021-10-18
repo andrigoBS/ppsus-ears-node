@@ -1,7 +1,7 @@
-import {Column, Entity, Index, JoinColumn, ManyToOne} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne} from "typeorm";
 
 import {ReferralService} from "./ReferralService";
-import {Phone} from "../decorators/Phone";
+import {PhoneTemplate as Phone} from "../decorators/templates/PhoneTemplate";
 
 @Entity("tel_servico_referencia")
 export class ReferralServicePhone extends Phone {
@@ -11,7 +11,6 @@ export class ReferralServicePhone extends Phone {
     })
     serviceId: number;
 
-    @Index("fk_tel_servico_referencia_servico_referencia1_idx")
     @JoinColumn({name: "fk_servico"})
     @ManyToOne(() => ReferralService, service => service.phones, {
         nullable: false

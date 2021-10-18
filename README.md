@@ -3,7 +3,7 @@
 ### Description
 **PT/BR:** Projeto desenvolvido na universidade do vale do itajaí
 voltado ao sistema de saude brasileiro, que visa acompanhar e
-analizar cosos de bebês que falham no teste da orelhinha.
+analizar casos de bebês que falham no teste da orelhinha.
 
 ### Dependencies
 - node: ^14.0.0

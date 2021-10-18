@@ -3,8 +3,10 @@ import {
     Column,
     CreateDateColumn,
     DeleteDateColumn,
-    Entity, Index,
-    JoinColumn, ManyToOne, OneToMany,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn
 } from "typeorm";
 import {State} from "./State";
@@ -21,7 +23,6 @@ export class Zone extends BaseEntity {
     name: string;
 
     @JoinColumn({name: "fk_estado"})
-    @Index("fk_regiao_estado1_idx")
     @ManyToOne(() => State, state => state.zones, {
         nullable: false
     })

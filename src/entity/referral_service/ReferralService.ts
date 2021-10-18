@@ -1,16 +1,16 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
     BaseEntity,
+    Column,
+    CreateDateColumn,
     DeleteDateColumn,
+    Entity,
     OneToMany,
-    CreateDateColumn, OneToOne
+    PrimaryGeneratedColumn
 } from "typeorm";
 
 import {ReferralServiceEmail as Email} from "./ReferralServiceEmail";
-import {ReferralServiceAddress as Address} from "./ReferralServiceAddress";
 import {ReferralServicePhone as Phone} from "./ReferralServicePhone";
+import {AddressComponent as Address} from "../decorators/components/Address";
 
 @Entity( "servico_referencia")
 export class ReferralService extends BaseEntity {
@@ -43,6 +43,9 @@ export class ReferralService extends BaseEntity {
     })
     isSus: boolean;
 
+    @Column(() => Address, {prefix: false})
+    address: Address;
+
     @CreateDateColumn({name: "data_cadastro", type: "datetime",
         comment: "Data de cadastro do serviço de referencia"
     })
@@ -57,9 +60,6 @@ export class ReferralService extends BaseEntity {
         cascade: ["soft-remove", "recover", "remove"]
     })
     emails: Email[];
-
-    @OneToOne(() => Address, address => address.service)
-    address: Address;
 
     @OneToMany(() => Phone, phone => phone.service, {
         cascade: ["soft-remove", "recover", "remove"]

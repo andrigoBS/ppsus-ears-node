@@ -7,7 +7,7 @@ export class State extends BaseEntity {
     @PrimaryGeneratedColumn({name: "id_estado"})
     id: number;
 
-    @Column({name: "codigo_ibge", type: "number", update: false, unique: true})
+    @Column({name: "codigo_ibge", type: "int", update: false, unique: true})
     code: number;
 
     @Column({name: "nome", type: "varchar", length: 20, update: false})

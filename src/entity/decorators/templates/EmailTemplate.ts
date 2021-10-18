@@ -1,7 +1,7 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from "typeorm";
 import {IsEmail} from "class-validator";
 
-export abstract class Email extends BaseEntity {
+export abstract class EmailTemplate extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_email",
         comment: "Chave primaria de um email"
@@ -14,7 +14,7 @@ export abstract class Email extends BaseEntity {
     })
     email: string;
 
-    @Column({name: "is_principal", type: "boolean", default: true})
+    @Column({name: "is_principal", type: "boolean", default: false})
     isMainEmail: boolean;
 
     @CreateDateColumn({name: "data_cadastro", type: "datetime",

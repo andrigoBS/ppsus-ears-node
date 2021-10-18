@@ -1,4 +1,4 @@
-import {BaseEntity, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Zone} from "./Zone";
 
 @Entity("municipio")
@@ -8,7 +8,6 @@ export class City extends BaseEntity{
     id: number;
 
     @JoinColumn({name: "fk_regiao"})
-    @Index("fk_municipio_regiao1_idx")
     @ManyToOne(() => Zone, zone => zone.cities)
     zone: Zone;
 

@@ -1,7 +1,7 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from "typeorm";
 import {Length} from "class-validator";
 
-export class Phone extends BaseEntity {
+export class PhoneTemplate extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_tel",
         comment: "have primaria de um telefone"

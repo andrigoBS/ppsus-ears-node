@@ -1,8 +1,16 @@
-import {Router} from 'express';
-import Admin from './admin/Routes';
+import {Router} from 'express'
+import SecretaryController from "./secretary/SecretaryController";
 
-const router: Router = Router();
+export default class Routes {
+    private readonly router: Router
 
-router.use('/admin', Admin);
+    constructor() {
+        this.router = Router()
 
-export default router;
+        this.router.use('/secretary', new SecretaryController().getRouter())
+    }
+
+    public getRouter(): Router{
+        return this.router
+    }
+};

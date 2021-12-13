@@ -9,7 +9,7 @@ export class ReferralServiceEmail extends Email {
     @Column({name: "fk_servico", select: false,
         comment: "Chave estrangeira do servico de referencia que tem esse email"
     })
-    serviceId!: number;
+    serviceId: number;
 
     @JoinColumn({name: "fk_servico"})
     @ManyToOne(() => ReferralService, service => service.emails, {

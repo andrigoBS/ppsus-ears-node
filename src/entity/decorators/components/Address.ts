@@ -1,7 +1,11 @@
 import {Column, JoinColumn, ManyToOne} from "typeorm";
 import {City} from "../../geography/City";
 
-
+/**
+ * Componente de Endereço.
+ *
+ * Este é um componente genérico que pode ser usado como coluna de uma tabela.
+ */
 export class AddressComponent {
 
     @Column({name: "rua", type: "varchar", length: 255,

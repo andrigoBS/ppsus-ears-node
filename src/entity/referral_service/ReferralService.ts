@@ -46,6 +46,8 @@ export class ReferralService extends BaseEntity {
     @Column(() => Address, {prefix: false})
     address: Address;
 
+    // Controle
+
     @CreateDateColumn({name: "data_cadastro", type: "datetime",
         comment: "Data de cadastro do serviço de referencia"
     })
@@ -55,6 +57,8 @@ export class ReferralService extends BaseEntity {
         comment: "Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data"
     })
     disableDate: Date;
+
+    // Relacionamentos
 
     @OneToMany(() => Email, email => email.service, {
         cascade: ["soft-remove", "recover", "remove"]

@@ -1,6 +1,12 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from "typeorm";
 import {IsEmail} from "class-validator";
 
+/**
+ * Entidade abstrata representando um e-mail.
+ *
+ * Esta entidade não representa uma tabela no banco, mas serve de
+ * template para várias tabelas.
+ */
 export abstract class EmailTemplate extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_email",
@@ -14,7 +20,9 @@ export abstract class EmailTemplate extends BaseEntity {
     })
     email: string;
 
-    @Column({name: "is_principal", type: "boolean", default: false})
+    @Column({name: "is_principal", type: "boolean", default: false,
+        comment: "Marca o email principal da conta"
+    })
     isMainEmail: boolean;
 
     @CreateDateColumn({name: "data_cadastro", type: "datetime",

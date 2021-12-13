@@ -1,6 +1,12 @@
 import {BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from "typeorm";
 import {Length} from "class-validator";
 
+/**
+ * Entidade abstrata representando um telefone.
+ *
+ * Esta entidade não representa uma tabela no banco, mas serve de
+ * template para várias tabelas.
+ */
 export class PhoneTemplate extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_tel",
@@ -23,6 +29,11 @@ export class PhoneTemplate extends BaseEntity {
         comment: "Diz se o número tem uma conta no whatsapp = 1 ou é fisico = 0"
     })
     isWhatsapp: boolean;
+
+    @Column({name: "is_principal", type: "boolean", default: false,
+        comment: "Marca o telefone principal da conta"
+    })
+    isMainPhone: boolean;
 
     @CreateDateColumn({name: "data_cadastro", type: "datetime",
         comment: "Data de cadastro do telefone"

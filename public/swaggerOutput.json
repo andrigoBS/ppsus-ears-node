@@ -19,8 +19,34 @@
     "application/json"
   ],
   "paths": {
-    "/admin/users/": {
+    "/secretary/referral-service/": {
       "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/secretary/referral-service/{id}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
         "tags": [],
         "description": "",
         "parameters": [],

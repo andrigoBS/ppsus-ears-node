@@ -1,8 +1,8 @@
-import Dotenv from "dotenv";
+import Dotenv from "dotenv"
 
-const swaggerAutogen: any = require('swagger-autogen')();
+const swaggerAutogen: any = require('swagger-autogen')()
 
-Dotenv.config();
+Dotenv.config()
 
 const config = {
     info: {
@@ -15,9 +15,9 @@ const config = {
     schemes: ['http', 'https'],
     consumes: ['application/json'],
     produces: ['application/json'],
-};
+}
 
-const outputFile = './public/swaggerOutput.json';
-const endpointsFiles = ['./src/controllers/routes'];
+const outputFile = './public/swaggerOutput.json'
+const endpointsFiles = ['./src/controllers/routes']
 
-swaggerAutogen(outputFile, endpointsFiles, config);
+swaggerAutogen(outputFile, endpointsFiles, config)

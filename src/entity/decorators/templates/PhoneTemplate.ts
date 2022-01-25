@@ -25,8 +25,8 @@ export class PhoneTemplate extends BaseEntity {
     })
     contactName: string;
 
-    @Column({name: "whatsapp", type: "boolean", default: false,
-        comment: "Diz se o número tem uma conta no whatsapp = 1 ou é fisico = 0"
+    @Column({name: "is_whatsapp", type: "boolean", default: false,
+        comment: "Diz se o número tem uma conta no whatsapp"
     })
     isWhatsapp: boolean;
 

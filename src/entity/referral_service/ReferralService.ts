@@ -12,11 +12,15 @@ import {ReferralServiceEmail as Email} from "./ReferralServiceEmail";
 import {ReferralServicePhone as Phone} from "./ReferralServicePhone";
 import {AddressComponent as Address} from "../decorators/components/Address";
 
+/**
+ * Serviço de referência para o qual o bebê é encaminhado
+ * de acordo com o parecer de um fonoaudiólogo.
+ */
 @Entity( "servico_referencia")
 export class ReferralService extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_servico",
-        comment: "Chave primaria do servico de referencia"
+        comment: "Chave primária do servico de referencia"
     })
     id: number;
 
@@ -39,7 +43,7 @@ export class ReferralService extends BaseEntity {
     cnes: string;
 
     @Column({name: "is_sus", type: "boolean", default: false,
-        comment: "Se o serviço de referencia é referente ao SUS caso 1 ou Privado caso 0"
+        comment: "Se o serviço de referencia é referente ao SUS  Privado"
     })
     isSus: boolean;
 

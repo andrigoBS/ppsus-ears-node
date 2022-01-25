@@ -30,26 +30,26 @@ export default class ReferralServiceController{
      */
     private async getOne(req: Request, res: Response, next: Function): Promise<Response> {
         return res.status(HttpStatus.ok).send({message: 'respond with a resource'});
-    };
+    }
 
     /**
      * Create
      */
     private async post(req: Request, res: Response, next: Function) : Promise<Response>{
         return res.status(HttpStatus.ok).send({message: 'respond with a resource'});
-    };
+    }
 
     /**
      * Update
      */
     private async put(req: Request, res: Response, next: Function) : Promise<Response>{
         return res.status(HttpStatus.ok).send({message: 'respond with a resource'});
-    };
+    }
 
     /**
      * Delete
      */
     private async delete(req: Request, res: Response, next: Function) : Promise<Response>{
         return res.status(HttpStatus.ok).send({message: 'respond with a resource'});
-    };
+    }
 }

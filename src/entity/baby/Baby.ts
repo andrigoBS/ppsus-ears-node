@@ -12,6 +12,10 @@ import {
 import {Guardian} from "../guardian/Guardian";
 import {JoinTable} from "typeorm/browser";
 
+/**
+ * Bebê que será submetido aos exames e, eventualmente,
+ * encaminhado à um serviço de referência.
+ */
 @Entity("bebe")
 export class Baby extends BaseEntity {
 

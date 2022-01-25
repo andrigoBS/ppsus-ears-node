@@ -1,6 +1,9 @@
 import {BaseEntity, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Zone} from "./Zone";
 
+/**
+ * Município o qual a clínica se encontra.
+ */
 @Entity("municipio")
 export class City extends BaseEntity{
 

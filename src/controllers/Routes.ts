@@ -13,4 +13,4 @@ export default class Routes {
     public getRouter(): Router{
         return this.router
     }
-};
+}

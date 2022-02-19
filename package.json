@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "npm run build && node build/src/server.js",
+    "start": "npm run build && node --inspect=0.0.0.0 build/src/server.js",
     "build": "tsc --project ./ && node build/src/swaggerGenerate.js && copyfiles public/* build && copyfiles package*.json build",
     "dev": "nodemon -L --ignore public --ignore node_modules --ignore build --ext ts --exec npm run start",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"

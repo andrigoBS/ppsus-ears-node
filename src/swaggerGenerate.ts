@@ -1,6 +1,6 @@
 import Dotenv from "dotenv"
 
-const swaggerAutogen: any = require('swagger-autogen')()
+const swaggerAutogen = require('swagger-autogen')()
 
 Dotenv.config()
 

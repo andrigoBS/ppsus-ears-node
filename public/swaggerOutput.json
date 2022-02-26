@@ -21,36 +21,133 @@
   "paths": {
     "/secretary/referral-service/": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "ReferralService"
+        ],
+        "description": "Endpoint para recuperar todos os serviços de referencia",
         "parameters": [],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       },
       "post": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "delete": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": [
+          "ReferralService"
+        ],
+        "description": "Endpoint para adicionar um serviço de referencia",
+        "parameters": [
+          {
+            "name": "referralService",
+            "in": "body",
+            "required": "true",
+            "description": "Nome e telefone do contado",
+            "type": "object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "João S. da Silva"
+                },
+                "cellphone": {
+                  "type": "string",
+                  "example": "554130306905"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     },
     "/secretary/referral-service/{id}": {
       "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": [
+          "ReferralService"
+        ],
+        "description": "Endpoint para recuperar um serviço de referencia pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       },
       "put": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": [
+          "ReferralService"
+        ],
+        "description": "Endpoint para atualizar um serviço de referencia",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "referralService",
+            "in": "body",
+            "required": "true",
+            "description": "Nome e telefone do contado",
+            "type": "object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "João S. da Silva"
+                },
+                "cellphone": {
+                  "type": "string",
+                  "example": "554130306905"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "ReferralService"
+        ],
+        "description": "Endpoint para deletar um serviço de referencia pelo id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     }
   },

@@ -19,7 +19,7 @@
     "application/json"
   ],
   "paths": {
-    "/secretary/referral-service/": {
+    "/secretary/referral-services/": {
       "get": {
         "tags": [
           "ReferralService"
@@ -68,7 +68,7 @@
         ]
       }
     },
-    "/secretary/referral-service/{id}": {
+    "/secretary/referral-services/{id}": {
       "get": {
         "tags": [
           "ReferralService"

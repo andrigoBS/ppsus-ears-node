@@ -7,7 +7,7 @@ export default class SecretaryController{
     constructor() {
         this.router = Router()
 
-        this.router.use('/referral-service', new ReferralServiceController().getRouter())
+        this.router.use('/referral-services', new ReferralServiceController().getRouter())
     }
 
     public getRouter(): Router{

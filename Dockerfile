@@ -1,12 +1,17 @@
 FROM node:lts-alpine AS build
 WORKDIR /usr/src/app
 COPY package*.json /usr/src/app/
-RUN --mount=type=secret,mode=0644,id=npmrc,target=/usr/src/app/.npmrc npm ci --only=production
+RUN npm install
+COPY public /usr/src/app/public
+COPY src /usr/src/app/src
+COPY tsconfig.json /usr/src/app/tsconfig.json
+RUN npm run build
 
 FROM node:lts-alpine
-RUN apk add dumb-init
 ENV NODE_ENV production
 USER node
 WORKDIR /usr/src/node
-COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/node/node_modules
-COPY --chown=node:node . /usr/src/node
+COPY --from=build /usr/src/app/build /usr/src/node
+RUN npm ci --only=production
+EXPOSE 80
+CMD ["node", "src/server.js"]

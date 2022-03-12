@@ -7,5 +7,5 @@ export default class HttpStatus {
    static readonly conflict = 409 //  Duplicate resource or resource already exists
    static readonly preconditionFailed  = 412 // One or more conditions in the request header fields evaluated to false
    static readonly internalServerError = 500 // A generic error occurred on the server
-   static readonly serviceUnavailable = 503 // The requested service is not available
+   static readonly serviceUnavailable = 503 // The requested services is not available
 }

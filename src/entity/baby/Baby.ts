@@ -4,13 +4,25 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinColumn, ManyToMany,
+    JoinColumn,
+    ManyToMany,
+    JoinTable,
     OneToOne,
     PrimaryGeneratedColumn
 } from "typeorm";
 
 import {Guardian} from "../guardian/Guardian";
-import {JoinTable} from "typeorm/browser";
+
+/**
+ * Tipos de parto aceitos pelo sistema
+ */
+export enum ChildBirth {
+    CESAREAN = "Parto Cirúrgico (Cesárea)",
+    NATURAL = "Parto Vaginal Natural",
+    VACUUM = "Parto Vaginal com Extrator a vácuo",
+    FORCEPS = "Parto Vaginal com Fórceps",
+    WATER = "Parto na água",
+}
 
 /**
  * Bebê que será submetido aos exames e, eventualmente,
@@ -49,7 +61,7 @@ export class Baby extends BaseEntity {
     })
     gestationalAge: number;
 
-    @Column({name: "tipo_parto", type: "enum", update: false,
+    @Column({name: "tipo_parto", type: "enum", update: false, enum: ChildBirth,
         comment: "Tipo do parto do bebê"
     })
     childBirthType: ChildBirth;
@@ -85,15 +97,4 @@ export class Baby extends BaseEntity {
     @ManyToMany(() => Guardian, guardian => guardian.ward)
     guardians: Guardian;
 
-}
-
-/**
- * Tipos de parto aceitos pelo sistema
- */
-export enum ChildBirth {
-    CESAREAN = "Parto Cirúrgico (Cesárea)",
-    NATURAL = "Parto Vaginal Natural",
-    VACUUM = "Parto Vaginal com Extrator a vácuo",
-    FORCEPS = "Parto Vaginal com Fórceps",
-    WATER = "Parto na água",
 }

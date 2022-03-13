@@ -23,7 +23,7 @@ class Server {
     public start(): void {
         this.express.set('port', process.env.SERVER_PORT)
         this.express.listen(process.env.SERVER_PORT, () => {
-            console.clear()
+            // console.clear()
             console.log(`${process.env.SERVER_NAME} running on port ${process.env.SERVER_PORT}.`)
         })
     }
@@ -38,6 +38,14 @@ class Server {
 
     /* connect db. see .env for typeorm config */
     private database(): void {
+        console.log("==== CONNECTION ====");
+        console.log(`
+            HOST: ${process.env.TYPEORM_HOST}
+            PORT: ${process.env.TYPEORM_PORT}
+            DB: ${process.env.TYPEORM_DATABASE}
+            USER: ${process.env.TYPEORM_USERNAME}
+            PASS: ${process.env.TYPEORM_PASSWORD}
+        `);
         createConnection().then(() => console.log("DB Connect"))
     }
 

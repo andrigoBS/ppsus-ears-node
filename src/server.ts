@@ -38,15 +38,9 @@ class Server {
 
     /* connect db. see .env for typeorm config */
     private database(): void {
-        console.log("==== CONNECTION ====");
-        console.log(`
-            HOST: ${process.env.TYPEORM_HOST}
-            PORT: ${process.env.TYPEORM_PORT}
-            DB: ${process.env.TYPEORM_DATABASE}
-            USER: ${process.env.TYPEORM_USERNAME}
-            PASS: ${process.env.TYPEORM_PASSWORD}
-        `);
-        createConnection().then(() => console.log("DB Connect"))
+        createConnection()
+            .then(() => console.log("DB Connect"))
+            .catch(console.error)
     }
 
     private routes(): void {

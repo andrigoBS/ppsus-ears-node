@@ -45,7 +45,7 @@ class Server {
 
     private routes(): void {
         this.express.use(new Routes().getRouter())
-        const swaggerFile: any = require('../public/swaggerOutput.json')
+        const swaggerFile: any = require('../swaggerOutput.json')
         this.express.use('/docs', SwaggerUI.serve, SwaggerUI.setup(swaggerFile))
     }
 }

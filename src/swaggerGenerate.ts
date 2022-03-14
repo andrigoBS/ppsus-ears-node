@@ -30,11 +30,11 @@ class SwaggerGenerate {
                 fs.writeFileSync(this.swaggerOutputFile, '{"swagger": "2.0"}')
             }
 
-            swaggerAutogen(this.swaggerOutputFile, this.endpointsFiles, config).then((r: {success: boolean, data: any}|boolean ) => {
-                if(r && typeof r !== "boolean" && r.success) {
-                    console.log(r)
+            swaggerAutogen(this.swaggerOutputFile, this.endpointsFiles, config).then((result: {success: boolean, data: any}|boolean ) => {
+                if(result && typeof result !== "boolean" && result.success) {
+                    console.log(result)
                 }else{
-                    let json = JSON.stringify(r)
+                    let json = JSON.stringify(result)
                     console.error("SwaggerError "+json)
                     throw new Error("SwaggerError "+json)
                 }

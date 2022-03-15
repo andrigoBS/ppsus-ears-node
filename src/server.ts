@@ -2,7 +2,6 @@ import "reflect-metadata"
 import Express, {Application} from 'express'
 import {createConnection} from "typeorm"
 import Dotenv from 'dotenv'
-import BodyParser from "body-parser"
 import Cors from 'cors'
 import Routes from './controllers/Routes'
 import SwaggerUI from "swagger-ui-express"
@@ -30,8 +29,8 @@ class Server {
 
     private middlewares(): void {
         /* Preparing middleware to parse different data formats */
-        this.express.use(BodyParser.json())
-        this.express.use(BodyParser.urlencoded({ extended: true, }))
+        this.express.use(Express.json())
+        this.express.use(Express.urlencoded({ extended: true, }))
         /* Setup CORS, adding this options to all response headers. */
         this.express.use(Cors())
     }

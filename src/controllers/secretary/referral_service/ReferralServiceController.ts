@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express'
-import HttpStatus from '../../../helpers/HttpStatus'
+import {HttpStatus} from '../../../helpers/HttpStatus'
 import {JwtAuth} from "../../../middleware/JwtAuth"
 
 export default class ReferralServiceController{
@@ -28,7 +28,7 @@ export default class ReferralServiceController{
                     "ApiKeyAuth": []
                 }]
             */
-            return res.status(HttpStatus.ok).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
         })
     }
 
@@ -41,7 +41,7 @@ export default class ReferralServiceController{
                     "ApiKeyAuth": []
                 }]
             */
-            return res.status(HttpStatus.ok).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
         })
     }
 
@@ -63,7 +63,7 @@ export default class ReferralServiceController{
             */
             let {name, cellphone, jwtObject} = req.body
 
-            return res.status(HttpStatus.ok).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
         })
     }
 
@@ -85,7 +85,7 @@ export default class ReferralServiceController{
             */
             let {name, cellphone, jwtObject} = req.body
 
-            return res.status(HttpStatus.ok).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
         })
     }
 
@@ -99,7 +99,7 @@ export default class ReferralServiceController{
                 }]
             */
 
-            return res.status(HttpStatus.ok).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
         })
     }
 }

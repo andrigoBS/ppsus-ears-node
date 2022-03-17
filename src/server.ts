@@ -7,7 +7,7 @@ import Routes from './controllers/Routes'
 import SwaggerUI from "swagger-ui-express"
 
 class Server {
-    public readonly express: Application
+    private readonly express: Application
 
     constructor() {
         /* Setup dot env */

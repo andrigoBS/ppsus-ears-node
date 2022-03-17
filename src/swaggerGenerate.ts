@@ -4,8 +4,8 @@ import fs from 'fs'
 const swaggerAutogen = require('swagger-autogen')()
 
 class SwaggerGenerate {
-    public readonly swaggerOutputFile = './build/swaggerOutput.json'
-    public readonly endpointsFiles = ['./src/controllers/Routes.ts']
+    private readonly swaggerOutputFile = './build/swaggerOutput.json'
+    private readonly endpointsFiles = ['./src/controllers/Routes.ts']
 
     constructor() {
         Dotenv.config()
@@ -17,7 +17,6 @@ class SwaggerGenerate {
         if(port !== 80){
             host += ":" + port
         }
-        console.log(host)
 
         const config = {
             info: {

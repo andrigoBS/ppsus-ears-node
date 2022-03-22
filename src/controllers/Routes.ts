@@ -8,6 +8,9 @@ export default class Routes {
         this.router = Router()
 
         this.router.use('/secretary', new SecretaryController().getRouter())
+        this.router.get('/institution', ((req, res) => {
+            return res.json({message: "CADE O TEU PHP AGORA?"});
+        }))
     }
 
     public getRouter(): Router{

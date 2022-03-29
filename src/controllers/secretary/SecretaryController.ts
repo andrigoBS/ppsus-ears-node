@@ -1,16 +1,11 @@
 import {Router} from 'express'
-import ReferralServiceController from "./referral_service/ReferralServiceController"
+import ReferralServiceController from "../service/ReferralServiceController"
+import AbstractController from "../AbstractController";
 
-export default class SecretaryController{
-    private readonly router: Router
+export default class SecretaryController extends AbstractController {
 
     constructor() {
-        this.router = Router()
-
-        this.router.use('/referral-services', new ReferralServiceController().getRouter())
-    }
-
-    public getRouter(): Router{
-        return this.router
+        super()
+        const router = this.getRouter()
     }
 }

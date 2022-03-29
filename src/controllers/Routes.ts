@@ -1,19 +1,15 @@
 import {Router} from 'express'
 import SecretaryController from "./secretary/SecretaryController";
+import AbstractController from "./AbstractController";
+import ReferralServiceController from "./service/ReferralServiceController";
 
-export default class Routes {
-    private readonly router: Router
+export default class Routes extends AbstractController {
 
     constructor() {
-        this.router = Router()
-
-        this.router.use('/secretary', new SecretaryController().getRouter())
-        this.router.get('/institution', ((req, res) => {
-            return res.json({message: "CADE O TEU PHP AGORA?"});
-        }))
+        super()
+        const router = this.getRouter()
+        router.use('/secretary', new SecretaryController().getRouter())
+        router.use('/referral-service', new ReferralServiceController().getRouter())
     }
 
-    public getRouter(): Router{
-        return this.router
-    }
 }

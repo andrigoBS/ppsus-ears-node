@@ -1,6 +1,7 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Zone} from "./Zone";
 import {SecretaryComponent as Secretary} from "../decorators/components/Secretary";
+import {IsEmail} from "class-validator";
 
 @Entity("estado")
 export class State extends BaseEntity {
@@ -16,6 +17,12 @@ export class State extends BaseEntity {
 
     @Column({name: "uf", type: "varchar", length: 2, update: false})
     uf: string;
+
+    @IsEmail()
+    @Column({name: "email", type: "varchar", length: 255, unique: true,
+        comment: "Endereço de email para contato"
+    })
+    email: string[];
 
     @Column(() => Secretary, {prefix: "secretaria"})
     secretary: Secretary;

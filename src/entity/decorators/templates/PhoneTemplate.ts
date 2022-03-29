@@ -10,7 +10,7 @@ import {Length} from "class-validator";
 export class PhoneTemplate extends BaseEntity {
 
     @PrimaryGeneratedColumn({name: "id_tel",
-        comment: "have primaria de um telefone"
+        comment: "Chave primaria de um telefone"
     })
     id: number;
 

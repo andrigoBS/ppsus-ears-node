@@ -24,7 +24,7 @@ export class Zone extends BaseEntity {
     @Column({name: "nome", type: "varchar", length: "45"})
     name: string;
 
-    @IsEmail()
+    @IsEmail({}, {each: true})
     @Column({name: "email", type: "varchar", length: 255, unique: true,
         comment: "Endereço de email para contato"
     })

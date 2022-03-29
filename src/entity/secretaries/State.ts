@@ -18,7 +18,7 @@ export class State extends BaseEntity {
     @Column({name: "uf", type: "varchar", length: 2, update: false})
     uf: string;
 
-    @IsEmail()
+    @IsEmail({}, {each: true})
     @Column({name: "email", type: "varchar", length: 255, unique: true,
         comment: "Endereço de email para contato"
     })

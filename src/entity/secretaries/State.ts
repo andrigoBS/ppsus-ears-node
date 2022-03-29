@@ -1,5 +1,6 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Zone} from "./Zone";
+import {SecretaryComponent as Secretary} from "../decorators/components/Secretary";
 
 @Entity("estado")
 export class State extends BaseEntity {
@@ -15,6 +16,9 @@ export class State extends BaseEntity {
 
     @Column({name: "uf", type: "varchar", length: 2, update: false})
     uf: string;
+
+    @Column(() => Secretary, {prefix: "secretaria"})
+    secretary: Secretary;
 
     @OneToMany(() => Zone, zone => zone.state, {
         cascade: ["soft-remove", "recover", "remove"]

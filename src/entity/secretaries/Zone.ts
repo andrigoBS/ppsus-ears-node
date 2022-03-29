@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import {State} from "./State";
 import {City} from "./City";
+import {SecretaryComponent as Secretary} from "../decorators/components/Secretary";
 
 
 @Entity("regiao")
@@ -27,6 +28,9 @@ export class Zone extends BaseEntity {
         nullable: false
     })
     state: State;
+
+    @Column(() => Secretary, {prefix: "secretaria"})
+    secretary: Secretary;
 
     @CreateDateColumn({name: "data_cadastro", type: "datetime"})
     registrationDate: Date;

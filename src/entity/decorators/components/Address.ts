@@ -1,5 +1,5 @@
 import {Column, JoinColumn, ManyToOne} from "typeorm";
-import {City} from "../../geography/City";
+import {City} from "../../secretaries/City";
 
 /**
  * Componente de Endereço.

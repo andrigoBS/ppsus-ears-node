@@ -1,0 +1,26 @@
+import {Column, OneToMany} from "typeorm";
+import {IsEmail} from "class-validator";
+import {SecretaryUser as User} from "../../secretaries/user/SecretaryUser";
+
+/**
+ * Componente de Secretaria.
+ *
+ * Este é um componente de Secretaria que é anexado ao estado ou à secretaria.
+ */
+export class SecretaryComponent {
+
+    @Column({name: "nome", type: "varchar", length: 255,
+        comment: "Rua em que se encontra esse endereço"
+    })
+    name: string;
+
+    @IsEmail()
+    @Column({name: "email", type: "varchar", length: 255, unique: true,
+        comment: "Endereço de email para contato"
+    })
+    email: string;
+
+    @OneToMany(() => User, user => user.zone? user.zone : user.state)
+    users: User[];
+
+}

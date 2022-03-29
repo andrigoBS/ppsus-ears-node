@@ -1,10 +1,11 @@
 import "reflect-metadata"
 import Express, {Application} from 'express'
-import {createConnection} from "typeorm"
+import {createConnection, getConnectionOptions} from "typeorm"
 import Dotenv from 'dotenv'
 import Cors from 'cors'
 import Routes from './controllers/Routes'
 import SwaggerUI from "swagger-ui-express"
+import {SnakeNamingStrategy} from "typeorm-naming-strategies";
 
 class Server {
     private readonly express: Application
@@ -22,7 +23,6 @@ class Server {
     public start(): void {
         this.express.set('port', process.env.SERVER_PORT)
         this.express.listen(process.env.SERVER_PORT, () => {
-            // console.clear()
             console.log(`${process.env.SERVER_NAME} running on port ${process.env.SERVER_PORT}.`)
         })
     }
@@ -37,9 +37,16 @@ class Server {
 
     /* connect db. see .env for typeorm config */
     private database(): void {
-        createConnection()
+        getConnectionOptions()
+            .then((envOptions) => {
+                return Object.assign(
+                    envOptions,
+                    {namingStrategy: new SnakeNamingStrategy()}
+                );
+            })
+            .then(createConnection)
             .then(() => console.log("DB Connect"))
-            .catch(console.error)
+            .catch(console.error);
     }
 
     private routes(): void {

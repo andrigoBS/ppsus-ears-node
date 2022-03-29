@@ -38,7 +38,7 @@ class SwaggerGenerate {
 
             swaggerAutogen(this.swaggerOutputFile, this.endpointsFiles, config).then((result: {success: boolean, data: any}|boolean ) => {
                 if(result && typeof result !== "boolean" && result.success) {
-                    console.log(result)
+                    console.log("Swagger generated");
                 }else{
                     let json = JSON.stringify(result)
                     console.error("SwaggerError "+json)

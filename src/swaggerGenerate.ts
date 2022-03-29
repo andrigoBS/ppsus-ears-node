@@ -29,6 +29,20 @@ class SwaggerGenerate {
             schemes: ['http', 'https'],
             consumes: ['application/json'],
             produces: ['application/json'],
+            securityDefinitions: {
+                apiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header', // can be 'header', 'query' or 'cookie'
+                    name: 'authorization', // name of the header, query parameter or cookie
+                    description: 'Bearer jwt token'
+                },
+                basicApiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header', // can be 'header', 'query' or 'cookie'
+                    name: 'authorization', // name of the header, query parameter or cookie
+                    description: 'Basic Base64(login:senha)'
+                }
+            }
         }
 
         try {

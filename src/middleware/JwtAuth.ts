@@ -6,7 +6,7 @@ import {HttpStatus} from "../helpers/HttpStatus";
 export class JwtAuth {
     private static readonly SECRET : string = process.env.JWT_SECRET || 'ppsus..!'
 
-    public verifyJWTMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    public verifyJWTMiddleware(req: Request, res: Response, next: NextFunction): any{
         let token: string | string[] | undefined = req.headers["authorization"]
 
         if (!token) {
@@ -24,5 +24,9 @@ export class JwtAuth {
         }
 
         return next()
+    }
+
+    public createJWToken(obj: object) : string {
+        return jwt.sign(obj, JwtAuth.SECRET)
     }
 }

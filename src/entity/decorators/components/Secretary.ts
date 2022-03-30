@@ -9,16 +9,16 @@ import {SecretaryUser as User} from "../../secretaries/user/SecretaryUser";
  */
 export class SecretaryComponent {
 
-    @Column({name: "nome", type: "varchar", length: 255,
+    @Column({name: "nome", type: "varchar", length: 255, nullable: true,
         comment: "Rua em que se encontra esse endereço"
     })
     name: string;
 
-    @IsEmail()
-    @Column({name: "email", type: "varchar", length: 255, unique: true,
-        comment: "Endereço de email para contato"
+    @IsEmail({}, {each: true})
+    @Column({name: "email", type: "simple-array", unique: true, nullable: true,
+        comment: "Endereços de email para contato"
     })
-    email: string;
+    emails: string[];
 
     @OneToMany(() => User, user => user.zone? user.zone : user.state)
     users: User[];

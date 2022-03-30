@@ -64,10 +64,14 @@ export default class StateController extends AbstractController {
         const state = await State.findOne(req.params.id);
         console.log(await State.count({where: emails}))
         if (!state) {
-            return res.status(HttpStatus.NOT_FOUND).json({error: "ID não encontrado"})
+            return res.status(HttpStatus.NOT_FOUND).json({message: "ID não encontrado"})
         }
-        Object.assign(state.secretary, {name, emails})
-        await state.save();
-        return res.status(HttpStatus.OK).json({state});
+        try {
+            Object.assign(state.secretary, {name, emails})
+            await state.save();
+            return res.status(HttpStatus.OK).json({state});
+        } catch (e: any) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: e.message})
+        }
     }
 }

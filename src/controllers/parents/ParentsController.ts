@@ -1,39 +1,33 @@
-import {Request, Response, Router} from 'express'
+import {Request, Response} from 'express'
 import {HttpStatus} from "../../helpers/HttpStatus";
 import LoginHelper from "../../helpers/LoginHelper";
-import jwt from "jsonwebtoken";
-import {JwtAuth} from "../../middleware/JwtAuth";
+import AbstractController from "../AbstractController";
 
-export default class SecretaryController{
-    private readonly router: Router
+export default class ParentsController extends AbstractController {
 
     constructor() {
-        this.router = Router()
-
-        this.createLoginRoute()
+        super()
+        const {login} = this
+        const router = this.getRouter()
+        router.post('/login', login)
     }
 
-    private createLoginRoute(): void {
-        this.router.post('/login', async (req: Request, res: Response, next: Function) => {
-            /*
-                #swagger.tags = ['Parents']
-                #swagger.description = 'Endpoint para logar um usuario pai'
-                #swagger.security = [{
-                    "basicApiKeyAuth": []
-                }
-            */
-
-            try{
-                const {login, password} = LoginHelper.basicAuthToObj(req.headers['authorization'])
-
-                return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
-            }catch (e: any){
-                return res.status(HttpStatus.BAD_REQUEST).send({message: e.message})
+    private login = async (req: Request, res: Response) => {
+        /*
+            #swagger.tags = ['Parents']
+            #swagger.description = 'Endpoint para logar um usuario pai'
+            #swagger.security = [{
+                "basicApiKeyAuth": []
             }
-        })
+        */
+
+        try{
+            const {login, password} = LoginHelper.basicAuthToObj(req.headers['authorization'])
+
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource', login, password})
+        }catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).send({message: e.message})
+        }
     }
 
-    public getRouter(): Router{
-        return this.router
-    }
 }

@@ -12,10 +12,12 @@ export default class SecretaryController extends AbstractController {
         const {login} = this
         const router = this.getRouter()
         router.use("/state", new StateController().getRouter())
+        router.use("/zone", new StateController().getRouter())
         router.post('/login', login)
     }
 
 
+    // Todo mover para controller de usuário quando criado
     private login = async (req: Request, res: Response) => {
         /*
             #swagger.tags = ['Secretary']
@@ -32,15 +34,11 @@ export default class SecretaryController extends AbstractController {
         }catch (e: any){
             return res.status(HttpStatus.UNAUTHORIZED).send({message: e.message})
         }
-
-        try{
-            const user = await SecretaryUser.findOneBy(authObj)
-
-            const token = this.getJwt().createJWToken({id: user.id})
-
-            return res.status(HttpStatus.OK).send({message: 'Created Token', token: token})
-        }catch (e: any){
+        const user = await SecretaryUser.findOne(authObj)
+        if (!user) {
             return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'})
         }
+        const token = this.getJwt().createJWToken({id: user.id})
+        return res.status(HttpStatus.OK).send({message: 'Created Token', token: token})
     }
 }

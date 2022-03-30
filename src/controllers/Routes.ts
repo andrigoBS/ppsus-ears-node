@@ -1,4 +1,3 @@
-import {Router} from 'express'
 import SecretaryController from "./secretary/SecretaryController";
 import AbstractController from "./AbstractController";
 import ReferralServiceController from "./service/ReferralServiceController";

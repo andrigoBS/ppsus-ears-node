@@ -2,6 +2,7 @@ import {Router} from 'express'
 import SecretaryController from "./secretary/SecretaryController";
 import AbstractController from "./AbstractController";
 import ReferralServiceController from "./service/ReferralServiceController";
+import ParentsController from "./parents/ParentsController";
 
 export default class Routes extends AbstractController {
 
@@ -10,6 +11,7 @@ export default class Routes extends AbstractController {
         const router = this.getRouter()
         router.use('/secretary', new SecretaryController().getRouter())
         router.use('/referral-service', new ReferralServiceController().getRouter())
+        router.use('/parents', new ParentsController().getRouter())
     }
 
 }

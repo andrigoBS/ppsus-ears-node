@@ -40,6 +40,6 @@ export default class SecretaryController extends AbstractController {
             return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'})
         }
         const token = this.getJwt().createJWToken({id: user.id})
-        return res.status(HttpStatus.OK).send({message: 'Created Token', token: token})
+        return res.status(HttpStatus.OK).send({message: 'Created Token', body: {token: token, user: {name: 'Deveria ter um nome?'}}})
     }
 }

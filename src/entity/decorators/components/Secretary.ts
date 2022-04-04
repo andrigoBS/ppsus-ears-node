@@ -18,9 +18,9 @@ export class SecretaryComponent {
     @Column({name: "email", type: "simple-array", unique: true, nullable: true,
         comment: "Endereços de email para contato"
     })
-    emails: string[];
+    emails?: string[];
 
     @OneToMany(() => User, user => user.zone? user.zone : user.state)
-    users: User[];
+    users?: User[];
 
 }

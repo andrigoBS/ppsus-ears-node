@@ -12,8 +12,6 @@ import {
 import {State} from "./State";
 import {City} from "./City";
 import {SecretaryComponent as Secretary} from "../decorators/components/Secretary";
-import {IsEmail} from "class-validator";
-
 
 @Entity("regiao")
 export class Zone extends BaseEntity {
@@ -23,12 +21,6 @@ export class Zone extends BaseEntity {
 
     @Column({name: "nome", type: "varchar", length: "45"})
     name: string;
-
-    @IsEmail({}, {each: true})
-    @Column({name: "email", type: "varchar", length: 255, unique: true,
-        comment: "Endereço de email para contato"
-    })
-    email: string[];
 
     @JoinColumn({name: "fk_estado"})
     @ManyToOne(() => State, state => state.zones, {

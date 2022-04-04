@@ -1,6 +1,6 @@
 import SecretaryController from "./secretary/SecretaryController";
 import AbstractController from "./AbstractController";
-import ReferralServiceController from "./service/ReferralServiceController";
+import ReferralServiceController from "./referral_service/ReferralServiceController";
 import ParentsController from "./parents/ParentsController";
 
 export default class Routes extends AbstractController {

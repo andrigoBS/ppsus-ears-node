@@ -81,7 +81,7 @@ export default class ReferralServiceController extends AbstractController{
         return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
     }
 
-    private deleteService = async (req: Request, res: Response, next: Function) => {
+    private deleteService = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['ReferralService']
            #swagger.description = 'Endpoint para deletar um serviço de referencia pelo id'

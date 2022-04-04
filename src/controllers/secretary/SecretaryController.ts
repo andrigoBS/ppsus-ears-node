@@ -4,6 +4,7 @@ import {Request, Response} from 'express'
 import {HttpStatus} from "../../helpers/HttpStatus";
 import LoginHelper from "../../helpers/LoginHelper";
 import {SecretaryUser} from "../../entity/secretaries/user/SecretaryUser";
+import ZoneController from "./ZoneController";
 
 export default class SecretaryController extends AbstractController {
 
@@ -12,7 +13,7 @@ export default class SecretaryController extends AbstractController {
         const {login} = this
         const router = this.getRouter()
         router.use("/state", new StateController().getRouter())
-        router.use("/zone", new StateController().getRouter())
+        router.use("/zone", new ZoneController().getRouter())
         router.post('/login', login)
     }
 

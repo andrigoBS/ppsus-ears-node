@@ -14,7 +14,7 @@ export class State extends BaseEntity {
     @Column({name: "nome", type: "varchar", length: 20, update: false})
     name: string;
 
-    @Column({name: "uf", type: "varchar", length: 2, update: false})
+    @Column({name: "uf", type: "varchar", length: 2, update: false, unique: true})
     uf: string;
 
     @Column(() => Secretary, {prefix: "secretaria"})

@@ -15,7 +15,7 @@ export class SecretaryComponent {
     name: string;
 
     @IsEmail({}, {each: true})
-    @Column({name: "email", type: "simple-array", unique: true, nullable: true,
+    @Column({name: "emails", type: "simple-array", unique: true, nullable: true,
         comment: "Endereços de email para contato"
     })
     emails?: string[];

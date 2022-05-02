@@ -42,6 +42,23 @@ class SwaggerGenerate {
                     name: 'authorization', // name of the header, query parameter or cookie
                     description: 'Basic Base64(login:senha)'
                 }
+            },
+            definitions: {
+                Secretary: {
+                    $name: "Secretaria de SC",
+                    $emails: ["email@email.com", "email@email.com"]
+                },
+                ZoneCreate: {
+                    $state: {
+                        id: 1,
+                    },
+                    $secretary: {
+                        $ref:"#/definitions/Secretary"
+                    },
+                    cities: [
+                        {id: 1}
+                    ]
+                }
             }
         }
 

@@ -18,7 +18,6 @@ export default class StateController extends AbstractController {
 
     private static getAll = async (req: Request, res: Response) => {
         /*
-           #swagger.tags = ['StateSecretary']
            #swagger.description = 'Endpoint para recuperar todas as secretarias de estado'
            #swagger.security = [{
                 "ApiKeyAuth": []
@@ -30,7 +29,6 @@ export default class StateController extends AbstractController {
 
     private static getById = async (req: Request, res: Response) => {
         /*
-           #swagger.tags = ['StateSecretary']
            #swagger.description = 'Endpoint para recuperar uma secretaria do estado pelo id'
            #swagger.security = [{
                 "ApiKeyAuth": []
@@ -45,17 +43,12 @@ export default class StateController extends AbstractController {
 
     private static updateSecretary = async (req: Request, res: Response) => {
         /*
-           #swagger.tags = ['StateSecretary']
            #swagger.description = 'Endpoint para atualizar uma secretaria do estado pelo id'
            #swagger.parameters['secretary'] = {
                in: 'body',
                required: 'true',
-               description: 'Nome da secretaria',
-               type: 'string',
-               schema: {
-                  name: "Secretaria de SC",
-                  emails: ["email@email.com", "email@email.com"]
-               }
+               description: 'Secretaria',
+               schema: {$ref: '#/definitions/Secretary'}
            }
            #swagger.security = [{
                 "ApiKeyAuth": []

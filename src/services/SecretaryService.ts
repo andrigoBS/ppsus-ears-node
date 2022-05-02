@@ -3,10 +3,13 @@ import {Zone} from "../entity/secretaries/Zone";
 import {HttpStatus} from "../helpers/HttpStatus";
 import {SecretaryComponent} from "../entity/decorators/components/Secretary";
 import {Equal, Like, Not} from "typeorm";
+import {validateOrReject} from "class-validator";
+import {RestResponse} from "../helpers/ComposedTypes";
+import ErrorHelper from "../helpers/ErrorHelper";
 
 export default class SecretaryService {
 
-    public static async saveSecretary (entity: Secretary , secretary: SecretaryComponent): RestResponse {
+    public static async saveSecretary (entity: Secretary , secretary: SecretaryComponent): Promise<RestResponse> {
         if (!entity) {
             return [HttpStatus.NOT_FOUND, {message: "ID não encontrado"}]
         }
@@ -22,10 +25,12 @@ export default class SecretaryService {
         }
         try {
             Object.assign(entity.secretary, secretary)
-            await entity.save();
+            await validateOrReject(entity)
+            await entity.save()
             return [HttpStatus.OK, {entity}]
         } catch (e: any) {
-            return [HttpStatus.INTERNAL_SERVER_ERROR, {message: e.message}]
+            return ErrorHelper.validationError(e) ||
+                [HttpStatus.INTERNAL_SERVER_ERROR, {message: e.message}]
         }
     }
 
@@ -53,5 +58,3 @@ export default class SecretaryService {
 type Secretary = State | Zone | undefined
 
 type SecretaryType = typeof Zone | typeof State
-
-type RestResponse = Promise<[HttpStatus, object]>

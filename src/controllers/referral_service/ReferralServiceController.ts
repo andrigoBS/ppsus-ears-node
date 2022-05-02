@@ -62,6 +62,8 @@ export default class ReferralServiceController extends AbstractController{
     }
 
     private updateService = async (req: Request, res: Response) => {
+
+
         /*
             #swagger.tags = ['ReferralService']
             #swagger.description = 'Endpoint para atualizar um serviço de referencia'

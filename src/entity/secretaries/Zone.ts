@@ -1,5 +1,5 @@
 import {
-    BaseEntity,
+    BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
@@ -12,6 +12,7 @@ import {
 import {State} from "./State";
 import {City} from "./City";
 import {SecretaryComponent as Secretary} from "../decorators/components/Secretary";
+import {ValidateNested, validateOrReject} from "class-validator";
 
 @Entity("regiao")
 export class Zone extends BaseEntity {
@@ -19,15 +20,13 @@ export class Zone extends BaseEntity {
     @PrimaryGeneratedColumn({name: "id_regiao"})
     id: number;
 
-    @Column({name: "nome", type: "varchar", length: "45"})
-    name: string;
-
     @JoinColumn({name: "fk_estado"})
     @ManyToOne(() => State, state => state.zones, {
         nullable: false
     })
     state: State;
 
+    @ValidateNested()
     @Column(() => Secretary, {prefix: "secretaria"})
     secretary: Secretary;
 
@@ -39,5 +38,11 @@ export class Zone extends BaseEntity {
 
     @OneToMany(() => City, city => city.zone)
     cities: City[];
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    private validate(): Promise<void> {
+        return validateOrReject(this)
+    }
 
 }

@@ -24,7 +24,11 @@ export default class ParentsController extends AbstractController {
         try{
             const {login, password} = LoginHelper.basicAuthToObj(req.headers['authorization'])
 
-            return res.status(HttpStatus.OK).send({message: 'respond with a resource', login, password})
+            if (login != 'mocked' && password != 'test') {
+                return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'})
+            }
+
+            return res.status(HttpStatus.OK).send({message: 'Created Token', body: {token: 'Isso é um mockup', user: {name: 'Test Mockup'}}})
         }catch (e: any){
             return res.status(HttpStatus.BAD_REQUEST).send({message: e.message})
         }

@@ -248,6 +248,11 @@
     "no-unsafe-any": false,
     "radix": true,
     "class-name": true,
-    "no-this-assignment": false
+    "no-this-assignment": [
+      true,
+      {
+        "allow-destructuring": true
+      }
+    ]
   }
 }

@@ -1,4 +1,4 @@
-import AbstractController from "../AbstractController";
+import AbstractController from '../AbstractController';
 
 export default class SecretaryUserController extends AbstractController {
 

@@ -1,32 +1,31 @@
-import AbstractController from "../AbstractController";
-import StateController from "./StateController";
-import {Request, Response} from 'express'
-import {HttpStatus} from "../../helpers/HttpStatus";
-import LoginHelper from "../../helpers/LoginHelper";
-import {SecretaryUser} from "../../entity/secretaries/user/SecretaryUser";
-import ZoneController from "./ZoneController";
-import SecretaryUserController from "./SecretaryUserController";
+import AbstractController from '../AbstractController';
+import StateController from './StateController';
+import {Request, Response} from 'express';
+import {HttpStatus} from '../../helpers/HttpStatus';
+import LoginHelper from '../../helpers/LoginHelper';
+import {SecretaryUser} from '../../entity/secretaries/user/SecretaryUser';
+import ZoneController from './ZoneController';
+import SecretaryUserController from './SecretaryUserController';
 
 export default class SecretaryController extends AbstractController {
 
     constructor() {
-        super()
-        const {login} = this
-        const router = this.getRouter()
-        router.use("/state", new StateController().getRouter()
-            //#swagger.tags = ['StateSecretary']
-        )
+        super();
+        const {login} = this;
+        const router = this.getRouter();
+        router.use('/state', new StateController().getRouter(),
+            // #swagger.tags = ['StateSecretary']
+        );
 
-        router.use("/zone", new ZoneController().getRouter()
-            //#swagger.tags = ['ZoneSecretary']
-        )
+        router.use('/zone', new ZoneController().getRouter(),
+            // #swagger.tags = ['ZoneSecretary']
+        );
 
-        router.use("/user", new SecretaryUserController().getRouter()
-            //#swagger.tags = ['SecretaryUser']
-        )
-        router.post('/login', login)
+        router.use('/user', new SecretaryUserController().getRouter(),
+            // #swagger.tags = ['SecretaryUser']
+        );
+        router.post('/login', login);
     }
-
 
     // Todo mover para controller de usuário quando criado
     private login = async (req: Request, res: Response) => {
@@ -40,16 +39,16 @@ export default class SecretaryController extends AbstractController {
 
         let authObj = {};
 
-        try{
-            authObj = LoginHelper.basicAuthToObj(req.headers['authorization'])
-        }catch (e: any){
-            return res.status(HttpStatus.UNAUTHORIZED).send({message: e.message})
+        try {
+            authObj = LoginHelper.basicAuthToObj(req.headers['authorization']);
+        } catch (e: any) {
+            return res.status(HttpStatus.UNAUTHORIZED).send({message: e.message});
         }
-        const user = await SecretaryUser.findOne(authObj)
+        const user = await SecretaryUser.findOne(authObj);
         if (!user) {
-            return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'})
+            return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'});
         }
-        const token = this.getJwt().createJWToken({id: user.id})
-        return res.status(HttpStatus.OK).send({message: 'Created Token', body: {token: token, user: {name: 'Deveria ter um nome?'}}})
+        const token = this.getJwt().createJWToken({id: user.id});
+        return res.status(HttpStatus.OK).send({message: 'Created Token', body: {token, user: {name: 'Deveria ter um nome?'}}});
     }
 }

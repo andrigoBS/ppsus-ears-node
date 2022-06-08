@@ -205,7 +205,6 @@
     ],
     "ter-indent": [
       true,
-      "spaces",
       4
     ],
     "whitespace": [

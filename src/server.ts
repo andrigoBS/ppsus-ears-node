@@ -39,14 +39,15 @@ class Server {
     private database(): void {
         getConnectionOptions()
             .then((envOptions) => {
-                return Object.assign(
-                    envOptions,
-                    {namingStrategy: new SnakeNamingStrategy()}
-                );
+                const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()}
+                if (process.env.DATABASE_URL){
+                    additionalOptions.url = process.env.DATABASE_URL
+                }
+                return Object.assign(envOptions, additionalOptions)
             })
             .then(createConnection)
             .then(() => console.log("DB Connect"))
-            .catch(console.error);
+            .catch(console.error)
     }
 
     private routes(): void {

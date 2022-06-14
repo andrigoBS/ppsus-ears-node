@@ -39,9 +39,11 @@ export default class Server {
     private database(): void {
         getConnectionOptions()
             .then((envOptions) => {
-                return {...envOptions,
-                    namingStrategy: new SnakeNamingStrategy(),
-                };
+                const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()}
+                if (process.env.DATABASE_URL){
+                    additionalOptions.url = process.env.DATABASE_URL
+                }
+                return {...envOptions, ...additionalOptions}
             })
             .then(createConnection)
             .then(() => console.log('DB Connect'))

@@ -8,93 +8,93 @@ import {
     ManyToMany,
     JoinTable,
     OneToOne,
-    PrimaryGeneratedColumn
-} from "typeorm";
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import {Guardian} from "../guardian/Guardian";
+import {Guardian} from '../guardian/Guardian';
 
 /**
  * Tipos de parto aceitos pelo sistema
  */
 export enum ChildBirth {
-    CESAREAN = "Parto Cirúrgico (Cesárea)",
-    NATURAL = "Parto Vaginal Natural",
-    VACUUM = "Parto Vaginal com Extrator a vácuo",
-    FORCEPS = "Parto Vaginal com Fórceps",
-    WATER = "Parto na água",
+    CESAREAN = 'Parto Cirúrgico (Cesárea)',
+    NATURAL = 'Parto Vaginal Natural',
+    VACUUM = 'Parto Vaginal com Extrator a vácuo',
+    FORCEPS = 'Parto Vaginal com Fórceps',
+    WATER = 'Parto na água',
 }
 
 /**
  * Bebê que será submetido aos exames e, eventualmente,
  * encaminhado à um serviço de referência.
  */
-@Entity("bebe")
+@Entity('bebe')
 export class Baby extends BaseEntity {
 
-    @PrimaryGeneratedColumn({name: "id_bebe",
-        comment: "Chave primária do bebê"
+    @PrimaryGeneratedColumn({name: 'id_bebe',
+        comment: 'Chave primária do bebê',
     })
     id: number;
 
-    @Column({name: "peso", type: "float",
-        comment: "Peso do bebê"
+    @Column({name: 'peso', type: 'float',
+        comment: 'Peso do bebê',
     })
     weight: number;
 
-    @Column({name: "altura", type: "float",
-        comment: "Altura do bebê"
+    @Column({name: 'altura', type: 'float',
+        comment: 'Altura do bebê',
     })
     height: number;
 
-    @Column({name: "circumferencia", type: "float",
-        comment: "Circunferência da cabeça do bebê"
+    @Column({name: 'circumferencia', type: 'float',
+        comment: 'Circunferência da cabeça do bebê',
     })
     circumference: number;
 
-    @Column({name: "data_nascimento", type: "datetime", update: false,
-        comment: "Data de nascimento do responsável (para cálculo de idade e afins)"
+    @Column({name: 'data_nascimento', type: 'datetime', update: false,
+        comment: 'Data de nascimento do responsável (para cálculo de idade e afins)',
     })
     birthDate: Date;
 
-    @Column({name: "idade_gestacional", type: "int", update: false,
-        comment: "Tempo de duração da gestação do bebê marcado em semanas"
+    @Column({name: 'idade_gestacional', type: 'int', update: false,
+        comment: 'Tempo de duração da gestação do bebê marcado em semanas',
     })
     gestationalAge: number;
 
-    @Column({name: "tipo_parto", type: "enum", update: false, enum: ChildBirth,
-        comment: "Tipo do parto do bebê"
+    @Column({name: 'tipo_parto', type: 'enum', update: false, enum: ChildBirth,
+        comment: 'Tipo do parto do bebê',
     })
     childBirthType: ChildBirth;
 
-    @Column({name: "obito_materno", type: "boolean", update: false,
-        comment: "Chave primária do responsável"
+    @Column({name: 'obito_materno', type: 'boolean', update: false,
+        comment: 'Chave primária do responsável',
     })
-    maternalDeath: boolean
+    maternalDeath: boolean;
 
     // Controle
 
-    @CreateDateColumn({name: "data_cadastro", type: "datetime",
-        comment: "Data de cadastro do bebê"
+    @CreateDateColumn({name: 'data_cadastro', type: 'datetime',
+        comment: 'Data de cadastro do bebê',
     })
     registrationDate: Date;
 
-    @DeleteDateColumn({name: "data_desativado", type: "datetime", nullable: true,
-        comment: "Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data"
+    @DeleteDateColumn({name: 'data_desativado', type: 'datetime', nullable: true,
+        comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data',
     })
     disableDate: Date;
 
     // Relacionamentos
 
-    @JoinColumn({name: "fk_mae_bio"})
+    @JoinColumn({name: 'fk_mae_bio'})
     @OneToOne(() => Guardian, {
-        nullable: false
+        nullable: false,
     })
     birthMother: Guardian;
 
-    @JoinTable ({name: "bebe_responsavel",
-        joinColumn: {name: "fk_bebe"}, inverseJoinColumn: {name: "fk_responsavel"}
+    @JoinTable ({name: 'bebe_responsavel',
+        joinColumn: {name: 'fk_bebe'}, inverseJoinColumn: {name: 'fk_responsavel'},
     })
-    @ManyToMany(() => Guardian, guardian => guardian.ward)
+    @ManyToMany(() => Guardian, (guardian) => guardian.ward)
     guardians: Guardian;
 
 }

@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  ##### mysql #####
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "meuprimeiroalo"
+      MYSQL_USER: "mpa_root"
+      MYSQL_PASSWORD: "mpa123"
+      MYSQL_ROOT_PASSWORD: "mpa123"
+    ports:
+      - "3306:3306"

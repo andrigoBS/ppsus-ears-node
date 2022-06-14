@@ -1,21 +1,21 @@
-import {Request, Response} from 'express'
-import {HttpStatus} from '../../helpers/HttpStatus'
-import AbstractController from "../AbstractController";
+import {Request, Response} from 'express';
+import {HttpStatus} from '../../helpers/HttpStatus';
+import AbstractController from '../AbstractController';
 
-export default class ReferralServiceController extends AbstractController{
+export default class ReferralServiceController extends AbstractController {
 
     constructor() {
-        super()
-        const {getAll, getById, createService, updateService, deleteService} = this
-        const {verifyJWTMiddleware} = this.getJwt()
-        const router = this.getRouter()
+        super();
+        const {getAll, getById, createService, updateService, deleteService} = this;
+        const {verifyJWTMiddleware} = this.getJwt();
+        const router = this.getRouter();
 
-        router.get('/', verifyJWTMiddleware, getAll)
-        router.post('/', verifyJWTMiddleware, createService)
+        router.get('/', verifyJWTMiddleware, getAll);
+        router.post('/', verifyJWTMiddleware, createService);
 
-        router.get('/:id', verifyJWTMiddleware, getById)
-        router.put('/:id', verifyJWTMiddleware, updateService)
-        router.delete('/:id', verifyJWTMiddleware, deleteService)
+        router.get('/:id', verifyJWTMiddleware, getById);
+        router.put('/:id', verifyJWTMiddleware, updateService);
+        router.delete('/:id', verifyJWTMiddleware, deleteService);
 
     }
 
@@ -27,7 +27,7 @@ export default class ReferralServiceController extends AbstractController{
                 "ApiKeyAuth": []
             }]
         */
-        return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
+        return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 
     private getById = async (req: Request, res: Response) => {
@@ -38,7 +38,7 @@ export default class ReferralServiceController extends AbstractController{
                     "ApiKeyAuth": []
                 }]
             */
-            return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
+            return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 
     private createService = async (req: Request, res: Response) => {
@@ -56,13 +56,12 @@ export default class ReferralServiceController extends AbstractController{
                 "ApiKeyAuth": []
             }]
         */
-        let {name, cellphone, jwtObject} = req.body
+        const {name, cellphone, jwtObject} = req.body;
 
-        return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
+        return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 
     private updateService = async (req: Request, res: Response) => {
-
 
         /*
             #swagger.tags = ['ReferralService']
@@ -78,9 +77,9 @@ export default class ReferralServiceController extends AbstractController{
                 "ApiKeyAuth": []
             }]
         */
-        let {name, cellphone, jwtObject} = req.body
+        const {name, cellphone, jwtObject} = req.body;
 
-        return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
+        return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 
     private deleteService = async (req: Request, res: Response) => {
@@ -92,8 +91,6 @@ export default class ReferralServiceController extends AbstractController{
             }]
         */
 
-        return res.status(HttpStatus.OK).send({message: 'respond with a resource'})
+        return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 }
-
-

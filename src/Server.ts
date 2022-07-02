@@ -21,7 +21,7 @@ export default class Server {
     }
 
     public start(): void {
-        this.express.set('port', process.env.SERVER_PORT);
+        this.express.set('port', process.env.PORT || process.env.SERVER_PORT);
         this.express.listen(process.env.SERVER_PORT, () => {
             console.log(`${process.env.SERVER_NAME} running on port ${process.env.SERVER_PORT}.`);
         });

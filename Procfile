@@ -1,1 +1,1 @@
-worker: npm run doc && cd build && npm start
+web: npm run doc && cd build && npm start

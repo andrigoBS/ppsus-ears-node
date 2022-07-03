@@ -40,8 +40,8 @@ export default class Server {
         getConnectionOptions()
             .then((envOptions) => {
                 const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()}
-                if (process.env.DATABASE_URL){
-                    additionalOptions.url = process.env.DATABASE_URL
+                if (process.env.CLEARDB_DATABASE_URL) { // heroku db url
+                    additionalOptions.url = process.env.CLEARDB_DATABASE_URL
                 }
                 return {...envOptions, ...additionalOptions}
             })

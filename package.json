@@ -9,9 +9,10 @@
     "dev:nodemon": "nodemon -L --ignore node_modules --ignore build --ext ts --exec npm run dev",
     "doc": "node build/src/scripts/SwaggerGenerate.js",
     "env": "node build/src/scripts/CopyEnv.js",
-    "build": "tsc --project ./",
+    "build": "npm run clean build && tsc --project ./",
     "build:prod": "npm run build && npm run doc",
-    "build:dev": "npm run build && npm run env && npm run doc",
+    "build:dev": "npm run build && npm run doc",
+    "clean": "node -e \"var fs = require('fs'); process.argv.slice(1).map((fpath) => fs.existsSync(fpath) && fs.rmdirSync(fpath, { recursive: true })); process.exit(0);\"",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "lint": "tslint --project ./",
     "lint:fix": "tslint --project ./ --fix"

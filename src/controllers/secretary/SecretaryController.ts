@@ -13,15 +13,15 @@ export default class SecretaryController extends AbstractController {
         super();
         const {login} = this;
         const router = this.getRouter();
-        router.use('/state', new StateController().getRouter(),
+        router.use('/state', new StateController().getRouter()
             // #swagger.tags = ['StateSecretary']
         );
 
-        router.use('/zone', new ZoneController().getRouter(),
+        router.use('/zone', new ZoneController().getRouter()
             // #swagger.tags = ['ZoneSecretary']
         );
 
-        router.use('/user', new SecretaryUserController().getRouter(),
+        router.use('/user', new SecretaryUserController().getRouter()
             // #swagger.tags = ['SecretaryUser']
         );
         router.post('/login', login);

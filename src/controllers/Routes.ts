@@ -1,7 +1,8 @@
-import SecretaryController from './secretary/SecretaryController';
 import AbstractController from './AbstractController';
-import ReferralServiceController from './referral_service/ReferralServiceController';
+import InstitutionController from './institution/InstitutionController';
 import ParentsController from './parents/ParentsController';
+import ReferralServiceController from './referral_service/ReferralServiceController';
+import SecretaryController from './secretary/SecretaryController';
 
 export default class Routes extends AbstractController {
 
@@ -9,6 +10,7 @@ export default class Routes extends AbstractController {
         super();
         const router = this.getRouter();
         router.use('/secretary', new SecretaryController().getRouter());
+        router.use('/institution', new InstitutionController().getRouter());
         router.use('/referral-service', new ReferralServiceController().getRouter());
         router.use('/parents', new ParentsController().getRouter());
     }

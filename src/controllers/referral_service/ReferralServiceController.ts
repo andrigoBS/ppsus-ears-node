@@ -57,7 +57,7 @@ export default class ReferralServiceController extends AbstractController {
             }]
         */
         const {name, cellphone, jwtObject} = req.body;
-        console.log("Essa é a minha branch")
+
         return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
     }
 

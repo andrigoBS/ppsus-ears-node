@@ -1,7 +1,7 @@
-import {HttpStatus} from '../../helpers/HttpStatus';
 import {Request, Response} from 'express';
-import AbstractController from '../AbstractController';
+import {HttpStatus} from '../../helpers/HttpStatus';
 import LoginHelper from '../../helpers/LoginHelper';
+import AbstractController from '../AbstractController';
 
 export default class ParentsController extends AbstractController {
 
@@ -22,7 +22,7 @@ export default class ParentsController extends AbstractController {
         */
 
         try {
-            const {login, password} = LoginHelper.basicAuthToObj(req.headers['authorization']);
+            const {login, password} = LoginHelper.basicAuthToObj(req.headers.authorization);
 
             if (login !== 'mocked' && password !== 'test') {
                 return res.status(HttpStatus.NOT_FOUND).send({message: 'User not found'});

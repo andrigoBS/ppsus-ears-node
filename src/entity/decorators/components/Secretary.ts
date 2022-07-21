@@ -1,6 +1,6 @@
-import {Column, OneToMany} from 'typeorm';
-import {IsEmail} from 'class-validator';
-import {SecretaryUser as User} from '../../secretaries/user/SecretaryUser';
+import { Column, OneToMany } from 'typeorm';
+import { IsEmail } from 'class-validator';
+import { SecretaryUser as User } from '../../secretaries/user/SecretaryUser';
 
 /**
  * Componente de Secretaria.
@@ -9,18 +9,18 @@ import {SecretaryUser as User} from '../../secretaries/user/SecretaryUser';
  */
 export class SecretaryComponent {
 
-    @Column({name: 'nome', type: 'varchar', length: 255, nullable: true,
+    @Column({ name: 'nome', type: 'varchar', length: 255, nullable: true,
         comment: 'Rua em que se encontra esse endereço',
     })
-    name: string;
+        name: string;
 
-    @IsEmail({}, {each: true})
-    @Column({name: 'emails', type: 'simple-array', nullable: true,
+    @IsEmail({}, { each: true })
+    @Column({ name: 'emails', type: 'simple-array', nullable: true,
         comment: 'Endereços de email para contato',
     })
-    emails?: string[];
+        emails?: string[];
 
     @OneToMany(() => User, (user) => user.zone ? user.zone : user.state)
-    users?: User[];
+        users?: User[];
 
 }

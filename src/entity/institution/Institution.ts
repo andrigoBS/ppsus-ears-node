@@ -16,7 +16,7 @@ export class Institution extends BaseEntity
         name: 'id_instituicao',
         comment: 'Chave primária da instituição',
     })
-    id: number;
+        id: number;
 
 
     @Column({

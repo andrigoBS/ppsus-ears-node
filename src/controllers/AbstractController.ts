@@ -1,5 +1,5 @@
-import {Router} from 'express';
-import {JwtAuth} from '../middleware/JwtAuth';
+import { JwtAuth } from '../middleware/JwtAuth';
+import { Router } from 'express';
 
 export default abstract class AbstractController {
 

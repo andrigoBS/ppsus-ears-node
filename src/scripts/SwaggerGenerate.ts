@@ -14,7 +14,7 @@ class SwaggerGenerate {
 
     public generate(): void {
         let host = process.env.SERVER_HOST;
-        const port: number = Number(process.env.SERVER_PORT || 80);
+        const port = Number(process.env.SERVER_PORT || 80);
         if (port !== 80) {
             host += ':' + port;
         }
@@ -57,7 +57,7 @@ class SwaggerGenerate {
                         $ref:'#/definitions/Secretary',
                     },
                     cities: [
-                        {id: 1},
+                        { id: 1 },
                     ],
                 },
             },

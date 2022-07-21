@@ -20,6 +20,31 @@ export default class InstitutionController extends AbstractController
         /*
            #swagger.tags = ['ReferralService']
            #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
+           #swagger.parameters['institution'] = {
+            in: 'body',
+            required: 'true',
+            description: 'Instituição',
+            type: 'object',
+            schema: {
+                "institutionName": "nome instituicao",
+                "password": "senha",
+                "passwordConfirmation": "confirmando senha",
+                "cnes": "numero cnes",
+                "cnpj": "cnpj",
+                "institutionType": 2,
+                "email": "example@gmail.com",
+                "alternative_email": "example2@gmail.com",
+                "institucional_phone": "123435",
+                "cep": "33232",
+                "public_area": "logradouro",
+                "state": "sc",
+                "city":  "floripa",
+                "number": "3242",
+                "complement": "complemento",
+                "responsible_name": "nome responsavel"
+            }
+            
+           }
            #swagger.security = [{
                 "ApiKeyAuth": []
             }]

@@ -10,7 +10,6 @@ analizar casos de bebês que falham no teste da orelhinha.
 - express ~4.16.1
 - sequelize ^6.6.5
 - nodemon ^2.0.12
-- body-parser ^1.19.0
 - dotenv ^10.0.0
 - swagger-autogen ^2.11.2
 - swagger-ui-express ^4.1.6

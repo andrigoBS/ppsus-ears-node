@@ -27,7 +27,6 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
-    "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "swagger": "^0.7.5",
     "swagger-autogen": "^2.19.0",

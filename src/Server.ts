@@ -21,7 +21,7 @@ export default class Server {
     }
 
     public start(): void {
-        const port = process.env.PORT || process.env.SERVER_PORT
+        const port = process.env.PORT || process.env.SERVER_PORT;
         this.express.set('port', port);
         this.express.listen(port, () => {
             console.log(`${process.env.SERVER_NAME} running on port ${port}.`);
@@ -40,15 +40,16 @@ export default class Server {
     private database(): void {
         getConnectionOptions()
             .then((envOptions) => {
-                const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()}
+                const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()};
                 if (process.env.CLEARDB_DATABASE_URL) { // heroku db url
-                    additionalOptions.url = process.env.CLEARDB_DATABASE_URL
+                    additionalOptions.url = process.env.CLEARDB_DATABASE_URL;
                 }
-                return {...envOptions, ...additionalOptions}
+                return {...envOptions, ...additionalOptions};
             })
             .then(createConnection)
             .then(() => console.log('DB Connect'))
-            .catch(console.error);
+            .catch(console.error)
+        ;
     }
 
     private routes(): void {

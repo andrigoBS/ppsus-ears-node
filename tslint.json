@@ -79,7 +79,7 @@
     "no-shadowed-variable": false,
     "no-submodule-imports": false,
     "no-var-requires": true,
-    "ordered-imports": false,
+    "ordered-imports": true,
     "import-name": false,
     "match-default-export-name": false,
     "prefer-conditional-expression": false,

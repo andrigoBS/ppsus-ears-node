@@ -1,39 +1,39 @@
-import {Column, Entity, ManyToMany, OneToMany} from 'typeorm';
-import {Baby} from '../baby/Baby';
-import {AddressComponent as Address} from '../decorators/components/Address';
-import {GuardianEmail as Email} from './GuardianEmail';
-import {GuardianPhone as Phone} from './GuardianPhone';
-import {UserTemplate as User} from '../decorators/templates/UserTemplate';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Baby } from '../baby/Baby';
+import { AddressComponent as Address } from '../decorators/components/Address';
+import { GuardianEmail as Email } from './GuardianEmail';
+import { GuardianPhone as Phone } from './GuardianPhone';
+import { UserTemplate as User } from '../decorators/templates/UserTemplate';
 
 @Entity('responsavel')
 export class Guardian extends User {
 
-    @Column({name: 'data_nascimento', type: 'date', update: false,
+    @Column({ name: 'data_nascimento', type: 'date', update: false,
         comment: 'Data de nascimento do responsável (para cálculo de idade e afins)',
     })
-    birthDate: Date;
+        birthDate: Date;
 
-    @Column({name: 'cpf', type: 'varchar', length: 11, unique: true,
+    @Column({ name: 'cpf', type: 'varchar', length: 11, unique: true,
         comment: 'CPF do responsável',
     })
-    cpf: string;
+        cpf: string;
 
-    @Column(() => Address, {prefix: false})
-    address: Address;
+    @Column(() => Address, { prefix: false })
+        address: Address;
 
     // Relacionamentos
 
     @ManyToMany(() => Baby, (baby) => baby.guardians)
-    ward: Baby[];
+        ward: Baby[];
 
     @OneToMany(() => Email, (email) => email.guardian, {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
-    emails: Email[];
+        emails: Email[];
 
     @OneToMany(() => Phone, (phone) => phone.guardian, {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
-    phones: Phone[];
+        phones: Phone[];
 
 }

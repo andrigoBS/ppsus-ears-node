@@ -1,4 +1,4 @@
-import {BaseEntity, BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn} from 'typeorm';
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 /**
  * Entidade abstrata representando um usuário.
@@ -8,25 +8,25 @@ import {BaseEntity, BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Pr
  */
 export abstract class UserTemplate extends BaseEntity {
 
-    @PrimaryGeneratedColumn({name: 'id_usuario',
+    @PrimaryGeneratedColumn({ name: 'id_usuario',
         comment: 'Chave primária de um usuário. é única apenas dentro de uma tabela.',
     })
-    id: number;
+        id: number;
 
     @Column()
-    password: string;
+        password: string;
 
     // Controle
 
-    @CreateDateColumn({name: 'data_cadastro', type: 'datetime',
+    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
         comment: 'Data de cadastro do usuário',
     })
-    registrationDate: Date;
+        registrationDate: Date;
 
-    @DeleteDateColumn({name: 'data_desativado', type: 'datetime', nullable: true,
+    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
         comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data',
     })
-    disableDate: Date;
+        disableDate: Date;
 
     @BeforeInsert()
     hashPassword() {

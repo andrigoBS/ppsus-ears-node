@@ -1,13 +1,13 @@
-import {Request, Response} from 'express';
-import {HttpStatus} from '../../helpers/HttpStatus';
+import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
+import { HttpStatus } from '../../helpers/HttpStatus';
 
 export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const {createService} = this;
-        const {verifyJWTMiddleware} = this.getJwt();
+        const { createService } = this;
+        const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', verifyJWTMiddleware, createService);
     }
@@ -20,6 +20,6 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        return res.status(HttpStatus.OK).send({message: 'respond with a resource'});
-    }
+        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
+    };
 }

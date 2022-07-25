@@ -1,7 +1,7 @@
 import * as Dotenv from 'dotenv';
 import * as fs from 'fs';
 
-// tslint:disable-next-line:no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const swaggerAutogen = require('swagger-autogen')();
 
 class SwaggerGenerate {

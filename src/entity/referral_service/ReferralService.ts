@@ -7,10 +7,9 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-
-import {ReferralServiceEmail as Email} from './ReferralServiceEmail';
-import {ReferralServicePhone as Phone} from './ReferralServicePhone';
-import {AddressComponent as Address} from '../decorators/components/Address';
+import { AddressComponent as Address } from '../decorators/components/Address';
+import { ReferralServiceEmail as Email } from './ReferralServiceEmail';
+import { ReferralServicePhone as Phone } from './ReferralServicePhone';
 
 export enum Service {
     SUS = 'Serviço do Sistema Único de Saúde(SUS)',

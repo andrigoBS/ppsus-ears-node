@@ -1,11 +1,11 @@
+import { Equal, Like, Not } from 'typeorm';
+import ErrorHelper from '../helpers/ErrorHelper';
+import { HttpStatus } from '../helpers/HttpStatus';
+import { RestResponse } from '../helpers/ComposedTypes';
+import { SecretaryComponent } from '../entity/decorators/components/Secretary';
 import { State } from '../entity/secretaries/State';
 import { Zone } from '../entity/secretaries/Zone';
-import { HttpStatus } from '../helpers/HttpStatus';
-import { SecretaryComponent } from '../entity/decorators/components/Secretary';
-import { Equal, Like, Not } from 'typeorm';
 import { validateOrReject } from 'class-validator';
-import { RestResponse } from '../helpers/ComposedTypes';
-import ErrorHelper from '../helpers/ErrorHelper';
 
 export default class SecretaryService {
 
@@ -35,6 +35,7 @@ export default class SecretaryService {
     }
 
     public static async verifyUniqueEmail(emails: string[], ignoreId: number, secretary: SecretaryType): Promise<string[]> {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const dbEmails = await secretary.find({
             select: ['secretary.emails'],

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
+import AbstractController from '../AbstractController';
 import { FindOneOptions } from 'typeorm';
-import { Zone } from '../../entity/secretaries/Zone';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import SecretaryService from '../../services/SecretaryService';
-import AbstractController from '../AbstractController';
+import { Zone } from '../../entity/secretaries/Zone';
 
 export default class ZoneController extends AbstractController {
 

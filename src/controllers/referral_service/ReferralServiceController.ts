@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
+import { HttpStatus } from '../../helpers/HttpStatus';
 
 export default class ReferralServiceController extends AbstractController {
 

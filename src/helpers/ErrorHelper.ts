@@ -1,6 +1,6 @@
-import { ValidationError } from 'class-validator';
 import { HttpStatus } from './HttpStatus';
 import { RestResponse } from './ComposedTypes';
+import { ValidationError } from 'class-validator';
 
 export default class ErrorHelper {
 

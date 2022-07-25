@@ -1,7 +1,6 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
-
-import { ReferralService } from './ReferralService';
 import { EmailTemplate as Email } from '../decorators/templates/EmailTemplate';
+import { ReferralService } from './ReferralService';
 
 @Entity('email_servico_referencia')
 export class ReferralServiceEmail extends Email {

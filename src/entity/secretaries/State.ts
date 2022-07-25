@@ -1,7 +1,7 @@
 import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Zone } from './Zone';
-import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
 import { ValidateNested, validateOrReject } from 'class-validator';
+import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
+import { Zone } from './Zone';
 
 @Entity('estado')
 export class State extends BaseEntity {

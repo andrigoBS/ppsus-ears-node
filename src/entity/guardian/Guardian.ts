@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
-import { Baby } from '../baby/Baby';
 import { AddressComponent as Address } from '../decorators/components/Address';
+import { Baby } from '../baby/Baby';
 import { GuardianEmail as Email } from './GuardianEmail';
 import { GuardianPhone as Phone } from './GuardianPhone';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';

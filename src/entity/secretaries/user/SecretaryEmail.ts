@@ -1,7 +1,6 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
-
-import { SecretaryUser } from './SecretaryUser';
 import { EmailTemplate as Email } from '../../decorators/templates/EmailTemplate';
+import { SecretaryUser } from './SecretaryUser';
 
 @Entity('email_secretaria')
 export class SecretaryEmail extends Email {

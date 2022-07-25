@@ -7,10 +7,9 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-
+import { AddressComponent as Address } from '../decorators/components/Address';
 import { ReferralServiceEmail as Email } from './ReferralServiceEmail';
 import { ReferralServicePhone as Phone } from './ReferralServicePhone';
-import { AddressComponent as Address } from '../decorators/components/Address';
 
 /**
  * Serviço de referência para o qual o bebê é encaminhado

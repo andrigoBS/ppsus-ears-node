@@ -1,11 +1,11 @@
-import AbstractController from '../AbstractController';
-import StateController from './StateController';
 import { Request, Response } from 'express';
+import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import LoginHelper from '../../helpers/LoginHelper';
 import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import ZoneController from './ZoneController';
 import SecretaryUserController from './SecretaryUserController';
+import StateController from './StateController';
+import ZoneController from './ZoneController';
 
 export default class SecretaryController extends AbstractController {
 

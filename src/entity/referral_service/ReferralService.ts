@@ -11,7 +11,7 @@ import { AddressComponent as Address } from '../decorators/components/Address';
 import { ReferralServiceEmail as Email } from './ReferralServiceEmail';
 import { ReferralServicePhone as Phone } from './ReferralServicePhone';
 
-export enum Service {
+export enum ReferralServiceType {
     SUS = 'Serviço do Sistema Único de Saúde(SUS)',
     PRIVATE = 'Serviço Privado',
     MIXED = 'Serviço Misto',
@@ -44,10 +44,10 @@ export class ReferralService extends BaseEntity {
     @Column({ name: 'cnes', type: 'varchar', length: 7, nullable: true })
         cnes: string;
 
-    @Column({ name: 'tipo_servico', type: 'enum', update: false, enum: Service,
+    @Column({ name: 'tipo_servico', type: 'enum', update: false, enum: ReferralServiceType,
         comment: 'Tipo de Serviço',
     })
-        typeService: Service;
+        typeService: ReferralServiceType;
 
     @Column(() => Address, { prefix: false })
         address: Address;

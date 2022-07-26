@@ -3,6 +3,7 @@ import InstitutionController from './institution/InstitutionController';
 import ParentsController from './parents/ParentsController';
 import ReferralServiceController from './referral_service/ReferralServiceController';
 import SecretaryController from './secretary/SecretaryController';
+import BabyController from './baby/BabyController';
 
 export default class Routes extends AbstractController {
 
@@ -13,6 +14,7 @@ export default class Routes extends AbstractController {
         router.use('/institution', new InstitutionController().getRouter());
         router.use('/referral-service', new ReferralServiceController().getRouter());
         router.use('/parents', new ParentsController().getRouter());
+        router.use('/baby', new BabyController().getRouter());
     }
 
 }

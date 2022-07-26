@@ -7,10 +7,15 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-
+import { AddressComponent as Address } from '../decorators/components/Address';
 import { ReferralServiceEmail as Email } from './ReferralServiceEmail';
 import { ReferralServicePhone as Phone } from './ReferralServicePhone';
-import { AddressComponent as Address } from '../decorators/components/Address';
+
+export enum ReferralServiceType {
+    SUS = 'Serviço do Sistema Único de Saúde(SUS)',
+    PRIVATE = 'Serviço Privado',
+    MIXED = 'Serviço Misto',
+}
 
 /**
  * Serviço de referência para o qual o bebê é encaminhado
@@ -19,20 +24,17 @@ import { AddressComponent as Address } from '../decorators/components/Address';
 @Entity('servico_referencia')
 export class ReferralService extends BaseEntity {
 
-    @PrimaryGeneratedColumn({ name: 'id_servico',
+    @PrimaryGeneratedColumn({
+        name: 'id_servico',
         comment: 'Chave primária do servico de referencia',
     })
         id: number;
 
-    @Column({ name: 'nome_fantasia', type: 'varchar', length: 255,
-        comment: 'Nome fantasia do endereço de referencia',
+    @Column({
+        name: 'nome_servico', type: 'varchar', length: 255,
+        comment: 'Nome do Serviço',
     })
         name: string;
-
-    @Column({ name: 'razao_social', type: 'varchar', length: 255, nullable: true,
-        comment: 'Razão social do endereço de referencia',
-    })
-        socialName: string;
 
     @Column({ name: 'cnpj', type: 'varchar', length: 13, nullable: true,
         comment: 'CNPJ do servico de referencia',
@@ -42,10 +44,10 @@ export class ReferralService extends BaseEntity {
     @Column({ name: 'cnes', type: 'varchar', length: 7, nullable: true })
         cnes: string;
 
-    @Column({ name: 'is_sus', type: 'boolean', default: false,
-        comment: 'Se o serviço de referencia é referente ao SUS  Privado',
+    @Column({ name: 'tipo_servico', type: 'enum', update: false, enum: ReferralServiceType,
+        comment: 'Tipo de Serviço',
     })
-        isSus: boolean;
+        typeService: ReferralServiceType;
 
     @Column(() => Address, { prefix: false })
         address: Address;

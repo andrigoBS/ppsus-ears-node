@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ReferralServiceType } from '../../entity/referral_service/ReferralService';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
 
@@ -6,9 +7,11 @@ export default class ReferralServiceController extends AbstractController {
 
     constructor() {
         super();
-        const { getAll, getById, createService, updateService, deleteService } = this;
+        const { getAll, getById, createService, updateService, deleteService, listType } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
+        
+        router.get('/types', verifyJWTMiddleware, listType);
 
         router.get('/', verifyJWTMiddleware, getAll);
         router.post('/', verifyJWTMiddleware, createService);
@@ -16,6 +19,7 @@ export default class ReferralServiceController extends AbstractController {
         router.get('/:id', verifyJWTMiddleware, getById);
         router.put('/:id', verifyJWTMiddleware, updateService);
         router.delete('/:id', verifyJWTMiddleware, deleteService);
+
 
     }
 
@@ -92,5 +96,17 @@ export default class ReferralServiceController extends AbstractController {
         */
 
         return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
+    };
+
+    private listType = async (req: Request, res: Response) => {
+        /*
+               #swagger.tags = ['ReferralService']
+               #swagger.description = 'Tipos de serviço de referencia'
+               #swagger.security = [{
+                    "ApiKeyAuth": []
+                }]
+        */
+
+        return res.status(HttpStatus.OK).send(ReferralServiceType);
     };
 }

@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
+import { HttpStatus } from '../../helpers/HttpStatus';
 import { Institution } from '../../entity/institution/Institution';
 
-export default class InstitutionController extends AbstractController
-{
+export default class InstitutionController extends AbstractController {
 
-    constructor()
-    {
+    constructor() {
         super();
         const { createService } = this;
         const { verifyJWTMiddleware } = this.getJwt();
@@ -15,8 +13,7 @@ export default class InstitutionController extends AbstractController
         router.post('/', createService);
     }
 
-    private createService = async (req: Request, res: Response) =>
-    {
+    private createService = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['ReferralService']
            #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
@@ -43,7 +40,7 @@ export default class InstitutionController extends AbstractController
                 "responsibleName": "nome responsavel",
                 "responsibleRole": "cargo do responsavel"
             }
-            
+
            }
            #swagger.security = [{
                 "ApiKeyAuth": []
@@ -52,8 +49,8 @@ export default class InstitutionController extends AbstractController
 
 
 
-        let institution = req.body as Institution
+        let institution = req.body as Institution;
         institution = await Institution.save(institution);
         return res.status(HttpStatus.OK).json(institution);
-    }
+    };
 }

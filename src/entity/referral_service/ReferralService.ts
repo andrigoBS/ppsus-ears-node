@@ -24,55 +24,56 @@ export enum Service {
 @Entity('servico_referencia')
 export class ReferralService extends BaseEntity {
 
-    @PrimaryGeneratedColumn({name: 'id_servico',
+    @PrimaryGeneratedColumn({
+        name: 'id_servico',
         comment: 'Chave primária do servico de referencia',
     })
-    id: number;
+        id: number;
 
     @Column({
         name: 'nome_servico', type: 'varchar', length: 255,
         comment: 'Nome do Serviço',
     })
-    name: string;
+        name: string;
 
-    @Column({name: 'cnpj', type: 'varchar', length: 13, nullable: true,
+    @Column({ name: 'cnpj', type: 'varchar', length: 13, nullable: true,
         comment: 'CNPJ do servico de referencia',
     })
-    cnpj: string;
+        cnpj: string;
 
-    @Column({name: 'cnes', type: 'varchar', length: 7, nullable: true})
-    cnes: string;
+    @Column({ name: 'cnes', type: 'varchar', length: 7, nullable: true })
+        cnes: string;
 
     @Column({ name: 'tipo_servico', type: 'enum', update: false, enum: Service,
         comment: 'Tipo de Serviço',
     })
-    typeService: Service;
+        typeService: Service;
 
-    @Column(() => Address, {prefix: false})
-    address: Address;
+    @Column(() => Address, { prefix: false })
+        address: Address;
 
     // Controle
 
-    @CreateDateColumn({name: 'data_cadastro', type: 'datetime',
+    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
         comment: 'Data de cadastro do serviço de referencia',
     })
-    registrationDate: Date;
+        registrationDate: Date;
 
-    @DeleteDateColumn({name: 'data_desativado', type: 'datetime', nullable: true,
+    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
         comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data',
     })
-    disableDate: Date;
+        disableDate: Date;
 
     // Relacionamentos
 
     @OneToMany(() => Email, (email) => email.service, {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
-    emails: Email[];
+        emails: Email[];
 
     @OneToMany(() => Phone, (phone) => phone.service, {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
-    phones: Phone[];
+        phones: Phone[];
 
 }

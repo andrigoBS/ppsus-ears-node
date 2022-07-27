@@ -1,15 +1,15 @@
+import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
-import {State} from '../../entity/secretaries/State';
-import {HttpStatus} from '../../helpers/HttpStatus';
-import {Request, Response} from 'express';
+import { HttpStatus } from '../../helpers/HttpStatus';
 import SecretaryService from '../../services/SecretaryService';
+import { State } from '../../entity/secretaries/State';
 
 export default class StateController extends AbstractController {
 
     constructor() {
         super();
-        const {getAll, getById, updateSecretary} = this;
-        const {verifyJWTMiddleware} = this.getJwt();
+        const { getAll, getById, updateSecretary } = this;
+        const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
         router.get('/:id', getById);
@@ -24,8 +24,8 @@ export default class StateController extends AbstractController {
             }]
         */
         const [states, count] = await State.findAndCount();
-        return res.status(HttpStatus.OK).json({states, count});
-    }
+        return res.status(HttpStatus.OK).json({ states, count });
+    };
 
     private getById = async (req: Request, res: Response) => {
         /*
@@ -36,10 +36,10 @@ export default class StateController extends AbstractController {
         */
         const state = await State.findOne(req.params.id);
         if (!state) {
-                res.status(HttpStatus.NOT_FOUND).json({message: 'ID não encontrado'});
+            res.status(HttpStatus.NOT_FOUND).json({ message: 'ID não encontrado' });
         }
-        return res.status(HttpStatus.OK).json({state});
-    }
+        return res.status(HttpStatus.OK).json({ state });
+    };
 
     private updateSecretary = async (req: Request, res: Response) => {
         /*
@@ -54,10 +54,10 @@ export default class StateController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const {name, emails} = req.body;
+        const { name, emails } = req.body;
         const id = Number(req.params.id);
         const state = await State.findOne(id);
-        const [status, response] = await SecretaryService.saveSecretary(state, {name, emails});
+        const [status, response] = await SecretaryService.saveSecretary(state, { name, emails });
         return res.status(status).json(response);
-    }
+    };
 }

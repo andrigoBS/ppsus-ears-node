@@ -1,7 +1,7 @@
 import * as Dotenv from 'dotenv';
 import * as fs from 'fs';
 
-// tslint:disable-next-line:no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const swaggerAutogen = require('swagger-autogen')();
 
 class SwaggerGenerate {
@@ -14,7 +14,7 @@ class SwaggerGenerate {
 
     public generate(): void {
         let host = process.env.SERVER_HOST;
-        const port: number = Number(process.env.SERVER_PORT || 80);
+        const port = Number(process.env.SERVER_PORT || 80);
         if (port !== 80) {
             host += ':' + port;
         }
@@ -57,7 +57,7 @@ class SwaggerGenerate {
                         $ref:'#/definitions/Secretary',
                     },
                     cities: [
-                        {id: 1},
+                        { id: 1 },
                     ],
                 },
             },

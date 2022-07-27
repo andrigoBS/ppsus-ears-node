@@ -1,7 +1,7 @@
+import { NextFunction, Request, Response } from 'express';
+import { HttpStatus } from '../helpers/HttpStatus';
+import { isArray } from 'class-validator';
 import jwt from 'jsonwebtoken';
-import {NextFunction, Request, Response} from 'express';
-import {isArray} from 'class-validator';
-import {HttpStatus} from '../helpers/HttpStatus';
 
 export class JwtAuth {
     private static readonly SECRET: string = process.env.JWT_SECRET || 'ppsus..!';

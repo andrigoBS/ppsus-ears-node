@@ -1,16 +1,16 @@
+import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
-import {HttpStatus} from '../../helpers/HttpStatus';
-import {Request, Response} from 'express';
-import {Zone} from '../../entity/secretaries/Zone';
+import { FindOneOptions } from 'typeorm';
+import { HttpStatus } from '../../helpers/HttpStatus';
 import SecretaryService from '../../services/SecretaryService';
-import {FindOneOptions} from 'typeorm';
+import { Zone } from '../../entity/secretaries/Zone';
 
 export default class ZoneController extends AbstractController {
 
     constructor() {
         super();
-        const {getAll, getById, updateSecretary, createZone, deleteZone, recoverZone} = this;
-        const {verifyJWTMiddleware} = this.getJwt();
+        const { getAll, getById, updateSecretary, createZone, deleteZone, recoverZone } = this;
+        const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
         router.get('/:id', getById);
@@ -28,8 +28,8 @@ export default class ZoneController extends AbstractController {
             }]
         */
         const [zones, count] = await Zone.findAndCount();
-        return res.status(HttpStatus.OK).json({zones, count});
-    }
+        return res.status(HttpStatus.OK).json({ zones, count });
+    };
 
     private getById = async (req: Request, res: Response) => {
         /*
@@ -40,10 +40,10 @@ export default class ZoneController extends AbstractController {
         */
         const zone = await Zone.findOne(req.params.id);
         if (!zone) {
-            res.status(HttpStatus.NOT_FOUND).json({error: 'ID não encontrado'});
+            res.status(HttpStatus.NOT_FOUND).json({ error: 'ID não encontrado' });
         }
-        return res.status(HttpStatus.OK).json({zone});
-    }
+        return res.status(HttpStatus.OK).json({ zone });
+    };
 
     private updateSecretary = async (req: Request, res: Response) => {
         /*
@@ -62,7 +62,7 @@ export default class ZoneController extends AbstractController {
         const zone = await Zone.findOne(id);
         const [status, response] = await SecretaryService.saveSecretary(zone, req.body);
         return res.status(status).json(response);
-    }
+    };
 
     private createZone = async (req: Request, res: Response) => {
         /*
@@ -79,7 +79,7 @@ export default class ZoneController extends AbstractController {
         */
         let zone = req.body as Zone;
         zone.secretary.emails = [...new Set(zone.secretary.emails)];
-        const {emails} = zone.secretary;
+        const { emails } = zone.secretary;
         if (emails) {
             const result = await SecretaryService.verifyUniqueEmail(emails, 0, Zone);
             if (result.length > 0) {
@@ -92,9 +92,9 @@ export default class ZoneController extends AbstractController {
             zone = await Zone.save(zone);
             return res.status(HttpStatus.OK).json(zone);
         } catch (e: any) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    }
+    };
 
     private deleteZone = async (req: Request, res: Response) => {
         /*
@@ -107,11 +107,11 @@ export default class ZoneController extends AbstractController {
             const zone = new Zone();
             zone.id = Number(req.params.id);
             await zone.softRemove();
-            return res.status(HttpStatus.OK).json({disabled: zone.disableDate});
+            return res.status(HttpStatus.OK).json({ disabled: zone.disableDate });
         } catch (e: any) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    }
+    };
 
     private recoverZone = async (req: Request, res: Response) => {
         /*
@@ -126,9 +126,9 @@ export default class ZoneController extends AbstractController {
                 withDeleted: true,
             } as FindOneOptions);
             await zone.recover();
-            return res.status(HttpStatus.OK).json({recovered: zone});
+            return res.status(HttpStatus.OK).json({ recovered: zone });
         } catch (e: any) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: e.message});
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    }
+    };
 }

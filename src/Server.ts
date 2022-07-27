@@ -1,11 +1,11 @@
 import 'reflect-metadata';
-import Express, {Application} from 'express';
-import {createConnection, getConnectionOptions} from 'typeorm';
-import Dotenv from 'dotenv';
+import Express, { Application } from 'express';
+import { createConnection, getConnectionOptions } from 'typeorm';
 import Cors from 'cors';
+import Dotenv from 'dotenv';
 import Routes from './controllers/Routes';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import SwaggerUI from 'swagger-ui-express';
-import {SnakeNamingStrategy} from 'typeorm-naming-strategies';
 
 export default class Server {
     private readonly express: Application;
@@ -40,11 +40,11 @@ export default class Server {
     private database(): void {
         getConnectionOptions()
             .then((envOptions) => {
-                const additionalOptions: any = {namingStrategy: new SnakeNamingStrategy()};
+                const additionalOptions: any = { namingStrategy: new SnakeNamingStrategy() };
                 if (process.env.CLEARDB_DATABASE_URL) { // heroku db url
                     additionalOptions.url = process.env.CLEARDB_DATABASE_URL;
                 }
-                return {...envOptions, ...additionalOptions};
+                return { ...envOptions, ...additionalOptions };
             })
             .then(createConnection)
             .then(() => console.log('DB Connect'))
@@ -54,6 +54,7 @@ export default class Server {
 
     private routes(): void {
         this.express.use(new Routes().getRouter());
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         this.express.use('/docs', SwaggerUI.serve, SwaggerUI.setup(require('../swaggerOutput.json')));
     }
 }

@@ -1,3 +1,3 @@
-import {HttpStatus} from './HttpStatus';
+import { HttpStatus } from './HttpStatus';
 
 export type RestResponse = [HttpStatus, object];

@@ -1,3 +1,4 @@
 import fs from 'fs';
 
-fs.writeFileSync('build/.env', fs.readFileSync('.env.development'));
+const envFileName: string = fs.existsSync('.env') ? '.env' : '.env.development';
+fs.writeFileSync('build/.env', fs.readFileSync(envFileName));

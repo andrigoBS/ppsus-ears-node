@@ -9,35 +9,38 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import {State} from './State';
-import {City} from './City';
-import {SecretaryComponent as Secretary} from '../decorators/components/Secretary';
-import {ValidateNested, validateOrReject} from 'class-validator';
+import {
+    ValidateNested,
+    validateOrReject
+} from 'class-validator';
+import { City } from './City';
+import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
+import { State } from './State';
 
 @Entity('regiao')
 export class Zone extends BaseEntity {
 
-    @PrimaryGeneratedColumn({name: 'id_regiao'})
-    id: number;
+    @PrimaryGeneratedColumn({ name: 'id_regiao' })
+        id: number;
 
-    @JoinColumn({name: 'fk_estado'})
+    @JoinColumn({ name: 'fk_estado' })
     @ManyToOne(() => State, (state) => state.zones, {
         nullable: false,
     })
-    state: State;
+        state: State;
 
     @ValidateNested()
-    @Column(() => Secretary, {prefix: 'secretaria'})
-    secretary: Secretary;
+    @Column(() => Secretary, { prefix: 'secretaria' })
+        secretary: Secretary;
 
-    @CreateDateColumn({name: 'data_cadastro', type: 'datetime'})
-    registrationDate: Date;
+    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime' })
+        registrationDate: Date;
 
-    @DeleteDateColumn({name: 'data_desativado', type: 'datetime', nullable: true})
-    disableDate: Date;
+    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true })
+        disableDate: Date;
 
     @OneToMany(() => City, (city) => city.zone)
-    cities: City[];
+        cities: City[];
 
     @BeforeInsert()
     @BeforeUpdate()

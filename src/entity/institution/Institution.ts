@@ -1,5 +1,11 @@
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
-import {AddressComponent as Address} from '../decorators/components/Address';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export enum InstitutionType
+{
+    HOSPITAL = 'Hospital',
+    MATERNITY = 'Maternidade',
+    HOSPITAL_AND_MATERNITY = 'Hospital e Maternidade',
+}
 
 @Entity('instituicao')
 export class Institution extends BaseEntity {
@@ -11,24 +17,104 @@ export class Institution extends BaseEntity {
     id: number;
 
     @Column({
-        name: 'nome_fantasia', type: 'varchar', length: 255,
-        comment: 'Nome Fantasia (Comercial) da instituição',
+        name: 'nome_instituicao', type: 'varchar', length: 255,
+        comment: 'Nome instituição', nullable: false
     })
-    tradingName: string;
+    institutionName: string;
 
     @Column({
-        name: 'razao_social', type: 'varchar', length: 255,
-        comment: 'Razão Social da instituição',
+        name: 'senha', type: 'varchar', length: 255,
+        comment: 'Senha', nullable: false
     })
-    companyName: string;
+    password: string;
 
     @Column({
-        name: 'is_maternidade', type: 'boolean',
-        comment: 'Define se a instituição é ou não uma maternidade',
+        name: 'cnes', type: 'varchar', length: 11,
+        comment: 'CNES', nullable: false
     })
-    isMaternity: boolean;
+    cnes: string;
 
-    @Column(() => Address, {prefix: false})
-    address: Address;
+    @Column({
+        name: 'cnpj', type: 'varchar', length: 14,
+        comment: 'CNPJ', nullable: true
+    })
+    cnpj: string;
 
+    @Column({
+        name: 'tipo_instituicao', type: 'enum', update: false, enum: InstitutionType,
+        comment: 'Tipo de Instituição', nullable: false
+    })
+    institutionType: InstitutionType;
+
+    @Column({
+        name: 'email', type: 'varchar', length: 255,
+        comment: 'E-mail Preferencial', nullable: false
+    })
+    email: string;
+
+    @Column({
+        name: 'email_alternativo', type: 'varchar', length: 255,
+        comment: 'E-mail Alternativo', nullable: true
+    })
+    alternativeEmail: string;
+
+    @Column({
+        name: 'telefone_institucional', type: 'varchar', length: 255,
+        comment: 'Telefone Institucional', nullable: false
+    })
+    institutionalPhone: string;
+
+    @Column({
+        name: 'telefone_secundario_institucional', type: 'varchar', length: 255,
+        comment: 'Telefone Secundario Institucional', nullable: true
+    })
+    institutionPhoneSecond: string;
+
+    @Column({
+        name: 'cep', type: 'varchar', length: 8,
+        comment: 'CEP', nullable: false
+    })
+    cep: string;
+
+    @Column({
+        name: 'logradouro', type: 'varchar', length: 255,
+        comment: 'Logradouro', nullable: false
+    })
+    publicArea: string;
+
+    @Column({
+        name: 'estado', type: 'varchar', length: 255,
+        comment: 'Estado', nullable: false
+    })
+    state: string;
+
+    @Column({
+        name: 'cidade', type: 'varchar', length: 255,
+        comment: 'Cidade', nullable: false
+    })
+    city: string;
+
+    @Column({
+        name: 'numero', type: 'varchar', length: 255,
+        comment: 'Número', nullable: true
+    })
+    number: string;
+
+    @Column({
+        name: 'complemento', type: 'varchar', length: 255,
+        comment: 'Complemento', nullable: true
+    })
+    complement: string;
+
+    @Column({
+        name: 'nome_responsavel', type: 'varchar', length: 255,
+        comment: 'Nome do Responsável', nullable: false
+    })
+    responsibleName: string;
+
+    @Column({
+        name: 'cargo', type: 'varchar', length: 255,
+        comment: 'Cargo', nullable: true
+    })
+    responsibleRole: string;
 }

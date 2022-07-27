@@ -1,7 +1,7 @@
 import { Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { UserTemplate as User } from '../../decorators/templates/UserTemplate';
 import { SecretaryEmail as Email } from './SecretaryEmail';
 import { State } from '../State';
+import { UserTemplate as User } from '../../decorators/templates/UserTemplate';
 import { Zone } from '../Zone';
 
 @Entity('usuario_secretaria')

@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
 import { Institution, institutiontype } from '../../entity/institution/Institution';
+import { HttpStatus } from '../../helpers/HttpStatus';
 
-export default class InstitutionController extends AbstractController
-{
+export default class InstitutionController extends AbstractController {
 
-    constructor()
-    {
+    constructor() {
         super();
         const { createService, institutionTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
@@ -16,17 +14,18 @@ export default class InstitutionController extends AbstractController
         router.get('/types', institutionTypes);
     }
 
-    private createService = async (req: Request, res: Response) =>
-    {
+    private createService = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['Institution']
-           #swagger.description = '(???)Endpoint para recuperar todos os serviços de referencia (???)'
+           #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
            #swagger.security = [{
                 "ApiKeyAuth": []
             }]
         */
 
-        let institution = req.body as Institution
+
+
+        let institution = req.body as Institution;
         institution = await Institution.save(institution);
         return res.status(HttpStatus.OK).json(institution);
     }

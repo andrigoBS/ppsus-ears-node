@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ReferralServiceType } from '../../entity/referral_service/ReferralService';
-import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
+import { HttpStatus } from '../../helpers/HttpStatus';
 
 export default class ReferralServiceController extends AbstractController {
 
@@ -19,7 +19,6 @@ export default class ReferralServiceController extends AbstractController {
         router.get('/:id', verifyJWTMiddleware, getById);
         router.put('/:id', verifyJWTMiddleware, updateService);
         router.delete('/:id', verifyJWTMiddleware, deleteService);
-
 
     }
 

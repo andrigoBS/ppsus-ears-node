@@ -1,8 +1,8 @@
-import AbstractController from '../AbstractController';
-import { State } from '../../entity/secretaries/State';
-import { HttpStatus } from '../../helpers/HttpStatus';
 import { Request, Response } from 'express';
+import AbstractController from '../AbstractController';
+import { HttpStatus } from '../../helpers/HttpStatus';
 import SecretaryService from '../../services/SecretaryService';
+import { State } from '../../entity/secretaries/State';
 
 export default class StateController extends AbstractController {
 

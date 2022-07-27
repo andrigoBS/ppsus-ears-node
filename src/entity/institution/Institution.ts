@@ -1,23 +1,20 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-export enum institutiontype
+export enum InstitutionType
 {
     HOSPITAL = 'Hospital',
     MATERNITY = 'Maternidade',
-    HOSPITALANDMATERNITY = 'Hospital e Maternidade',
+    HOSPITAL_AND_MATERNITY = 'Hospital e Maternidade',
 }
 
-
 @Entity('instituicao')
-export class Institution extends BaseEntity
-{
+export class Institution extends BaseEntity {
 
     @PrimaryGeneratedColumn({
         name: 'id_instituicao',
         comment: 'Chave primária da instituição',
     })
-        id: number;
-
+    id: number;
 
     @Column({
         name: 'nome_instituicao', type: 'varchar', length: 255,
@@ -32,12 +29,6 @@ export class Institution extends BaseEntity
     password: string;
 
     @Column({
-        name: 'confirmacao_senha', type: 'varchar', length: 255,
-        comment: 'Confirmação de Senha', nullable: false
-    })
-    passwordConfirmation: string;
-
-    @Column({
         name: 'cnes', type: 'varchar', length: 11,
         comment: 'CNES', nullable: false
     })
@@ -50,10 +41,10 @@ export class Institution extends BaseEntity
     cnpj: string;
 
     @Column({
-        name: 'tipo_instituicao', type: 'enum', update: false, enum: institutiontype,
+        name: 'tipo_instituicao', type: 'enum', update: false, enum: InstitutionType,
         comment: 'Tipo de Instituição', nullable: false
     })
-    institutionType: institutiontype;
+    institutionType: InstitutionType;
 
     @Column({
         name: 'email', type: 'varchar', length: 255,
@@ -65,19 +56,19 @@ export class Institution extends BaseEntity
         name: 'email_alternativo', type: 'varchar', length: 255,
         comment: 'E-mail Alternativo', nullable: true
     })
-    alternative_email: string;
+    alternativeEmail: string;
 
     @Column({
         name: 'telefone_institucional', type: 'varchar', length: 255,
         comment: 'Telefone Institucional', nullable: false
     })
-    institucional_phone: string;
+    institutionalPhone: string;
 
     @Column({
-        name: 'celular_institucional', type: 'varchar', length: 255,
-        comment: 'Telefone Celular Institucional', nullable: true
+        name: 'telefone_secundario_institucional', type: 'varchar', length: 255,
+        comment: 'Telefone Secundario Institucional', nullable: true
     })
-    institucional_cellphone: string;
+    institutionPhoneSecond: string;
 
     @Column({
         name: 'cep', type: 'varchar', length: 8,
@@ -89,8 +80,7 @@ export class Institution extends BaseEntity
         name: 'logradouro', type: 'varchar', length: 255,
         comment: 'Logradouro', nullable: false
     })
-    public_area: string;
-
+    publicArea: string;
 
     @Column({
         name: 'estado', type: 'varchar', length: 255,
@@ -120,11 +110,11 @@ export class Institution extends BaseEntity
         name: 'nome_responsavel', type: 'varchar', length: 255,
         comment: 'Nome do Responsável', nullable: false
     })
-    responsible_name: string;
+    responsibleName: string;
 
     @Column({
         name: 'cargo', type: 'varchar', length: 255,
         comment: 'Cargo', nullable: true
     })
-    role: string;
+    responsibleRole: string;
 }

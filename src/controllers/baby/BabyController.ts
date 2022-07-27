@@ -22,7 +22,7 @@ export default class ParentsController extends AbstractController {
             }
         */
              
-            return res.status(HttpStatus.OK).send(ChildBirth);
+        return res.status(HttpStatus.OK).send(ChildBirth);
 
     };
 

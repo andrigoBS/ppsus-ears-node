@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
+import AbstractController from '../AbstractController';
 import { ChildBirth } from '../../entity/baby/Baby';
 import { HttpStatus } from '../../helpers/HttpStatus';
-import LoginHelper from '../../helpers/LoginHelper';
-import AbstractController from '../AbstractController';
 
 export default class ParentsController extends AbstractController {
 
@@ -21,7 +20,7 @@ export default class ParentsController extends AbstractController {
                 "basicApiKeyAuth": []
             }
         */
-             
+
         return res.status(HttpStatus.OK).send(ChildBirth);
 
     };

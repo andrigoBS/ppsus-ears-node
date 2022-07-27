@@ -96,5 +96,4 @@ export class Baby extends BaseEntity {
     })
     @ManyToMany(() => Guardian, (guardian) => guardian.ward)
         guardians: Guardian;
-
 }

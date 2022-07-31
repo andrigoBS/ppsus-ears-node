@@ -62,13 +62,13 @@ export class Institution extends BaseEntity {
         name: 'telefone_institucional', type: 'varchar', length: 255,
         comment: 'Telefone Institucional', nullable: false
     })
-    institutionalPhone: string;
+    institutionPhone: string;
 
     @Column({
-        name: 'telefone_secundario_institucional', type: 'varchar', length: 255,
-        comment: 'Telefone Secundario Institucional', nullable: true
+        name: 'celular_institucional', type: 'varchar', length: 255,
+        comment: 'Telefone Celular Institucional', nullable: true
     })
-    institutionPhoneSecond: string;
+    institutionCellphone: string;
 
     @Column({
         name: 'cep', type: 'varchar', length: 8,

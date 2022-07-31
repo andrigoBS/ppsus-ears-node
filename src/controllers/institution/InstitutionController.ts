@@ -7,15 +7,15 @@ export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const { createService, institutionTypes, getDashboard } = this;
+        const { create, institutionTypes, getDashboard } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.post('/', createService);
+        router.post('/', create);
         router.get('/types', institutionTypes);
         router.get('/dashboard', getDashboard);
     }
 
-    private createService = async (req: Request, res: Response) => {
+    private create = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['Institution']
            #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
@@ -49,8 +49,6 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-
-        console.log("OOOOOOOOOOOOOOO " + req.body.institutionType)
 
         let institution = req.body as Institution;
         institution = await Institution.save(institution);

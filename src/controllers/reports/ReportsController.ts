@@ -9,11 +9,11 @@ export default class ReportsController extends AbstractController {
         const { getBabiesPassFail, getBabiesComeBorn, getIndicatorsPercent, getIndicators, getEquipment } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.get('/baby-pass-fail/:userType', getBabiesPassFail);
-        router.get('/baby-come-born/:userType', getBabiesComeBorn);
-        router.get('/indicators-percent/:userType', getIndicatorsPercent);
-        router.get('/indicators/:userType', getIndicators);
-        router.get('/equipment/:userType', getEquipment);
+        router.get('/baby-pass-fail/:userType', verifyJWTMiddleware, getBabiesPassFail);
+        router.get('/baby-come-born/:userType', verifyJWTMiddleware, getBabiesComeBorn);
+        router.get('/indicators-percent/:userType', verifyJWTMiddleware, getIndicatorsPercent);
+        router.get('/indicators/:userType', verifyJWTMiddleware, getIndicators);
+        router.get('/equipment/:userType', verifyJWTMiddleware, getEquipment);
     }
 
     private getBabiesPassFail = async (req: Request, res: Response) => {

@@ -18,7 +18,7 @@ export class JwtAuth {
         }
 
         try {
-            req.body.jwtObject = jwt.verify(String(token), JwtAuth.SECRET);
+            req.body.jwtObject = jwt.verify(String(token.replace('Bearer ', '')), JwtAuth.SECRET);
         } catch (err) {
             return res.status(HttpStatus.UNAUTHORIZED).send('Invalid Token');
         }

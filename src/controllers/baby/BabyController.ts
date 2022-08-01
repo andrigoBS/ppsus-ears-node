@@ -8,8 +8,9 @@ export default class ParentsController extends AbstractController {
     constructor() {
         super();
         const { listChildBirth } = this;
+        const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.get('/child-birth', listChildBirth);
+        router.get('/child-birth', verifyJWTMiddleware, listChildBirth);
     }
 
     private listChildBirth = async (req: Request, res: Response) => {

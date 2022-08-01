@@ -9,6 +9,7 @@ export default class SecretaryController extends AbstractController {
     constructor() {
         super();
         const { getDashboard } = this;
+        const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.use('/state', new StateController().getRouter()
             // #swagger.tags = ['StateSecretary']
@@ -18,7 +19,7 @@ export default class SecretaryController extends AbstractController {
             // #swagger.tags = ['ZoneSecretary']
         );
 
-        router.get('/dashboard', getDashboard);
+        router.get('/dashboard', verifyJWTMiddleware, getDashboard);
     }
 
     private getDashboard = async (req: Request, res: Response) => {

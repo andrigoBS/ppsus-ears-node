@@ -12,7 +12,7 @@ export default class InstitutionController extends AbstractController {
         const router = this.getRouter();
         router.post('/', create);
         router.get('/types', institutionTypes);
-        router.get('/dashboard', getDashboard);
+        router.get('/dashboard', verifyJWTMiddleware, getDashboard);
     }
 
     private create = async (req: Request, res: Response) => {

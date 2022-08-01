@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import AbstractController from '../AbstractController';
+import { ReferralService, ReferralServiceType } from '../../entity/referral_service/ReferralService';
 import { HttpStatus } from '../../helpers/HttpStatus';
-import { ReferralServiceType } from '../../entity/referral_service/ReferralService';
+import AbstractController from '../AbstractController';
 
 export default class ReferralServiceController extends AbstractController {
 
@@ -59,7 +59,9 @@ export default class ReferralServiceController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const { name, cellphone, jwtObject } = req.body;
+        let referralService = req.body as ReferralService;
+        referralService = await ReferralService.save(referralService);
+        return res.status(HttpStatus.OK).json(referralService);
 
         return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
     };

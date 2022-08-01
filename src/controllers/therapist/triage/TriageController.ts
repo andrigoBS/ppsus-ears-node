@@ -11,7 +11,7 @@ export default class TriageController extends AbstractController {
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
-        router.get('/types', triageTypes);
+        router.get('/types', verifyJWTMiddleware, triageTypes);
     }
 
     private create = async (req: Request, res: Response) => {

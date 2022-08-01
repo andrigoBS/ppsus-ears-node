@@ -15,7 +15,7 @@ export default class TherapistController extends AbstractController {
         router.use('/triage', new TriageController().getRouter());
 
         router.post('/', create);
-        router.get('/dashboard', getDashboard);
+        router.get('/dashboard', verifyJWTMiddleware, getDashboard);
     }
 
     private create = async (req: Request, res: Response) => {

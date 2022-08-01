@@ -14,7 +14,7 @@ export default class UserController extends AbstractController {
         super();
         const { login } = this;
         const router = this.getRouter();
-        router.post('/:userType/login', login);
+        router.post('/:userType/register', login);
     }
 
     private login = async (req: Request, res: Response) => {
@@ -33,12 +33,12 @@ export default class UserController extends AbstractController {
             return res.status(HttpStatus.UNAUTHORIZED).send({ message: e.message, fancyMessage: 'Usuario não autorizado, contate um administrador' });
         }
 
-        //TODO: remover mock, ativar login definitivo
+        //TODO: remover mock, ativar register definitivo
         const user = authObj.login === 'test.mock' && authObj.password === 'test123'? { id: 10, name: 'Teste' } : null;
         //const user: User = await this.findOne(req.params.userType, authObj);
 
         if (!user) {
-            return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Usuário não encontrado, login ou senha incorreto', message: 'Not Found' });
+            return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Usuário não encontrado, register ou senha incorreto', message: 'Not Found' });
         }
 
         const token = this.getJwt().createJWToken({ id: user.id });

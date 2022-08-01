@@ -5,6 +5,8 @@ import ParentsController from './parents/ParentsController';
 import ReferralServiceController from './referral_service/ReferralServiceController';
 import ReportsController from './reports/ReportsController';
 import SecretaryController from './secretary/SecretaryController';
+import TherapistController from './therapist/TherapistController';
+import UserController from './users/UserController';
 
 export default class Routes extends AbstractController {
 
@@ -17,6 +19,8 @@ export default class Routes extends AbstractController {
         router.use('/referral-service', new ReferralServiceController().getRouter());
         router.use('/reports', new ReportsController().getRouter());
         router.use('/secretary', new SecretaryController().getRouter());
+        router.use('/therapist', new TherapistController().getRouter());
+        router.use('/user', new UserController().getRouter());
     }
 
 }

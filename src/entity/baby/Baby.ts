@@ -36,6 +36,12 @@ export class Baby extends BaseEntity {
     })
         id: number;
 
+    @Column({
+        name: 'nome', type: 'varchar', length: 255,
+        comment: 'Nome', nullable: false
+    })
+        name: string;
+
     @Column({ name: 'peso', type: 'float',
         comment: 'Peso do bebê',
     })

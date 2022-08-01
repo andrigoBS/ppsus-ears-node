@@ -7,18 +7,44 @@ export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const { createService, institutionTypes, getDashboard } = this;
+        const { create, institutionTypes, getDashboard } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.post('/', createService);
+        router.post('/', create);
         router.get('/types', institutionTypes);
-        router.get('/dashboard', getDashboard);
+        router.get('/dashboard', verifyJWTMiddleware, getDashboard);
     }
 
-    private createService = async (req: Request, res: Response) => {
+    private create = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['Institution']
            #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
+           #swagger.parameters['institution'] = {
+            in: 'body',
+            required: 'true',
+            description: 'Instituição',
+            type: 'object',
+            schema: {
+                "institutionName": "nome instituicao",
+                "password": "senha",
+                "cnes": "numero cnes",
+                "cnpj": "cnpj",
+                "institutionType": 2,
+                "email": "example@gmail.com",
+                "alternativeEmail": "example2@gmail.com",
+                "institutionPhone": "123435",
+                "institutionalCellphone": "123435",
+                "cep": "33232",
+                "publicArea": "logradouro",
+                "state": "sc",
+                "city":  "floripa",
+                "number": "3242",
+                "complement": "complemento",
+                "responsibleName": "nome responsavel",
+                "responsibleRole": "cargo do responsavel"
+            }
+
+           }
            #swagger.security = [{
                 "ApiKeyAuth": []
             }]

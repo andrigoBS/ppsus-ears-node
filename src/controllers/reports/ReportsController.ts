@@ -9,11 +9,11 @@ export default class ReportsController extends AbstractController {
         const { getBabiesPassFail, getBabiesComeBorn, getIndicatorsPercent, getIndicators, getEquipment } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.get('/baby-pass-fail/:view', getBabiesPassFail);
-        router.get('/baby-come-born/:view', getBabiesComeBorn);
-        router.get('/indicators-percent/:view', getIndicatorsPercent);
-        router.get('/indicators/:view', getIndicators);
-        router.get('/equipment/:view', getEquipment);
+        router.get('/baby-pass-fail/:userType', getBabiesPassFail);
+        router.get('/baby-come-born/:userType', getBabiesComeBorn);
+        router.get('/indicators-percent/:userType', getIndicatorsPercent);
+        router.get('/indicators/:userType', getIndicators);
+        router.get('/equipment/:userType', getEquipment);
     }
 
     private getBabiesPassFail = async (req: Request, res: Response) => {
@@ -41,7 +41,7 @@ export default class ReportsController extends AbstractController {
     private getIndicatorsPercent = async (req: Request, res: Response) => {
         const indicators = [];
         for (let i = 0; i < 20; i++) {
-            indicators.push({ label: 'Indicador'+i, quantities: Math.random() * 100 });
+            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
         }
 
         return res.status(HttpStatus.OK).json({
@@ -54,7 +54,7 @@ export default class ReportsController extends AbstractController {
     private getIndicators = async (req: Request, res: Response) => {
         const indicators = [];
         for (let i = 0; i < 40; i++) {
-            indicators.push({ label: 'Indicador'+i, quantities: Math.random() * 100 });
+            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
         }
 
         return res.status(HttpStatus.OK).json({
@@ -67,11 +67,11 @@ export default class ReportsController extends AbstractController {
     private getEquipment = async (req: Request, res: Response) => {
         const equipments = [];
         for (let i = 0; i < 40; i++) {
-            equipments.push({ label: 'Indicador'+i, quantities: Math.random() * 100 });
+            equipments.push({ label: 'Equipamento '+i, quantities: Math.random() * 100 });
         }
 
         return res.status(HttpStatus.OK).json({
-            title: 'Único ou múltiplo (Relacionado a quantidade de indicadores selecionados no momento da consulta).',
+            title: 'Passou e falhou (Para analisar melhor os resultados comparando com os equipamentos)',
             labels: equipments.map(equipment => equipment.label),
             quantities: equipments.map(equipment => equipment.quantities),
         });

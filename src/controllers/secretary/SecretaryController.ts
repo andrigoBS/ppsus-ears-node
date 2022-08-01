@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
-import SecretaryUserController from './SecretaryUserController';
 import StateController from './StateController';
 import ZoneController from './ZoneController';
 
@@ -17,10 +16,6 @@ export default class SecretaryController extends AbstractController {
 
         router.use('/zone', new ZoneController().getRouter()
             // #swagger.tags = ['ZoneSecretary']
-        );
-
-        router.use('/user', new SecretaryUserController().getRouter()
-            // #swagger.tags = ['SecretaryUser']
         );
 
         router.get('/dashboard', getDashboard);

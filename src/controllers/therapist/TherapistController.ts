@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import { Therapist } from '../../entity/therapist/Therapist';
-import TherapistUserController from './TherapistUserController';
 import TriageController from './triage/TriageController';
 
 export default class TherapistController extends AbstractController {
@@ -13,7 +12,6 @@ export default class TherapistController extends AbstractController {
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
 
-        router.use('/user', new TherapistUserController().getRouter());
         router.use('/triage', new TriageController().getRouter());
 
         router.post('/', create);

@@ -14,7 +14,7 @@ export default class UserController extends AbstractController {
         super();
         const { login } = this;
         const router = this.getRouter();
-        router.post('/:userType/register', login);
+        router.post('/:userType/login', login);
     }
 
     private login = async (req: Request, res: Response) => {

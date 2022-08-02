@@ -7,10 +7,11 @@ export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const { create, institutionTypes, getDashboard } = this;
+        const { create, getOne, institutionTypes, getDashboard } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
+        router.get('/:id', getOne);
         router.get('/types', institutionTypes);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
     }
@@ -52,6 +53,21 @@ export default class InstitutionController extends AbstractController {
 
         let institution = req.body as Institution;
         institution = await Institution.save(institution);
+        return res.status(HttpStatus.OK).json(institution);
+    };
+
+    private getOne = async (req: Request, res: Response) => {
+        /*
+           #swagger.tags = ['Institution']
+           #swagger.description = 'Endpoint para recuperar uma instituição'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+        const institution = await Institution.findOne(req.params.id);
+        if(!institution) {
+            return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Instituição não encontrada', message: 'Not Found' });
+        }
         return res.status(HttpStatus.OK).json(institution);
     };
 

@@ -34,7 +34,7 @@ export default class UserController extends AbstractController {
         }
 
         //TODO: remover mock, ativar register definitivo
-        const user = authObj.login === 'test.mock' && authObj.password === 'test123'? { id: 10, name: 'Teste' } : null;
+        const user = authObj.login === 'test.mock' && authObj.password === 'test123'? { id: 1, name: 'Teste' } : null;
         //const user: User = await this.findOne(req.params.userType, authObj);
 
         if (!user) {
@@ -42,7 +42,7 @@ export default class UserController extends AbstractController {
         }
 
         const token = this.getJwt().createJWToken({ id: user.id });
-        return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: { ...user, password: undefined, id: undefined } });
+        return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: { ...user, password: undefined } });
     };
 
     private async findOne(userType: string, authObj: AuthUser) : Promise<User> {

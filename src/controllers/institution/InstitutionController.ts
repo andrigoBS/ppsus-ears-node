@@ -11,9 +11,9 @@ export default class InstitutionController extends AbstractController {
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
-        router.get('/:id', getOne);
         router.get('/types', institutionTypes);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
+        router.get('/:id', getOne);
     }
 
     private create = async (req: Request, res: Response) => {

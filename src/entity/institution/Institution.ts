@@ -1,4 +1,6 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AddressComponent as Address } from '../decorators/components/Address';
+import { InstitutionUser as User } from './InstitutionUser';
 
 export enum InstitutionType
 {
@@ -23,12 +25,6 @@ export class Institution extends BaseEntity {
     institutionName: string;
 
     @Column({
-        name: 'senha', type: 'varchar', length: 255,
-        comment: 'Senha', nullable: false
-    })
-    password: string;
-
-    @Column({
         name: 'cnes', type: 'varchar', length: 11,
         comment: 'CNES', nullable: false
     })
@@ -46,75 +42,11 @@ export class Institution extends BaseEntity {
     })
     institutionType: InstitutionType;
 
-    @Column({
-        name: 'email', type: 'varchar', length: 255,
-        comment: 'E-mail Preferencial', nullable: false
-    })
-    email: string;
+    @Column(() => Address, { prefix: false })
+    address: Address;
 
-    @Column({
-        name: 'email_alternativo', type: 'varchar', length: 255,
-        comment: 'E-mail Alternativo', nullable: true
-    })
-    alternativeEmail: string;
+    // Relacionamentos
 
-    @Column({
-        name: 'telefone_institucional', type: 'varchar', length: 255,
-        comment: 'Telefone Institucional', nullable: false
-    })
-    institutionPhone: string;
-
-    @Column({
-        name: 'celular_institucional', type: 'varchar', length: 255,
-        comment: 'Telefone Celular Institucional', nullable: true
-    })
-    institutionCellphone: string;
-
-    @Column({
-        name: 'cep', type: 'varchar', length: 8,
-        comment: 'CEP', nullable: false
-    })
-    cep: string;
-
-    @Column({
-        name: 'logradouro', type: 'varchar', length: 255,
-        comment: 'Logradouro', nullable: false
-    })
-    publicArea: string;
-
-    @Column({
-        name: 'estado', type: 'varchar', length: 255,
-        comment: 'Estado', nullable: false
-    })
-    state: string;
-
-    @Column({
-        name: 'cidade', type: 'varchar', length: 255,
-        comment: 'Cidade', nullable: false
-    })
-    city: string;
-
-    @Column({
-        name: 'numero', type: 'varchar', length: 255,
-        comment: 'Número', nullable: true
-    })
-    number: string;
-
-    @Column({
-        name: 'complemento', type: 'varchar', length: 255,
-        comment: 'Complemento', nullable: true
-    })
-    complement: string;
-
-    @Column({
-        name: 'nome_responsavel', type: 'varchar', length: 255,
-        comment: 'Nome do Responsável', nullable: false
-    })
-    responsibleName: string;
-
-    @Column({
-        name: 'cargo', type: 'varchar', length: 255,
-        comment: 'Cargo', nullable: true
-    })
-    responsibleRole: string;
+    @OneToMany(() => User, (user) => user.institution)
+    users: User[];
 }

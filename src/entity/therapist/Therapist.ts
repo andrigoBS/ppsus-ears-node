@@ -1,33 +1,34 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { TherapistEmail as Email } from './TherapistEmail';
+import { TherapistPhone as Phone } from './TherapistPhone';
+import { UserTemplate as User } from '../decorators/templates/UserTemplate';
 
 /**
  * O profissional de fonoaudiologia que ira atender o bebe
  */
 @Entity('fonoaudiologo')
-export class Therapist extends BaseEntity {
-
-    @PrimaryGeneratedColumn({ name: 'id_fonoaudiologo',
-        comment: 'Chave primária do fonoaudiologo',
-    })
-        id: number;
-
-    @Column({
-        name: 'nome', type: 'varchar', length: 255,
-        comment: 'Nome', nullable: false
-    })
-        name: string;
-
+export class Therapist extends User {
     @Column({
         name: 'crfa', type: 'varchar', length: 8,
         comment: 'crfa', nullable: false
     })
-        crfa: string;
+    crfa: string;
 
     @Column({
         name: 'tempo_experiencia', type: 'json',
         comment: 'Json do tempo de experiência', nullable: false
     })
-        xp: string;
+    xp: string;
 
-    //falta join em telefone, email, usuario
+    // Relacionamentos
+
+    @OneToMany(() => Email, (email) => email.therapist, {
+        cascade: ['soft-remove', 'recover', 'remove'],
+    })
+    emails: Email[];
+
+    @OneToMany(() => Phone, (phone) => phone.therapist, {
+        cascade: ['soft-remove', 'recover', 'remove'],
+    })
+    phones: Phone[];
 }

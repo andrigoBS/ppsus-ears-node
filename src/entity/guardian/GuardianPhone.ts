@@ -10,6 +10,6 @@ export class GuardianPhone extends Phone {
     @ManyToOne(() => Guardian, (guardian) => guardian.phones, {
         nullable: false,
     })
-        guardian: Guardian;
+    guardian: Guardian;
 
 }

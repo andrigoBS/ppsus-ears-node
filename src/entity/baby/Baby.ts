@@ -34,60 +34,60 @@ export class Baby extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_bebe',
         comment: 'Chave primária do bebê',
     })
-        id: number;
+    id: number;
 
     @Column({
         name: 'nome', type: 'varchar', length: 255,
         comment: 'Nome', nullable: false
     })
-        name: string;
+    name: string;
 
     @Column({ name: 'peso', type: 'float',
         comment: 'Peso do bebê',
     })
-        weight: number;
+    weight: number;
 
     @Column({ name: 'altura', type: 'float',
         comment: 'Altura do bebê',
     })
-        height: number;
+    height: number;
 
     @Column({ name: 'circumferencia', type: 'float',
         comment: 'Circunferência da cabeça do bebê',
     })
-        circumference: number;
+    circumference: number;
 
     @Column({ name: 'data_nascimento', type: 'datetime', update: false,
         comment: 'Data de nascimento do responsável (para cálculo de idade e afins)',
     })
-        birthDate: Date;
+    birthDate: Date;
 
     @Column({ name: 'idade_gestacional', type: 'int', update: false,
         comment: 'Tempo de duração da gestação do bebê marcado em semanas',
     })
-        gestationalAge: number;
+    gestationalAge: number;
 
     @Column({ name: 'tipo_parto', type: 'enum', update: false, enum: ChildBirth,
         comment: 'Tipo do parto do bebê',
     })
-        childBirthType: ChildBirth;
+    childBirthType: ChildBirth;
 
     @Column({ name: 'obito_materno', type: 'boolean', update: false,
         comment: 'Chave primária do responsável',
     })
-        maternalDeath: boolean;
+    maternalDeath: boolean;
 
     // Controle
 
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
         comment: 'Data de cadastro do bebê',
     })
-        registrationDate: Date;
+    registrationDate: Date;
 
     @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
         comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data',
     })
-        disableDate: Date;
+    disableDate: Date;
 
     // Relacionamentos
 
@@ -95,11 +95,11 @@ export class Baby extends BaseEntity {
     @OneToOne(() => Guardian, {
         nullable: false,
     })
-        birthMother: Guardian;
+    birthMother: Guardian;
 
     @JoinTable ({ name: 'bebe_responsavel',
         joinColumn: { name: 'fk_bebe' }, inverseJoinColumn: { name: 'fk_responsavel' },
     })
     @ManyToMany(() => Guardian, (guardian) => guardian.ward)
-        guardians: Guardian;
+    guardians: Guardian;
 }

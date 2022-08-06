@@ -9,6 +9,6 @@ export class ReferralServicePhone extends Phone {
     @ManyToOne(() => ReferralService, (service) => service.phones, {
         nullable: false,
     })
-        service: ReferralService;
+    service: ReferralService;
 
 }

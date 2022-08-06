@@ -1,13 +1,21 @@
+import { Guardian } from '../../entity/guardian/Guardian';
+import { InstitutionUser } from '../../entity/institution/InstitutionUser';
+import { Therapist } from '../../entity/therapist/Therapist';
 import { AuthUser, LoginHelper } from '../../helpers/LoginHelper';
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
 import { getRepository } from 'typeorm';
 
-//TODO: colocar todos os tipos de user aqui
-type User = SecretaryUser | UserTemplate | undefined;
+type UserString = 'secretary'   | 'institution'   | 'therapist' | 'parents';
+type User       = SecretaryUser | InstitutionUser | Therapist   | Guardian | undefined;
+enum MappingUser {
+    secretary = 'SecretaryUser',
+    institution = 'InstitutionUser',
+    therapist = 'Therapist',
+    parents = 'Guardian',
+}
 
 export default class UserController extends AbstractController {
     constructor() {
@@ -33,9 +41,7 @@ export default class UserController extends AbstractController {
             return res.status(HttpStatus.UNAUTHORIZED).send({ message: e.message, fancyMessage: 'Usuario não autorizado, contate um administrador' });
         }
 
-        //TODO: remover mock, ativar register definitivo
-        const user = authObj.login === 'test.mock' && authObj.password === 'test123'? { id: 1, name: 'Teste' } : null;
-        //const user: User = await this.findOne(req.params.userType, authObj);
+        const user: User = await this.findOne(req.params.userType, authObj);
 
         if (!user) {
             return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Usuário não encontrado, register ou senha incorreto', message: 'Not Found' });
@@ -45,14 +51,7 @@ export default class UserController extends AbstractController {
         return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: { ...user, password: undefined } });
     };
 
-    private async findOne(userType: string, authObj: AuthUser) : Promise<User> {
-        const repositoryName = this.toCamelCase(userType)+'User';
-        return getRepository<User>(repositoryName).findOne(authObj);
-    }
-
-    private toCamelCase(value: string): string {
-        const upperCaseFirstCharUserType = value.charAt(0).toUpperCase();
-        const withoutFirstCharUserType = value.substring(1);
-        return upperCaseFirstCharUserType + withoutFirstCharUserType;
+    private async findOne(userType: string, authObj: AuthUser): Promise<User> {
+        return getRepository<User>(MappingUser[userType as UserString]).findOne(authObj);
     }
 }

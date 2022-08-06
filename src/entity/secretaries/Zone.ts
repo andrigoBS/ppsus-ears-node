@@ -21,26 +21,26 @@ import { State } from './State';
 export class Zone extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: 'id_regiao' })
-        id: number;
+    id: number;
 
     @JoinColumn({ name: 'fk_estado' })
     @ManyToOne(() => State, (state) => state.zones, {
         nullable: false,
     })
-        state: State;
+    state: State;
 
     @ValidateNested()
     @Column(() => Secretary, { prefix: 'secretaria' })
-        secretary: Secretary;
+    secretary: Secretary;
 
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime' })
-        registrationDate: Date;
+    registrationDate: Date;
 
     @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true })
-        disableDate: Date;
+    disableDate: Date;
 
     @OneToMany(() => City, (city) => city.zone)
-        cities: City[];
+    cities: City[];
 
     @BeforeInsert()
     @BeforeUpdate()

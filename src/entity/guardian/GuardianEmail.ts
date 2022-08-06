@@ -9,6 +9,6 @@ export class GuardianEmail extends Email {
     @ManyToOne(() => Guardian, (guardian) => guardian.emails, {
         nullable: false,
     })
-        guardian: Guardian;
+    guardian: Guardian;
 
 }

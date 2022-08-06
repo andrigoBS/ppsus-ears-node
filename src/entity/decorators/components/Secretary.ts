@@ -12,15 +12,15 @@ export class SecretaryComponent {
     @Column({ name: 'nome', type: 'varchar', length: 255, nullable: true,
         comment: 'Rua em que se encontra esse endereço',
     })
-        name: string;
+    name: string;
 
     @IsEmail({}, { each: true })
     @Column({ name: 'emails', type: 'simple-array', nullable: true,
         comment: 'Endereços de email para contato',
     })
-        emails?: string[];
+    emails?: string[];
 
     @OneToMany(() => User, (user) => user.zone ? user.zone : user.state)
-        users?: User[];
+    users?: User[];
 
 }

@@ -9,6 +9,6 @@ export class SecretaryEmail extends Email {
     @ManyToOne(() => SecretaryUser, (user) => user.emails, {
         nullable: false,
     })
-        user: SecretaryUser;
+   user: SecretaryUser;
 
 }

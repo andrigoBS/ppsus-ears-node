@@ -8,18 +8,18 @@ import { Zone } from './Zone';
 export class City extends BaseEntity {
 
     @PrimaryGeneratedColumn({ name: 'id_municipio' })
-        id: number;
+    id: number;
 
     @Column({ name: 'nome', type: 'varchar', length: 20, update: false })
-        name: string;
+    name: string;
 
     @JoinColumn({ name: 'fk_regiao' })
     @ManyToOne(() => Zone, (zone) => zone.cities, { nullable: true })
-        zone: Zone;
+    zone: Zone;
 
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
         comment: 'Data de cadastro do município',
     })
-        registrationDate: Date;
+    registrationDate: Date;
 
 }

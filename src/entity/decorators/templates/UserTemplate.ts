@@ -14,7 +14,7 @@ export abstract class UserTemplate extends BaseEntity {
     id: number;
 
     @Column({
-        name: 'login', type: 'varchar', length: 255, nullable: false,
+        name: 'login', type: 'varchar', length: 255, nullable: false, unique: true, update: false,
         comment: 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema'
     })
     login: string;

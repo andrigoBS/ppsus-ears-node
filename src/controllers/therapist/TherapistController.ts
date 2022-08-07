@@ -35,10 +35,29 @@ export default class TherapistController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
+        let therapist: Therapist;
 
-        let therapist = req.body as Therapist;
-        therapist = await Therapist.save(therapist);
-        return res.status(HttpStatus.OK).json(therapist);
+        try{
+            therapist = req.body as Therapist;
+        }catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
+
+        try{
+            const therapist2 = await Therapist.findOne({ login: therapist.login });
+            if(therapist2){
+                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: therapist2.id }, fancyMessage: 'Já existe um usuario com esse login' });
+            }
+        }catch (e: any) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
+
+        try{
+            therapist = await Therapist.save(therapist);
+            return res.status(HttpStatus.OK).json(therapist);
+        }catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
     };
 
     private getDashboard = async (req: Request, res: Response) => {

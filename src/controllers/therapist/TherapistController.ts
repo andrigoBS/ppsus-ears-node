@@ -44,8 +44,12 @@ export default class TherapistController extends AbstractController {
         }
 
         try{
-            const therapist2 = await Therapist.findOne({ login: therapist.login });
-            if(therapist2){
+            const therapist2 = await Therapist.createQueryBuilder('t')
+                .where('t.login = :login', { login: therapist.login })
+                .select(['t.id AS id'])
+                .limit(1)
+                .execute();
+            if(therapist2 && therapist2.length !== 0){
                 return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: therapist2.id }, fancyMessage: 'Já existe um usuario com esse login' });
             }
         }catch (e: any) {

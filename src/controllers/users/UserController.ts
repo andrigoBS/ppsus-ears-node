@@ -1,6 +1,7 @@
 import { Guardian } from '../../entity/guardian/Guardian';
 import { InstitutionUser } from '../../entity/institution/InstitutionUser';
 import { Therapist } from '../../entity/therapist/Therapist';
+import CryptoHelper from '../../helpers/CryptoHelper';
 import { AuthUser, LoginHelper } from '../../helpers/LoginHelper';
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
@@ -48,10 +49,15 @@ export default class UserController extends AbstractController {
         }
 
         const token = this.getJwt().createJWToken({ id: user.id });
-        return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: { ...user, password: undefined } });
+        return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: user });
     };
 
     private async findOne(userType: string, authObj: AuthUser): Promise<User> {
-        return getRepository<User>(MappingUser[userType as UserString]).findOne(authObj);
+        return getRepository<User>(MappingUser[userType as UserString]).createQueryBuilder('u')
+            .where('u.login = :login', { login: authObj.login })
+            .orWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
+            .select(['u.id AS id', 'u.name AS name'])
+            .limit(1)
+            .execute();
     }
 }

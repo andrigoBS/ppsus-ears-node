@@ -1,4 +1,5 @@
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import CryptoHelper from '../../../helpers/CryptoHelper';
 
 /**
  * Entidade abstrata representando um usuário.
@@ -19,7 +20,6 @@ export abstract class UserTemplate extends BaseEntity {
     })
     login: string;
 
-    //TODO: ver como criptografar e descriptografar nos get e set ou insert e select
     @Column({
         name: 'password', type: 'varchar', length: 255,
         comment: 'password do usuário', nullable: false
@@ -45,8 +45,8 @@ export abstract class UserTemplate extends BaseEntity {
     disableDate: Date;
 
     @BeforeInsert()
+    @BeforeUpdate()
     hashPassword() {
-        console.log(this);
+        this.password = CryptoHelper.encrypt(this.password);
     }
-
 }

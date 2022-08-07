@@ -1,7 +1,9 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AddressComponent as Address } from '../decorators/components/Address';
+import { Therapist } from '../therapist/Therapist';
 import { InstitutionUser as User } from './InstitutionUser';
 
+export type InstitutionString = 'HOSPITAL' | 'MATERNITY' | 'HOSPITAL_AND_MATERNITY';
 export enum InstitutionType
 {
     HOSPITAL = 'Hospital',
@@ -49,4 +51,7 @@ export class Institution extends BaseEntity {
 
     @OneToMany(() => User, (user) => user.institution)
     users: User[];
+
+    @ManyToMany(() => Therapist, (therapist) => therapist.institutions)
+    therapists: Therapist[];
 }

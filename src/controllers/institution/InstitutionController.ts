@@ -1,4 +1,4 @@
-import { Institution, InstitutionType, } from '../../entity/institution/Institution';
+import { Institution, InstitutionString, InstitutionType, } from '../../entity/institution/Institution';
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
@@ -51,9 +51,37 @@ export default class InstitutionController extends AbstractController {
             }]
         */
 
-        let institution = req.body as Institution;
-        institution = await Institution.save(institution);
-        return res.status(HttpStatus.OK).json(institution);
+        let institution: Institution;
+
+        try{
+            const institutionJson = req.body;
+            institutionJson.institutionType = InstitutionType[institutionJson.institutionType as InstitutionString];
+            institution = institutionJson as Institution;
+        }catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
+
+        try{
+            const institution2 = await Institution.createQueryBuilder('i')
+                .where('i.institutionName = :institutionName', { institutionName: institution.institutionName })
+                .orWhere('i.cnes = :cnes', { cnes: institution.cnes })
+                .orWhere('i.cnpj = :cnpj', { cnpj: institution.cnpj })
+                .select(['i.id AS id'])
+                .limit(1)
+                .execute();
+            if(institution2 && institution2.length !== 0){
+                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: institution2.id }, fancyMessage: 'Já existe um usuario com esse login' });
+            }
+        }catch (e: any) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
+
+        try{
+            institution = await Institution.save(institution);
+            return res.status(HttpStatus.OK).json(institution);
+        }catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        }
     };
 
     private getOne = async (req: Request, res: Response) => {

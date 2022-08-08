@@ -11,7 +11,8 @@ export default class TriageController extends AbstractController {
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
-        router.get('/types', verifyJWTMiddleware, triageTypes);
+        router.get('/types', triageTypes);
+
     }
 
     private create = async (req: Request, res: Response) => {
@@ -41,7 +42,7 @@ export default class TriageController extends AbstractController {
     private triageTypes = async (req: Request, res: Response) => {
         /*
             #swagger.tags = ['Triage']
-            #swagger.description = 'Tipos de traigem'
+            #swagger.description = 'Tipos de triagem'
             #swagger.security = [{
                 "ApiKeyAuth": []
             }

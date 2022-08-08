@@ -1,9 +1,10 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum TriageType {
-    EOET = 'EOET',
-    PEATEA = 'PEATE-A',
-    EOET_PEATEA = 'EOET + PEATE-A',
+    EOET = 'EOE transitente',
+    EOEP = 'EOE produto de distorção',
+    PEATEA = 'PEATE automático',
+    EOET_PEATEA = 'EOE transitente + PEATE automático',
 }
 
 @Entity('triagem')

@@ -73,6 +73,7 @@ export default class InstitutionController extends AbstractController {
         }
 
         try{
+            console.log(institution);
             institution = await this.institutionRepository.save(institution);
             return res.status(HttpStatus.OK).json(institution);
         }catch (e: any){

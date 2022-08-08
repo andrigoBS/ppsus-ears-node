@@ -1,3 +1,4 @@
+import { ValidateNested } from 'class-validator';
 import {
     BaseEntity,
     Column,
@@ -49,6 +50,7 @@ export class ReferralService extends BaseEntity {
     })
     typeService: ReferralServiceType;
 
+    @ValidateNested()
     @Column(() => Address, { prefix: false })
     address: Address;
 

@@ -3,6 +3,7 @@ import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import StateController from './StateController';
 import ZoneController from './ZoneController';
+import CityController from './CityController';
 
 export default class SecretaryController extends AbstractController {
 
@@ -17,6 +18,10 @@ export default class SecretaryController extends AbstractController {
 
         router.use('/zone', new ZoneController().getRouter()
             // #swagger.tags = ['ZoneSecretary']
+        );
+
+        router.use('/city', new CityController().getRouter()
+            // #swagger.tags = ['CitySecretary']
         );
 
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);

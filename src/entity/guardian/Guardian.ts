@@ -1,3 +1,4 @@
+import { ValidateNested } from 'class-validator';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Baby } from '../baby/Baby';
@@ -18,6 +19,7 @@ export class Guardian extends User {
     })
     cpf: string;
 
+    @ValidateNested()
     @Column(() => Address, { prefix: false })
     address: Address;
 

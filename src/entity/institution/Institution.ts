@@ -1,3 +1,4 @@
+import { ValidateNested } from 'class-validator';
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Therapist } from '../therapist/Therapist';
@@ -44,6 +45,7 @@ export class Institution extends BaseEntity {
     })
     institutionType: InstitutionType;
 
+    @ValidateNested()
     @Column(() => Address, { prefix: false })
     address: Address;
 

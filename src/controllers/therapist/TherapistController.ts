@@ -1,20 +1,21 @@
 import { Request, Response } from 'express';
-import AbstractController from '../AbstractController';
+import { Therapist, TherapistXP, TherapistXPString } from '../../entity/therapist/Therapist';
 import { HttpStatus } from '../../helpers/HttpStatus';
-import { Therapist } from '../../entity/therapist/Therapist';
+import AbstractController from '../AbstractController';
+import OrientationController from './orientation/OrientationController';
 import TriageController from './triage/TriageController';
-import OrientationController from "./orientation/OrientationController";
 
 export default class TherapistController extends AbstractController {
 
     constructor() {
         super();
-        const { create, getDashboard } = this;
+        const { create, getDashboard, getXpTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
 
         router.post('/', create);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
+        router.get('/xp-types', getXpTypes);
 
         router.use('/triage', new TriageController().getRouter());
         router.use('/:id/orientation', new OrientationController().getRouter());
@@ -40,7 +41,9 @@ export default class TherapistController extends AbstractController {
         let therapist: Therapist;
 
         try{
-            therapist = req.body as Therapist;
+            const therapistJson = req.body;
+            therapistJson.xp = TherapistXP[therapistJson.xp as TherapistXPString];
+            therapist = therapistJson as Therapist;
         }catch (e: any){
             return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
         }
@@ -81,5 +84,16 @@ export default class TherapistController extends AbstractController {
             { type: 'indicators' },
             { type: 'equipment' }
         ]);
+    };
+
+    private getXpTypes = async (req: Request, res: Response) => {
+        /*
+           #swagger.tags = ['Therapist']
+           #swagger.description = 'Endpoint para recuperar todos os reports do dashboard de um Fono'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+        return res.status(HttpStatus.OK).json(TherapistXP);
     };
 }

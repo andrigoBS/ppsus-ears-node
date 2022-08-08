@@ -3,8 +3,9 @@ import { Institution } from '../institution/Institution';
 import { TherapistEmail as Email } from './TherapistEmail';
 import { TherapistPhone as Phone } from './TherapistPhone';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';
-import {Orientation} from "../orientation/Orientation";
+import { Orientation } from '../orientation/Orientation';
 
+export type TherapistXPString = 'LESS_ONE' | 'ONE_TO_THREE' | 'THREE_TO_FIVE' | 'MORE_FIVE';
 export enum TherapistXP {
     LESS_ONE = 'Menos de 1 ano',
     ONE_TO_THREE = 'De 1 a 3 anos',

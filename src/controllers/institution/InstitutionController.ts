@@ -2,8 +2,10 @@ import { Institution, InstitutionString, InstitutionType, } from '../../entity/i
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
+import InstitutionRepository from './InstitutionRepository';
 
 export default class InstitutionController extends AbstractController {
+    private readonly institutionRepository = new InstitutionRepository();
 
     constructor() {
         super();
@@ -62,22 +64,16 @@ export default class InstitutionController extends AbstractController {
         }
 
         try{
-            const institution2 = await Institution.createQueryBuilder('i')
-                .where('i.institutionName = :institutionName', { institutionName: institution.institutionName })
-                .orWhere('i.cnes = :cnes', { cnes: institution.cnes })
-                .orWhere('i.cnpj = :cnpj', { cnpj: institution.cnpj })
-                .select(['i.id AS id'])
-                .limit(1)
-                .execute();
+            const institution2 = await this.institutionRepository.findIdsSimilar(institution, 1);
             if(institution2 && institution2.length !== 0){
-                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: institution2.id }, fancyMessage: 'Já existe um usuario com esse login' });
+                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: institution2[0].id }, fancyMessage: 'Já existe um usuario com esse login' });
             }
         }catch (e: any) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
         }
 
         try{
-            institution = await Institution.save(institution);
+            institution = await this.institutionRepository.save(institution);
             return res.status(HttpStatus.OK).json(institution);
         }catch (e: any){
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
@@ -92,7 +88,7 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const institution = await Institution.findOne(req.params.id);
+        const institution = await this.institutionRepository.findOne({ id: req.params.id });
         if(!institution) {
             return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Instituição não encontrada', message: 'Not Found' });
         }
@@ -123,7 +119,6 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }
         */
-
         return res.status(HttpStatus.OK).send(InstitutionType);
     };
 }

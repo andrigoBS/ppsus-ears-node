@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Therapist } from '../therapist/Therapist';
 import { InstitutionUser as User } from './InstitutionUser';

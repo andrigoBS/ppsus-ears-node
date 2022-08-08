@@ -3,6 +3,7 @@ import { Institution } from '../institution/Institution';
 import { TherapistEmail as Email } from './TherapistEmail';
 import { TherapistPhone as Phone } from './TherapistPhone';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';
+import {Orientation} from "../orientation/Orientation";
 
 export enum TherapistXP {
     LESS_ONE = 'Menos de 1 ano',
@@ -45,4 +46,7 @@ export class Therapist extends User {
     })
     @ManyToMany(() => Institution, (institution) => institution.therapists)
     institutions: Institution;
+
+    @OneToMany(() => Orientation, (orientation) => orientation.therapist)
+    orientations: Orientation;
 }

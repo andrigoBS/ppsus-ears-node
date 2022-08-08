@@ -3,6 +3,7 @@ import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import { Therapist } from '../../entity/therapist/Therapist';
 import TriageController from './triage/TriageController';
+import OrientationController from "./orientation/OrientationController";
 
 export default class TherapistController extends AbstractController {
 
@@ -12,10 +13,11 @@ export default class TherapistController extends AbstractController {
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
 
-        router.use('/triage', new TriageController().getRouter());
-
         router.post('/', create);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
+
+        router.use('/triage', new TriageController().getRouter());
+        router.use('/:id/orientation', new OrientationController().getRouter());
     }
 
     private create = async (req: Request, res: Response) => {

@@ -4,6 +4,8 @@ import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
 import OrientationController from './orientation/OrientationController';
 import TriageController from './triage/TriageController';
+import IndicatorController from "./indicator/IndicatorController";
+import EquipmentController from "./equipment/EquipmentController";
 
 export default class TherapistController extends AbstractController {
 
@@ -19,7 +21,8 @@ export default class TherapistController extends AbstractController {
 
         router.use('/triage', new TriageController().getRouter());
         router.use('/:id/orientation', new OrientationController().getRouter());
-        router.use('/orientation', new OrientationController().getRouter());
+        router.use('/indicator', new IndicatorController().getRouter());
+        router.use('/equipment', new EquipmentController().getRouter());
     }
 
     private create = async (req: Request, res: Response) => {

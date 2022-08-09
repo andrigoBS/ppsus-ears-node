@@ -43,7 +43,7 @@ export default class OrientationController extends AbstractController {
     private getAll = async (req: Request, res: Response) => {
         /*
            #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para criar uma orientacao'
+           #swagger.description = 'Endpoint para pegar todos as orientações'
            #swagger.parameters['orientation'] = {
             in: 'body',
             required: 'true',
@@ -59,9 +59,11 @@ export default class OrientationController extends AbstractController {
             }]
         */
 
-        console.log("AAAAAAAA", req.body)
-
-        let orientation = await Orientation.find(req.body);
+        let orientation = await Orientation.createQueryBuilder("orientation")
+                                           .select(["orientation.id", "orientation.description"])
+                                           .where("orientation.therapist = :id", {id: req.body.jwtObject.id})
+                                           .orWhere("orientation.therapist is null")
+                                           .getMany()
         return res.status(HttpStatus.OK).json(orientation);
     };
 

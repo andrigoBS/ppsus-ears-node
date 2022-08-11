@@ -9,11 +9,11 @@ export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const { create, getOne, institutionTypes, getDashboard } = this;
+        const { create, getOne, getInstitutionTypes, getDashboard } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
-        router.get('/types', institutionTypes);
+        router.get('/types', getInstitutionTypes);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
         router.get('/:id', getOne);
     }
@@ -73,7 +73,6 @@ export default class InstitutionController extends AbstractController {
         }
 
         try{
-            console.log(institution);
             institution = await this.institutionRepository.save(institution);
             return res.status(HttpStatus.OK).json(institution);
         }catch (e: any){
@@ -112,7 +111,7 @@ export default class InstitutionController extends AbstractController {
         ]);
     };
 
-    private institutionTypes = async (req: Request, res: Response) => {
+    private getInstitutionTypes = async (req: Request, res: Response) => {
         /*
             #swagger.tags = ['Institution']
             #swagger.description = 'Tipos de instituição'
@@ -120,6 +119,9 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }
         */
-        return res.status(HttpStatus.OK).send(InstitutionType);
+        const institutionTypes = Object.keys(InstitutionType).map((key) => (
+            { id: key, name: InstitutionType[key as InstitutionString] }
+        ));
+        return res.status(HttpStatus.OK).send(institutionTypes);
     };
 }

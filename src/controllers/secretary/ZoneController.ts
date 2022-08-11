@@ -27,8 +27,11 @@ export default class ZoneController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const [zones, count] = await Zone.findAndCount();
-        return res.status(HttpStatus.OK).json({ zones, count });
+        const zones = await Zone.createQueryBuilder('z')
+            .select(['z.id AS id', 'z.secretary.name AS name'])
+            .execute()
+        ;
+        return res.status(HttpStatus.OK).json(zones);
     };
 
     private getById = async (req: Request, res: Response) => {

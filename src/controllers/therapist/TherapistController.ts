@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { Therapist, TherapistXP, TherapistXPString } from '../../entity/therapist/Therapist';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
+import EquipmentController from './equipment/EquipmentController';
+import IndicatorController from './indicator/IndicatorController';
 import OrientationController from './orientation/OrientationController';
 import TriageController from './triage/TriageController';
-import IndicatorController from "./indicator/IndicatorController";
-import EquipmentController from "./equipment/EquipmentController";
-import ConductController from "./conduct/ConductController";
+import ConductController from './conduct/ConductController';
 
 export default class TherapistController extends AbstractController {
 
@@ -100,6 +100,9 @@ export default class TherapistController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        return res.status(HttpStatus.OK).json(TherapistXP);
+        const therapistXP = Object.keys(TherapistXP).map((key) => (
+            { id: key, name: TherapistXP[key as TherapistXPString] }
+        ));
+        return res.status(HttpStatus.OK).json(therapistXP);
     };
 }

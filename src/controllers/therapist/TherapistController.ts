@@ -6,6 +6,7 @@ import OrientationController from './orientation/OrientationController';
 import TriageController from './triage/TriageController';
 import IndicatorController from "./indicator/IndicatorController";
 import EquipmentController from "./equipment/EquipmentController";
+import ConductController from "./conduct/ConductController";
 
 export default class TherapistController extends AbstractController {
 
@@ -23,6 +24,7 @@ export default class TherapistController extends AbstractController {
         router.use('/:id/orientation', new OrientationController().getRouter());
         router.use('/indicator', new IndicatorController().getRouter());
         router.use('/equipment', new EquipmentController().getRouter());
+        router.use('/conduct', new ConductController().getRouter());
     }
 
     private create = async (req: Request, res: Response) => {

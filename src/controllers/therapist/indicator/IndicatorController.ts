@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Indicator} from "../../../entity/indicator/Indicator";
+import { Indicator } from '../../../entity/indicator/Indicator';
 
 export default class IndicatorController extends AbstractController {
 
@@ -58,7 +58,7 @@ export default class IndicatorController extends AbstractController {
             }]
         */
 
-        let indicator = await Indicator.find();
+        const indicator = await Indicator.find();
         return res.status(HttpStatus.OK).json(indicator);
     };
 

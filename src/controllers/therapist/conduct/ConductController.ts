@@ -69,7 +69,7 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        let conduct = await Conduct.find();
+        const conduct = await Conduct.find();
         return res.status(HttpStatus.OK).json(conduct);
     };
 

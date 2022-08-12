@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Orientation} from "../../../entity/orientation/Orientation";
+import { Orientation } from '../../../entity/orientation/Orientation';
 
 export default class OrientationController extends AbstractController {
 
@@ -59,11 +59,11 @@ export default class OrientationController extends AbstractController {
             }]
         */
 
-        let orientation = await Orientation.createQueryBuilder("orientation")
-                                           .select(["orientation.id", "orientation.description"])
-                                           .where("orientation.therapist = :id", {id: req.body.jwtObject.id})
-                                           .orWhere("orientation.therapist is null")
-                                           .getMany()
+        const orientation = await Orientation.createQueryBuilder('orientation')
+            .select(['orientation.id', 'orientation.description'])
+            .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
+            .orWhere('orientation.therapist is null')
+            .getMany();
         return res.status(HttpStatus.OK).json(orientation);
     };
 

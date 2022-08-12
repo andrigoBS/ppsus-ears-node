@@ -59,7 +59,7 @@ export default class EquipmentController extends AbstractController {
             }]
         */
 
-        let equipment = await Equipment.find();
+        const equipment = await Equipment.find();
         return res.status(HttpStatus.OK).json(equipment);
     };
 

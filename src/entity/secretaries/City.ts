@@ -19,7 +19,7 @@ export class City extends BaseEntity {
     zone: Zone;
 
     @JoinColumn({ name: 'fk_state' })
-    @ManyToOne(() => State, (state) => state.cities, { nullable: true })
+    @ManyToOne(() => State, (state) => state.cities, { nullable: false })
     state: State;
 
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Triage, TriageType } from '../../../entity/triage/Triage';
+import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
 
@@ -47,7 +47,9 @@ export default class TriageController extends AbstractController {
                 "ApiKeyAuth": []
             }
         */
-
-        return res.status(HttpStatus.OK).send(TriageType);
+        const triageType = Object.keys(TriageType).map((key) => (
+            { id: key, name: TriageType[key as TriageString] }
+        ));
+        return res.status(HttpStatus.OK).send(triageType);
     };
 }

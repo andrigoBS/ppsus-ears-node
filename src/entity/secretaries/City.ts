@@ -1,4 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { State } from './State';
 import { Zone } from './Zone';
 
 /**
@@ -16,6 +17,10 @@ export class City extends BaseEntity {
     @JoinColumn({ name: 'fk_regiao' })
     @ManyToOne(() => Zone, (zone) => zone.cities, { nullable: true })
     zone: Zone;
+
+    @JoinColumn({ name: 'fk_state' })
+    @ManyToOne(() => State, (state) => state.cities, { nullable: false })
+    state: State;
 
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
         comment: 'Data de cadastro do município',

@@ -1,5 +1,6 @@
 import { Institution, InstitutionString, InstitutionType, } from '../../entity/institution/Institution';
 import { Request, Response } from 'express';
+import { InstitutionUser } from '../../entity/institution/InstitutionUser';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import InstitutionRepository from './InstitutionRepository';
@@ -9,12 +10,13 @@ export default class InstitutionController extends AbstractController {
 
     constructor() {
         super();
-        const { create, getOne, institutionTypes, getDashboard } = this;
+        const { create, getOne, getAll, getInstitutionTypes, getDashboard } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', create);
-        router.get('/types', institutionTypes);
+        router.get('/types', getInstitutionTypes);
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
+        router.get('/', getAll);
         router.get('/:id', getOne);
     }
 
@@ -53,29 +55,39 @@ export default class InstitutionController extends AbstractController {
             }]
         */
 
-        let institution: Institution;
+        const institutionUserJson = req.body;
 
-        try{
-            const institutionJson = req.body;
-            institutionJson.institutionType = InstitutionType[institutionJson.institutionType as InstitutionString];
-            institution = institutionJson as Institution;
-        }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+        let institutionUser: InstitutionUser;
+
+        if(!institutionUserJson.institution){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Institution Not Found', fancyMessage: 'Não foi possivel recuperar a instituição' });
         }
 
-        try{
-            const institution2 = await this.institutionRepository.findIdsSimilar(institution, 1);
-            if(institution2 && institution2.length !== 0){
-                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: institution2[0].id }, fancyMessage: 'Já existe um usuario com esse login' });
+        if(!institutionUserJson.institution.id){
+            try{
+                institutionUserJson.institution.institutionType = InstitutionType[institutionUserJson.institution.institutionType as InstitutionString];
+            }catch (e: any){
+                return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
             }
-        }catch (e: any) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+
+            try{
+                const institution2 = await this.institutionRepository.findIdsSimilar(institutionUserJson.institution, 1);
+                if(institution2 && institution2.length !== 0){
+                    return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: institution2[0].id }, fancyMessage: 'Já existe um usuario com esse login' });
+                }
+            }catch (e: any) {
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+            }
+
+            const institution = await this.institutionRepository.save(institutionUserJson.institution as Institution);
+            institutionUserJson.institution = institution.id;
         }
 
+        institutionUser = institutionUserJson as InstitutionUser;
+
         try{
-            console.log(institution);
-            institution = await this.institutionRepository.save(institution);
-            return res.status(HttpStatus.OK).json(institution);
+            institutionUser = await this.institutionRepository.saveUser(institutionUser);
+            return res.status(HttpStatus.OK).json(institutionUser);
         }catch (e: any){
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
         }
@@ -90,6 +102,21 @@ export default class InstitutionController extends AbstractController {
             }]
         */
         const institution = await this.institutionRepository.findOne({ id: req.params.id });
+        if(!institution) {
+            return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Instituição não encontrada', message: 'Not Found' });
+        }
+        return res.status(HttpStatus.OK).json(institution);
+    };
+
+    private getAll = async (req: Request, res: Response) => {
+        /*
+           #swagger.tags = ['Institution']
+           #swagger.description = 'Endpoint para recuperar uma instituição'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+        const institution = await this.institutionRepository.findAll();
         if(!institution) {
             return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Instituição não encontrada', message: 'Not Found' });
         }
@@ -112,7 +139,7 @@ export default class InstitutionController extends AbstractController {
         ]);
     };
 
-    private institutionTypes = async (req: Request, res: Response) => {
+    private getInstitutionTypes = async (req: Request, res: Response) => {
         /*
             #swagger.tags = ['Institution']
             #swagger.description = 'Tipos de instituição'
@@ -120,6 +147,9 @@ export default class InstitutionController extends AbstractController {
                 "ApiKeyAuth": []
             }
         */
-        return res.status(HttpStatus.OK).send(InstitutionType);
+        const institutionTypes = Object.keys(InstitutionType).map((key) => (
+            { id: key, name: InstitutionType[key as InstitutionString] }
+        ));
+        return res.status(HttpStatus.OK).send(institutionTypes);
     };
 }

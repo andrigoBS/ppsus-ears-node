@@ -12,6 +12,7 @@ import { AddressComponent as Address } from '../decorators/components/Address';
 import { ReferralServiceEmail as Email } from './ReferralServiceEmail';
 import { ReferralServicePhone as Phone } from './ReferralServicePhone';
 
+export type ReferralServiceTypeString = 'SUS' | 'PRIVATE' | 'MIXED';
 export enum ReferralServiceType {
     SUS = 'Serviço do Sistema Único de Saúde(SUS)',
     PRIVATE = 'Serviço Privado',

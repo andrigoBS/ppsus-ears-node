@@ -1,6 +1,7 @@
 import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ValidateNested, validateOrReject } from 'class-validator';
 import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
+import { City } from './City';
 import { Zone } from './Zone';
 
 @Entity('estado')
@@ -26,6 +27,9 @@ export class State extends BaseEntity {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
     zones: Zone[];
+
+    @OneToMany(() => City, (city) => city.state)
+    cities: City[];
 
     @BeforeInsert()
     @BeforeUpdate()

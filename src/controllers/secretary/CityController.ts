@@ -23,19 +23,15 @@ export default class CityController extends AbstractController {
         const query = City
             .createQueryBuilder('c')
             .select(['c.id AS id', 'c.name AS name'])
-            .leftJoin('c.zone', 'z')
-            .leftJoin('z.state', 's')
         ;
         const state = req.query.state;
         if(state) {
-            query.where('s.id = :state', { state });
+            query.leftJoin('c.state', 's')
+                .where('s.id = :state', { state })
+            ;
         }
         const cities = await query.execute();
-        let citiesObject = {};
-        cities.forEach((city: { id: string; name: string; }) => {
-            citiesObject = { ...citiesObject, [city.id]: city.name };
-        });
-        return res.status(HttpStatus.OK).json(citiesObject);
+        return res.status(HttpStatus.OK).json(cities);
     };
 
     private getById = async (req: Request, res: Response) => {

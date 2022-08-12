@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ReferralService, ReferralServiceType } from '../../entity/referral_service/ReferralService';
+import { ReferralService, ReferralServiceType, ReferralServiceTypeString } from '../../entity/referral_service/ReferralService';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
 
@@ -107,7 +107,9 @@ export default class ReferralServiceController extends AbstractController {
                     "ApiKeyAuth": []
                 }]
         */
-
-        return res.status(HttpStatus.OK).send(ReferralServiceType);
+        const referralServiceType = Object.keys(ReferralServiceType).map((key) => (
+            { id: key, name: ReferralServiceType[key as ReferralServiceTypeString] }
+        ));
+        return res.status(HttpStatus.OK).send(referralServiceType);
     };
 }

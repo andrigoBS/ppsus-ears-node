@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
-import { Orientation } from '../../../entity/orientation/Orientation';
+import { Indicator } from '../../../entity/indicator/Indicator';
 
-export default class OrientationController extends AbstractController {
+export default class IndicatorController extends AbstractController {
 
     constructor() {
         super();
@@ -17,12 +17,12 @@ export default class OrientationController extends AbstractController {
 
     private create = async (req: Request, res: Response) => {
         /*
-           #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para criar uma orientacao'
-           #swagger.parameters['orientation'] = {
+           #swagger.tags = ['Indicator']
+           #swagger.description = 'Endpoint para criar uma indicador de risco'
+           #swagger.parameters['indicator'] = {
             in: 'body',
             required: 'true',
-            description: 'Orientação',
+            description: 'Indicador de risco',
             type: 'object',
             schema: {
                 "lembrar": "arrumarEsseJson"
@@ -34,20 +34,19 @@ export default class OrientationController extends AbstractController {
             }]
         */
 
-        let orientation = req.body as Orientation;
-        orientation.therapist = req.body.jwtObject.id;
-        orientation = await Orientation.save(orientation);
-        return res.status(HttpStatus.OK).json(orientation);
+        let indicator = req.body as Indicator;
+        indicator = await Indicator.save(indicator);
+        return res.status(HttpStatus.OK).json(indicator);
     };
 
     private getAll = async (req: Request, res: Response) => {
         /*
-           #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para pegar todos as orientações'
-           #swagger.parameters['orientation'] = {
+           #swagger.tags = ['Indicator']
+           #swagger.description = 'Endpoint para pegar todos os indicadores'
+           #swagger.parameters['indicator'] = {
             in: 'body',
             required: 'true',
-            description: 'Orientação',
+            description: 'Indicador',
             type: 'object',
             schema: {
                 "lembrar": "arrumarEsseJson"
@@ -59,12 +58,8 @@ export default class OrientationController extends AbstractController {
             }]
         */
 
-        const orientation = await Orientation.createQueryBuilder('orientation')
-            .select(['orientation.id', 'orientation.description'])
-            .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-            .orWhere('orientation.therapist is null')
-            .getMany();
-        return res.status(HttpStatus.OK).json(orientation);
+        const indicator = await Indicator.find();
+        return res.status(HttpStatus.OK).json(indicator);
     };
 
 }

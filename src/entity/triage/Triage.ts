@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export type TriageString = 'EOET' | 'EOEP' | 'PEATEA' | 'EOET_PEATEA';
 export enum TriageType {
     EOET = 'EOE transitente',
     EOEP = 'EOE produto de distorção',

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
 import AbstractController from '../AbstractController';
 import { FindOneOptions } from 'typeorm';
 import { HttpStatus } from '../../helpers/HttpStatus';
@@ -9,13 +10,14 @@ export default class ZoneController extends AbstractController {
 
     constructor() {
         super();
-        const { getAll, getById, updateSecretary, createZone, deleteZone, recoverZone } = this;
+        const { getAll, getById, updateSecretary, createZone, createZoneUser, deleteZone, recoverZone } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
         router.get('/:id', getById);
         router.put('/:id', verifyJWTMiddleware, updateSecretary);
         router.post('/', verifyJWTMiddleware, createZone);
+        router.post('/user', createZoneUser);
         router.delete('/:id', deleteZone);
         router.get('/recover/:id', recoverZone);
     }
@@ -27,8 +29,11 @@ export default class ZoneController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const [zones, count] = await Zone.findAndCount();
-        return res.status(HttpStatus.OK).json({ zones, count });
+        const zones = await Zone.createQueryBuilder('z')
+            .select(['z.id AS id', 'z.secretary.name AS name'])
+            .execute()
+        ;
+        return res.status(HttpStatus.OK).json(zones);
     };
 
     private getById = async (req: Request, res: Response) => {
@@ -90,6 +95,28 @@ export default class ZoneController extends AbstractController {
         }
         try {
             zone = await Zone.save(zone);
+            return res.status(HttpStatus.OK).json(zone);
+        } catch (e: any) {
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    };
+
+    private createZoneUser = async (req: Request, res: Response) => {
+        /*
+           #swagger.description = 'Endpoint para criar uma região'
+           #swagger.parameters['secretary'] = {
+               in: 'body',
+               required: 'true',
+               description: 'Secretaria Regional',
+               schema: {$ref: '#/definitions/ZoneCreate'}
+           }
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+        let zone = req.body as SecretaryUser;
+        try {
+            zone = await SecretaryUser.save(zone);
             return res.status(HttpStatus.OK).json(zone);
         } catch (e: any) {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });

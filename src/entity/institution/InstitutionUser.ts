@@ -29,7 +29,7 @@ export class InstitutionUser extends User {
     phones: Phone[];
 
     @JoinColumn({ name: 'fk_instituicao' })
-    @ManyToOne(() => Institution, (institution) => institution.users)
+    @ManyToOne(() => Institution, (institution) => institution.users, { nullable: false })
     institution: Institution;
 
 }

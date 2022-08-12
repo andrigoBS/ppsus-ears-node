@@ -23,12 +23,11 @@ export default class StateController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const states = await State.createQueryBuilder('s').select(['s.id AS id', 's.name AS name']).execute();
-        let statesObject = {};
-        states.forEach((state: { id: string; name: string; }) => {
-            statesObject = { ...statesObject, [state.id]: state.name };
-        });
-        return res.status(HttpStatus.OK).json(statesObject);
+        const states = await State.createQueryBuilder('s')
+            .select(['s.id AS id', 's.name AS name'])
+            .execute()
+        ;
+        return res.status(HttpStatus.OK).json(states);
     };
 
     private getById = async (req: Request, res: Response) => {

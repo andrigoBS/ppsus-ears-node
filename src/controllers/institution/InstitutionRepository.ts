@@ -1,4 +1,5 @@
 import { Institution } from '../../entity/institution/Institution';
+import { InstitutionUser } from '../../entity/institution/InstitutionUser';
 
 export default class InstitutionRepository {
     public findIdsSimilar({ institutionName, cnes, cnpj }: Institution, limit?: number): Promise<{ id: number }[]>{
@@ -19,7 +20,22 @@ export default class InstitutionRepository {
         return Institution.findOne(options);
     }
 
+    public findAll(options?: object, limit?: number): Promise<Institution[] | undefined>{
+        let query = Institution
+            .createQueryBuilder('i')
+            .select(['i.id AS id', 'i.institutionName AS name'])
+        ;
+        if(limit) {
+            query = query.limit(limit);
+        }
+        return query.execute();
+    }
+
     public save(institution: Institution): Promise<Institution>{
         return Institution.save(institution);
+    }
+
+    public saveUser(institutionUser: InstitutionUser): Promise<InstitutionUser>{
+        return InstitutionUser.save(institutionUser);
     }
 }

@@ -46,7 +46,7 @@ export class Therapist extends User {
         joinColumn: { name: 'fk_fonoaudiologo' }, inverseJoinColumn: { name: 'fk_instituicao' },
     })
     @ManyToMany(() => Institution, (institution) => institution.therapists)
-    institutions: Institution;
+    institutions: Institution[];
 
     @OneToMany(() => Orientation, (orientation) => orientation.therapist)
     orientations: Orientation;

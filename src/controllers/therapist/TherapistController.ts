@@ -49,6 +49,7 @@ export default class TherapistController extends AbstractController {
         try{
             const therapistJson = req.body;
             therapistJson.xp = TherapistXP[therapistJson.xp as TherapistXPString];
+            therapistJson.institutions = therapistJson.institutions.map((i: number) => ({ id: i }));
             therapist = therapistJson as Therapist;
         }catch (e: any){
             return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
@@ -69,6 +70,7 @@ export default class TherapistController extends AbstractController {
 
         try{
             therapist = await Therapist.save(therapist);
+
             return res.status(HttpStatus.OK).json(therapist);
         }catch (e: any){
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });

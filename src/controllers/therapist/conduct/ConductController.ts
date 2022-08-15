@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Conduct} from "../../../entity/conduct/Conduct";
-import {TriageString, TriageType} from "../../../entity/triage/Triage";
+import { Conduct } from '../../../entity/conduct/Conduct';
+import { TriageString, TriageType } from '../../../entity/triage/Triage';
 
 export default class ConductController extends AbstractController {
 

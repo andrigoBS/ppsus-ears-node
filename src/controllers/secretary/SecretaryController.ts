@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
+import CryptoHelper from '../../helpers/CryptoHelper';
 import AbstractController from '../AbstractController';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import StateController from './StateController';
@@ -9,7 +11,7 @@ export default class SecretaryController extends AbstractController {
 
     constructor() {
         super();
-        const { getDashboard } = this;
+        const { getDashboard, getIsState } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.use('/state', new StateController().getRouter()
@@ -25,6 +27,7 @@ export default class SecretaryController extends AbstractController {
         );
 
         router.get('/dashboard', verifyJWTMiddleware, getDashboard);
+        router.get(':id/is-state', verifyJWTMiddleware, getIsState);
     }
 
     private getDashboard = async (req: Request, res: Response) => {
@@ -41,5 +44,23 @@ export default class SecretaryController extends AbstractController {
             { type: 'indicators-percent' },
             { type: 'indicators' }
         ]);
+    };
+
+    private getIsState = async (req: Request, res: Response) => {
+        /*
+           #swagger.tags = ['Secretary']
+           #swagger.description = 'Endpoint para recuperar todos os reports do dashboard de uma secretaria'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+        const user = await SecretaryUser.createQueryBuilder('u')
+            .where('u.id = :id', { id: req.params.id })
+            .select(['u.state AS state'])
+            .limit(1)
+            .execute()
+        ;
+        console.log(user);
+        return res.status(HttpStatus.OK).json(user.state !== null);
     };
 }

@@ -1,19 +1,19 @@
 import { Request, Response } from 'express';
 import AbstractController from '../AbstractController';
-import { ChildBirth } from '../../entity/baby/Baby';
+import { ChildBirth, ChildBirthString } from '../../entity/baby/Baby';
 import { HttpStatus } from '../../helpers/HttpStatus';
 
 export default class ParentsController extends AbstractController {
 
     constructor() {
         super();
-        const { listChildBirth } = this;
+        const { listChildBirthTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
-        router.get('/child-birth', verifyJWTMiddleware, listChildBirth);
+        router.get('/birth-types', verifyJWTMiddleware, listChildBirthTypes);
     }
 
-    private listChildBirth = async (req: Request, res: Response) => {
+    private listChildBirthTypes = async (req: Request, res: Response) => {
         /*
             #swagger.tags = ['Baby']
             #swagger.description = 'Tipo de parto'
@@ -21,8 +21,10 @@ export default class ParentsController extends AbstractController {
                 "basicApiKeyAuth": []
             }
         */
-
-        return res.status(HttpStatus.OK).send(ChildBirth);
+        const childBirthTypes = Object.keys(ChildBirth).map((key) => (
+            { id: key, name: ChildBirth[key as ChildBirthString] }
+        ));
+        return res.status(HttpStatus.OK).send(childBirthTypes);
 
     };
 

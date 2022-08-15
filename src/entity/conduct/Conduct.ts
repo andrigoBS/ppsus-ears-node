@@ -49,6 +49,7 @@ export class Conduct extends BaseEntity {
     testType: number;
 
 
+
     // @JoinColumn({ name: 'fk_fonoaudiologo' })
     // @ManyToOne(() => Therapist, { nullable: true })
     // therapist: Therapist;

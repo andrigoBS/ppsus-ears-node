@@ -55,11 +55,21 @@ export default class UserController extends AbstractController {
     };
 
     private async findOne(userType: string, authObj: AuthUser): Promise<User[]> {
-        return getRepository<User>(MappingUser[userType as UserString]).createQueryBuilder('u')
+        let query = getRepository<User>(MappingUser[userType as UserString])
+            .createQueryBuilder('u')
             .where('u.login = :login', { login: authObj.login })
             .orWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
-            .select(['u.id AS id', 'u.name AS name'])
+            .select('u.id','id')
+            .addSelect('u.name','name')
+        ;
+
+        if(userType === 'secretary'){
+            query = query.addSelect('IF(u.state IS NULL, "ZONE", "STATE")', 'type');
+        }
+
+        return query
             .limit(1)
-            .execute();
+            .execute()
+        ;
     }
 }

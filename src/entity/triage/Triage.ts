@@ -44,7 +44,7 @@ export class Triage extends BaseEntity {
     * ................. joins .................
     * Equipamerntos
     * Conduta
-    * Indicador
+    * Indicador(IRDA)
     * Orientação
     * Fono
     * Instituicao

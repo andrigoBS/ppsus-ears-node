@@ -16,6 +16,7 @@ import { Guardian } from '../guardian/Guardian';
 /**
  * Tipos de parto aceitos pelo sistema
  */
+export type ChildBirthString = 'CESAREAN' | 'NATURAL' | 'VACUUM' | 'FORCEPS' | 'WATER';
 export enum ChildBirth {
     CESAREAN = 'Parto Cirúrgico (Cesárea)',
     NATURAL = 'Parto Vaginal Natural',
@@ -73,7 +74,7 @@ export class Baby extends BaseEntity {
     childBirthType: ChildBirth;
 
     @Column({ name: 'obito_materno', type: 'boolean', update: false,
-        comment: 'Chave primária do responsável',
+        comment: 'Obito materno',
     })
     maternalDeath: boolean;
 

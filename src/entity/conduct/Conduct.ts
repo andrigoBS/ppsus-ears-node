@@ -1,18 +1,18 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {Therapist} from "../therapist/Therapist";
 import {TriageType} from "../triage/Triage";
+import {Therapist} from "../therapist/Therapist";
 
 @Entity('conduta')
 export class Conduct extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_conduct' })
     id: number;
 
-    @Column({ name: 'descricao_resultado', type: 'varchar', length: 255,
+    @Column({ name: 'descricao_resultado', type: 'text',
         comment: 'Descrição da conduta',
     })
     resultDescription: string;
 
-    @Column({ name: 'descricao_acompanhamento', type: 'varchar', length: 255,
+    @Column({ name: 'descricao_acompanhamento', type: 'text',
         comment: 'Descrição do acompanhamento',
     })
     accompanyDescription: string;
@@ -48,9 +48,7 @@ export class Conduct extends BaseEntity {
     })
     testType: number;
 
-
-
-    // @JoinColumn({ name: 'fk_fonoaudiologo' })
-    // @ManyToOne(() => Therapist, { nullable: true })
-    // therapist: Therapist;
+    @JoinColumn({ name: 'fk_fonoaudiologo' })
+    @ManyToOne(() => Therapist, { nullable: true })
+    therapist: Therapist;
 }

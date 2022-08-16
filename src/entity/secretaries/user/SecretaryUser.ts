@@ -8,11 +8,6 @@ import { Zone } from '../Zone';
 @Entity('usuario_secretaria')
 export class SecretaryUser extends User {
 
-    @Column({ name: 'is_responsible', type: 'boolean', default: false,
-        comment: 'Marca o usuario como responsável da secretaria, usuarios marcados apareceram como contato quando for buscado os contatos da secretaria',
-    })
-    isResponsibleUser: boolean;
-
     @Column({
         name: 'cargo', type: 'varchar', length: 255,
         comment: 'Cargo', nullable: true

@@ -1,6 +1,6 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class CreatingStates1649121124762 implements MigrationInterface {
+export class CreatingStates1660609051470 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -33,6 +33,7 @@ export class CreatingStates1649121124762 implements MigrationInterface {
                    (28, 'Sergipe', 'SE'),
                    (17, 'Tocantins', 'TO');
         `);
+
         await queryRunner.query(`
             UPDATE estado e
             SET e.secretaria_nome = 'Secretaria de Estado da Saúde de Santa Catarina',

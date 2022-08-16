@@ -188,8 +188,8 @@ export class AdjustingDatabase1660606354055 implements MigrationInterface {
                 \`nome_usuario\` varchar(255) NOT NULL COMMENT 'Nome do usuário', 
                 \`data_cadastro\` datetime(6) NOT NULL COMMENT 'Data de cadastro do usuário' DEFAULT CURRENT_TIMESTAMP(6), 
                 \`data_desativado\` datetime(6) NULL COMMENT 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data', 
-                \`crfa\` varchar(8) NOT NULL COMMENT 'crfa', 
-                \`tempo_experiencia\` json NOT NULL COMMENT 'Json do tempo de experiência', 
+                \`crfa\` varchar(8) NOT NULL COMMENT 'crfa',
+                \`tempo_experiencia\` enum ('Menos de 1 ano', 'De 1 a 3 anos', 'De 3 a 5 anos', 'Mais de 5 anos') NOT NULL COMMENT 'enum do tempo de experiência'
             UNIQUE INDEX \`IDX_b9d94faecf55e50dd0b4006756\` (\`login\`), 
             PRIMARY KEY (\`id_usuario\`)) ENGINE=InnoDB`);
 

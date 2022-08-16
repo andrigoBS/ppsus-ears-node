@@ -57,10 +57,10 @@ export default class UserController extends AbstractController {
     private async findOne(userType: string, authObj: AuthUser): Promise<User[]> {
         let query = getRepository<User>(MappingUser[userType as UserString])
             .createQueryBuilder('u')
-            .where('u.login = :login', { login: authObj.login })
-            .orWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
             .select('u.id','id')
             .addSelect('u.name','name')
+            .where('u.login = :login', { login: authObj.login })
+            .andWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
         ;
 
         if(userType === 'secretary'){

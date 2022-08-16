@@ -1,4 +1,5 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Triage } from '../triage/Triage';
 
 @Entity('equipamento')
 export class Equipment extends BaseEntity {
@@ -19,4 +20,7 @@ export class Equipment extends BaseEntity {
         comment: 'Data do último calibramento do equipamento',
     })
     dateOfLastCalibration: Date;
+
+    @OneToMany(() => Triage, (triage) => triage.therapist)
+    triages: Triage;
 }

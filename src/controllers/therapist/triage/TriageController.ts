@@ -34,9 +34,23 @@ export default class TriageController extends AbstractController {
             }]
         */
 
-        let triage = req.body as Triage;
-        triage = await Triage.save(triage);
-        return res.status(HttpStatus.OK).json(triage);
+        let triage = null;
+
+        try{
+            const triageJson = req.body;
+            triageJson.type = TriageType[triageJson.type as TriageString];
+
+            triage = triageJson as Triage;
+        }catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+        }
+
+        try{
+            triage = await Triage.save(triage);
+            return res.status(HttpStatus.OK).json(triage);
+        }catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+        }
     };
 
     private triageTypes = async (req: Request, res: Response) => {

@@ -60,10 +60,10 @@ export default class OrientationController extends AbstractController {
         */
 
         const orientation = await Orientation.createQueryBuilder('orientation')
-            .select(['orientation.id', 'orientation.description'])
+            .select(['orientation.id AS id', 'orientation.description AS name', 'orientation.description AS description'])
             .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
             .orWhere('orientation.therapist is null')
-            .getMany();
+            .getRawMany();
         return res.status(HttpStatus.OK).json(orientation);
     };
 

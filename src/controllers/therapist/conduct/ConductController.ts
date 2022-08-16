@@ -59,11 +59,19 @@ export default class ConductController extends AbstractController {
         */
 
         const conduct = await Conduct.createQueryBuilder('conduct')
-            .select(['conduct.resultDescription', 'conduct.accompanyDescription', 'conduct.leftEar',
-                             'conduct.rightEar', 'conduct.irda', 'conduct.testType'])
+            .select([
+                'conduct.id AS id',
+                'CONCAT(conduct.resultDescription, conduct.accompanyDescription) AS name',
+                'conduct.resultDescription AS resultDescription',
+                'conduct.accompanyDescription AS accompanyDescription',
+                'conduct.leftEar AS leftEar',
+                'conduct.rightEar AS rightEar',
+                'conduct.irda AS irda',
+                'conduct.testType AS testType'
+            ])
             .where('conduct.therapist = :id', { id: req.body.jwtObject.id })
             .orWhere('conduct.therapist is null')
-            .getMany();
+            .getRawMany();
         return res.status(HttpStatus.OK).json(conduct);
     };
 

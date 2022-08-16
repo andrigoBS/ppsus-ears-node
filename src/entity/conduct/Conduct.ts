@@ -1,5 +1,4 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {TriageType} from "../triage/Triage";
 import {Therapist} from "../therapist/Therapist";
 
 @Entity('conduta')
@@ -34,13 +33,6 @@ export class Conduct extends BaseEntity {
         comment: 'Se o a conduta está relacionada com o irda', nullable: false
     })
     irda: boolean;
-
-
-    @Column({ name: 'tipo_triagem', type: 'enum', update: false, enum: TriageType,
-        comment: 'Tipo de triagem',
-    })
-    type: TriageType;
-
 
     @Column({
         name: 'tipo_teste', type: 'int',

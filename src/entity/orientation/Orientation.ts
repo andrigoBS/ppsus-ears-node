@@ -1,5 +1,6 @@
-import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {Therapist} from "../therapist/Therapist";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Therapist } from '../therapist/Therapist';
+import { Triage } from '../triage/Triage';
 
 @Entity('orientacao')
 export class Orientation extends BaseEntity {
@@ -14,4 +15,7 @@ export class Orientation extends BaseEntity {
     @JoinColumn({ name: 'fk_fonoaudiologo' })
     @ManyToOne(() => Therapist, { nullable: true })
     therapist: Therapist;
+
+    @OneToMany(() => Triage, (triage) => triage.therapist)
+    triages: Triage;
 }

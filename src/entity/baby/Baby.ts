@@ -6,12 +6,13 @@ import {
     Entity,
     JoinColumn,
     JoinTable,
-    ManyToMany,
+    ManyToMany, OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Guardian } from '../guardian/Guardian';
+import { Triage } from '../triage/Triage';
 
 /**
  * Tipos de parto aceitos pelo sistema
@@ -103,4 +104,7 @@ export class Baby extends BaseEntity {
     })
     @ManyToMany(() => Guardian, (guardian) => guardian.ward)
     guardians: Guardian;
+
+    @OneToMany(() => Triage, (triage) => triage.therapist)
+    triages: Triage;
 }

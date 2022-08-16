@@ -1,5 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { Institution } from '../institution/Institution';
+import { Triage } from '../triage/Triage';
 import { TherapistEmail as Email } from './TherapistEmail';
 import { TherapistPhone as Phone } from './TherapistPhone';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';
@@ -24,11 +25,10 @@ export class Therapist extends User {
     })
     crfa: string;
 
-    @Column({
-        name: 'tempo_experiencia', type: 'json',
-        comment: 'Json do tempo de experiência', nullable: false
+    @Column({ name: 'tempo_experiencia', type: 'enum', update: false, enum: TherapistXP,
+        comment: 'Json do tempo de experiência',
     })
-    xp: string;
+    xp: TherapistXP;
 
     // Relacionamentos
 
@@ -50,4 +50,7 @@ export class Therapist extends User {
 
     @OneToMany(() => Orientation, (orientation) => orientation.therapist)
     orientations: Orientation;
+
+    @OneToMany(() => Triage, (triage) => triage.therapist)
+    triages: Triage;
 }

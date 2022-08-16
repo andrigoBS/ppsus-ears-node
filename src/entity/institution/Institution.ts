@@ -2,6 +2,7 @@ import { ValidateNested } from 'class-validator';
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Therapist } from '../therapist/Therapist';
+import { Triage } from '../triage/Triage';
 import { InstitutionUser as User } from './InstitutionUser';
 
 export type InstitutionString = 'HOSPITAL' | 'MATERNITY' | 'HOSPITAL_AND_MATERNITY';
@@ -56,4 +57,7 @@ export class Institution extends BaseEntity {
 
     @ManyToMany(() => Therapist, (therapist) => therapist.institutions)
     therapists: Therapist[];
+
+    @OneToMany(() => Triage, (triage) => triage.therapist)
+    triages: Triage;
 }

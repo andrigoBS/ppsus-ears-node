@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Equipment} from "../../../entity/equipment/Equipment";
+import { Equipment } from '../../../entity/equipment/Equipment';
 
 export default class EquipmentController extends AbstractController {
 
@@ -44,22 +44,20 @@ export default class EquipmentController extends AbstractController {
         /*
            #swagger.tags = ['Equipment']
            #swagger.description = 'Endpoint para pegar todos os equipamentos'
-           #swagger.parameters['equipment'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Equipamento',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
            #swagger.security = [{
                 "ApiKeyAuth": []
             }]
         */
 
-        const equipment = await Equipment.find();
+        const equipment = await Equipment.createQueryBuilder('equipment')
+            .select([
+                'equipment.id AS id',
+                'equipment.model AS name',
+                'equipment.model AS model',
+                'equipment.brand AS brand',
+                'equipment.dateOfLastCalibration AS dateOfLastCalibration'
+            ])
+            .getRawMany();
         return res.status(HttpStatus.OK).json(equipment);
     };
 

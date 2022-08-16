@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Baby } from '../baby/Baby';
+import { Conduct } from '../conduct/Conduct';
+import { Equipment } from '../equipment/Equipment';
+import { Indicator } from '../indicator/Indicator';
+import { Institution } from '../institution/Institution';
+import { Orientation } from '../orientation/Orientation';
+import { Therapist } from '../therapist/Therapist';
 
 export type TriageString = 'EOET' | 'EOEP' | 'PEATEA' | 'EOET_PEATEA';
 export enum TriageType {
@@ -35,20 +42,40 @@ export class Triage extends BaseEntity {
     })
     type: TriageType;
 
-    @Column({ name: 'observacao', type: 'varchar', length: 255, unique: true,
+    @Column({ name: 'observacao', type: 'text',
         comment: 'Qualquer tipo de observação sobre a triagem',
     })
     observation: string;
 
-    /*
-    * ................. joins .................
-    * Equipamerntos
-    * Conduta
-    * Indicador(IRDA)
-    * Orientação
-    * Fono
-    * Instituicao
-    * Respensavel
-    * Bebe
-    */
+    // Relacionamentos
+
+    @JoinColumn({ name: 'fk_fonoaudiologo' })
+    @ManyToOne(() => Therapist, { nullable: false })
+    therapist: Therapist;
+
+    @JoinColumn({ name: 'fk_equipamento' })
+    @ManyToOne(() => Equipment, { nullable: false })
+    equipment: Equipment;
+
+    @JoinColumn({ name: 'fk_conduta' })
+    @ManyToOne(() => Conduct, { nullable: false })
+    conduct: Conduct;
+
+    @JoinColumn({ name: 'fk_orientacao' })
+    @ManyToOne(() => Orientation, { nullable: false })
+    orientation: Orientation;
+
+    @JoinColumn({ name: 'fk_instituicao' })
+    @ManyToOne(() => Institution, { nullable: false })
+    institution: Institution;
+
+    @JoinColumn({ name: 'fk_bebe' })
+    @ManyToOne(() => Baby, { nullable: false })
+    baby: Baby;
+
+    @JoinTable ({ name: 'triagem_indicador',
+        joinColumn: { name: 'fk_triagem' }, inverseJoinColumn: { name: 'fk_indicador' },
+    })
+    @ManyToMany(() => Indicator, (indicator) => indicator.triages)
+    indicators: Indicator[];
 }

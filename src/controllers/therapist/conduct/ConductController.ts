@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Conduct } from '../../../entity/conduct/Conduct';
-import { TriageString, TriageType } from '../../../entity/triage/Triage';
 
 export default class ConductController extends AbstractController {
 
@@ -34,18 +33,8 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        // console.log(req.params.id, req.body);
-        let conduct: Conduct;
-
-        try{
-            const conductJson = req.body;
-            conductJson.type = TriageType[conductJson.type as TriageString];
-            conduct = conductJson as Conduct;
-        }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
-        }
-
-        conduct = req.body as Conduct;
+        let conduct = req.body as Conduct;
+        conduct.therapist = req.body.jwtObject.id;
         conduct = await Conduct.save(conduct);
         return res.status(HttpStatus.OK).json(conduct);
     };
@@ -69,7 +58,12 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        const conduct = await Conduct.find();
+        const conduct = await Conduct.createQueryBuilder('conduct')
+            .select(['conduct.resultDescription', 'conduct.accompanyDescription', 'conduct.leftEar',
+                             'conduct.rightEar', 'conduct.irda', 'conduct.testType'])
+            .where('conduct.therapist = :id', { id: req.body.jwtObject.id })
+            .orWhere('conduct.therapist is null')
+            .getMany();
         return res.status(HttpStatus.OK).json(conduct);
     };
 

@@ -26,6 +26,12 @@ export abstract class UserTemplate extends BaseEntity {
     })
     password: string;
 
+    @Column ({
+        name:'resetar_senha', type: 'boolean', default: false,
+        comment: 'Força a mudança de senha no próximo login'
+    })
+    forcePasswordReset: boolean;
+
     @Column({
         name: 'nome_usuario', type: 'varchar', length: 255,
         comment: 'Nome do usuário', nullable: false

@@ -7,11 +7,6 @@ import { InstitutionPhone as Phone } from './InstitutionPhone';
 @Entity('usuario_instituicao')
 export class InstitutionUser extends User {
 
-    @Column({ name: 'is_responsible', type: 'boolean', default: false,
-        comment: 'Marca o usuario como responsável da instituição, usuarios marcados apareceram como contato quando for buscado os contatos da instituição',
-    })
-    isResponsibleUser: boolean;
-
     @Column({
         name: 'cargo', type: 'varchar', length: 255,
         comment: 'Cargo', nullable: true

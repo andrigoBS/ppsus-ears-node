@@ -22,9 +22,9 @@ export default class TherapistController extends AbstractController {
 
         router.use('/triage', new TriageController().getRouter());
         router.use('/:id/orientation', new OrientationController().getRouter());
-        router.use('/indicator', new IndicatorController().getRouter());
+        router.use('/:id/indicator', new IndicatorController().getRouter());
         router.use('/equipment', new EquipmentController().getRouter());
-        router.use('/conduct', new ConductController().getRouter());
+        router.use('/:id/conduct', new ConductController().getRouter());
     }
 
     private create = async (req: Request, res: Response) => {

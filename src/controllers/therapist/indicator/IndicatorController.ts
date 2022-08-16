@@ -35,6 +35,7 @@ export default class IndicatorController extends AbstractController {
         */
 
         let indicator = req.body as Indicator;
+        indicator.therapist = req.body.jwtObject.id;
         indicator = await Indicator.save(indicator);
         return res.status(HttpStatus.OK).json(indicator);
     };
@@ -58,7 +59,11 @@ export default class IndicatorController extends AbstractController {
             }]
         */
 
-        const indicator = await Indicator.find();
+        const indicator = await Indicator.createQueryBuilder('indicator')
+            .select(['indicator.id', 'indicator.name'])
+            .where('indicator.therapist = :id', { id: req.body.jwtObject.id })
+            .orWhere('indicator.therapist is null')
+            .getMany();
         return res.status(HttpStatus.OK).json(indicator);
     };
 

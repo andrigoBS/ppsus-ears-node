@@ -1,4 +1,5 @@
 import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Therapist} from "../therapist/Therapist";
 
 @Entity('indicador_risco')
 export class Indicator extends BaseEntity {
@@ -9,4 +10,8 @@ export class Indicator extends BaseEntity {
         comment: 'Nome do indicador de risco',
     })
     name: string;
+
+    @JoinColumn({ name: 'fk_fonoaudiologo' })
+    @ManyToOne(() => Therapist, { nullable: true })
+    therapist: Therapist;
 }

@@ -14,7 +14,7 @@ export class Guardian extends User {
     })
     birthDate: Date;
 
-    @Column({ name: 'cpf', type: 'varchar', length: 11, unique: true,
+    @Column({ name: 'cpf', type: 'varchar', length: 11, nullable: true,
         comment: 'CPF do responsável',
     })
     cpf: string;

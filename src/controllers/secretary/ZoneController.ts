@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
+import CryptoHelper from '../../helpers/CryptoHelper';
 import AbstractController from '../AbstractController';
 import { FindOneOptions } from 'typeorm';
 import { HttpStatus } from '../../helpers/HttpStatus';
@@ -116,6 +117,7 @@ export default class ZoneController extends AbstractController {
         */
         let zone = req.body as SecretaryUser;
         try {
+            zone.password = CryptoHelper.encrypt(zone.password);
             zone = await SecretaryUser.save(zone);
             return res.status(HttpStatus.OK).json(zone);
         } catch (e: any) {

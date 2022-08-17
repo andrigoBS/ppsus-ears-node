@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Baby, ChildBirth, ChildBirthString } from '../../../entity/baby/Baby';
 import { Guardian } from '../../../entity/guardian/Guardian';
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
+import CryptoHelper from '../../../helpers/CryptoHelper';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
 import {Orientation} from "../../../entity/orientation/Orientation";
@@ -48,11 +49,13 @@ export default class TriageController extends AbstractController {
 
             triageJson.baby.birthMother.login = triageJson.baby.birthMother.name.toLowerCase().replaceAll(' ', '.');
             triageJson.baby.birthMother.password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
+            triageJson.baby.birthMother.password = CryptoHelper.encrypt(triageJson.baby.birthMother.password);
             triageJson.baby.birthMother = await Guardian.save(triageJson.baby.birthMother);
 
             for(let index = 0; index < triageJson.baby.guardians.length; index++) {
                 triageJson.baby.guardians[index].login = triageJson.baby.guardians[index].name.toLowerCase().replaceAll(' ', '.');
                 triageJson.baby.guardians[index].password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
+                triageJson.baby.guardians[index].password = CryptoHelper.encrypt(triageJson.baby.guardians[index].password);
                 triageJson.baby.guardians[index] = await Guardian.save(triageJson.baby.guardians[index]);
             }
 

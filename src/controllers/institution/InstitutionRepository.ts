@@ -1,5 +1,6 @@
 import { Institution } from '../../entity/institution/Institution';
 import { InstitutionUser } from '../../entity/institution/InstitutionUser';
+import CryptoHelper from '../../helpers/CryptoHelper';
 
 export default class InstitutionRepository {
     public findIdsSimilar({ institutionName, cnes, cnpj }: Institution, limit?: number): Promise<{ id: number }[]>{
@@ -36,6 +37,7 @@ export default class InstitutionRepository {
     }
 
     public saveUser(institutionUser: InstitutionUser): Promise<InstitutionUser>{
+        institutionUser.password = CryptoHelper.encrypt(institutionUser.password);
         return InstitutionUser.save(institutionUser);
     }
 }

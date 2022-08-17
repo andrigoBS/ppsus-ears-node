@@ -1,4 +1,10 @@
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import CryptoHelper from '../../../helpers/CryptoHelper';
 
 /**
@@ -49,10 +55,4 @@ export abstract class UserTemplate extends BaseEntity {
         comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data',
     })
     disableDate: Date;
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    hashPassword() {
-        this.password = CryptoHelper.encrypt(this.password);
-    }
 }

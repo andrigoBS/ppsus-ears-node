@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Therapist, TherapistXP, TherapistXPString } from '../../entity/therapist/Therapist';
+import CryptoHelper from '../../helpers/CryptoHelper';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
 import EquipmentController from './equipment/EquipmentController';
@@ -69,6 +70,7 @@ export default class TherapistController extends AbstractController {
         }
 
         try{
+            therapist.password = CryptoHelper.encrypt(therapist.password);
             therapist = await Therapist.save(therapist);
 
             return res.status(HttpStatus.OK).json(therapist);

@@ -11,7 +11,7 @@ export class City extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_municipio' })
     id: number;
 
-    @Column({ name: 'nome', type: 'varchar', length: 20, update: false })
+    @Column({ name: 'nome', type: 'varchar', length: 48, update: false })
     name: string;
 
     @JoinColumn({ name: 'fk_regiao' })

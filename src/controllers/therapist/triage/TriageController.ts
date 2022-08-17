@@ -4,15 +4,17 @@ import { Guardian } from '../../../entity/guardian/Guardian';
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
+import {Orientation} from "../../../entity/orientation/Orientation";
 
 export default class TriageController extends AbstractController {
 
     constructor() {
         super();
-        const { create, triageTypes } = this;
+        const { create, triageTypes, getAll } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', verifyJWTMiddleware, create);
+        router.get('/', getAll);
         router.get('/types', triageTypes);
 
     }
@@ -84,5 +86,35 @@ export default class TriageController extends AbstractController {
             { id: key, name: TriageType[key as TriageString] }
         ));
         return res.status(HttpStatus.OK).send(triageType);
+    };
+
+    private getAll = async (req: Request, res: Response) => {
+        /*
+           #swagger.tags = ['Triage']
+           #swagger.description = 'Endpoint para pegar todas as triagens'
+           #swagger.parameters['triage'] = {
+            in: 'body',
+            required: 'true',
+            description: 'Triagem',
+            type: 'object',
+            schema: {
+                "lembrar": "arrumarEsseJson"
+            }
+
+           }
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+
+        const triage = await Triage.createQueryBuilder('triage')
+            .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
+                             'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
+                             'triage.observation AS observation', 'triage.conduct AS conduct',
+                             'triage.orientation AS orientation'])
+            // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
+            // .orWhere('orientation.therapist is null')
+            .getRawMany();
+        return res.status(HttpStatus.OK).json(triage);
     };
 }

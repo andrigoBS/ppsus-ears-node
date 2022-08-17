@@ -54,7 +54,7 @@ export class Baby extends BaseEntity {
     })
     height: number;
 
-    @Column({ name: 'circumferencia', type: 'float',
+    @Column({ name: 'circunferencia', type: 'float',
         comment: 'Circunferência da cabeça do bebê',
     })
     circumference: number;

@@ -14,10 +14,10 @@ export class PhoneTemplate extends BaseEntity {
     })
     id: number;
 
-    @Column({ name: 'numero', type: 'varchar', length: 13,
+    @Column({ name: 'numero', type: 'varchar', length: 15,
         comment: 'Número do telefone, DDD + número',
     })
-    @Length(10, 13)
+    @Length(14, 15)
     phoneNumber: string;
 
     @Column({ name: 'nome_contato', type: 'varchar', length: 45, nullable: true,

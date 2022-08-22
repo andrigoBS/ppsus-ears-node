@@ -52,15 +52,6 @@ export default class ZoneController extends AbstractController {
             }]
         */
 
-        const values = [
-            { id: 1, name: 'Região 1', values: [{ id: 1, name:'cidade 1' }, { id: 2, name:'cidade 2' }] },
-            { id: 2, name: 'Região 2', values: [{ id: 3, name:'cidade 3' }, { id: 4, name:'cidade 4' }] },
-            { id: 3, name: 'Região 3', values: [{ id: 5, name:'cidade 5' }, { id: 6, name:'cidade 6' }] },
-            { id: 4, name: 'Região 4', values: [{ id: 7, name:'cidade 7' }, { id: 8, name:'cidade 8' }] },
-            { id: 5, name: 'Região 5', values: [{ id: 9, name:'cidade 9' }, { id: 10, name:'cidade 10' }] },
-            { id: 0, name: 'Cidades não vinculadas', values: [{ id: 11, name:'cidade 11' }, { id: 12, name:'cidade 12' }] },
-        ];
-
         const state = await SecretaryUser.createQueryBuilder('u')
             .select(['u.state.id AS id'])
             .where('u.id = :stateUser', { stateUser: req.body.jwtObject.id })
@@ -84,6 +75,7 @@ export default class ZoneController extends AbstractController {
         const notLinked = await City.createQueryBuilder('c')
             .select(['c.id AS id', 'c.name AS name'])
             .where('c.state = :state',  { state: state.id })
+            .andWhere('c.zone IS NULL')
             .getRawMany()
         ;
         zones.push({ id: 0, name: 'Cidades não vinculadas', values: notLinked });

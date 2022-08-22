@@ -69,7 +69,7 @@
     "no-object-literal-type-assertion": "off",
     "no-shadowed-variable": "off",
     "no-submodule-imports": "off",
-    "sort-imports": "warn",
+    "sort-imports": "off",
     "import-name": "off",
     "match-default-export-name": "off",
     "prefer-conditional-expression": "off",

@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import AbstractController from '../../AbstractController';
 import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Conduct } from '../../../entity/conduct/Conduct';
+import ConductRepository from "./ConductRepository";
 
 export default class ConductController extends AbstractController {
+    private readonly conductRepository = new ConductRepository();
 
     constructor() {
         super();
@@ -33,9 +35,11 @@ export default class ConductController extends AbstractController {
             }]
         */
 
+        let therapistId = req.body.jwtObject.id;
+
         let conduct = req.body as Conduct;
-        conduct.therapist = req.body.jwtObject.id;
-        conduct = await Conduct.save(conduct);
+        conduct.therapist = therapistId;
+        conduct = await this.conductRepository.save(conduct);
         return res.status(HttpStatus.OK).json(conduct);
     };
 
@@ -58,20 +62,8 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        const conduct = await Conduct.createQueryBuilder('conduct')
-            .select([
-                'conduct.id AS id',
-                'CONCAT(conduct.resultDescription, conduct.accompanyDescription) AS name',
-                'conduct.resultDescription AS resultDescription',
-                'conduct.accompanyDescription AS accompanyDescription',
-                'conduct.leftEar AS leftEar',
-                'conduct.rightEar AS rightEar',
-                'conduct.irda AS irda',
-                'conduct.testType AS testType'
-            ])
-            .where('conduct.therapist = :id', { id: req.body.jwtObject.id })
-            .orWhere('conduct.therapist is null')
-            .getRawMany();
+        let therapistId = req.body.jwtObject.id;
+        const conduct = await this.conductRepository.getAll(therapistId);
         return res.status(HttpStatus.OK).json(conduct);
     };
 

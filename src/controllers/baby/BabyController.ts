@@ -47,15 +47,18 @@ export default class BabyController extends AbstractController {
             }]
         */
 
-        const baby = await Baby.createQueryBuilder('baby')
-            .select(['baby.id AS id', 'baby.name AS name', 'baby.weight AS weight',
-                             'baby.height AS height', 'baby.circumference AS circumference',
-                             'baby.birthDate AS birthDate', 'baby.gestationalAge AS gestationalAge',
-                             'baby.childBirthType AS childBirthType', 'baby.birthMother AS birthMother'])
-            // .where('baby.therapist = :id', { id: req.body.jwtObject.id })
-            // .orWhere('baby.therapist is null')
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(baby);
+        try{
+            const baby = await Baby.createQueryBuilder('baby')
+                .select(['baby.id AS id', 'baby.name AS name', 'baby.weight AS weight',
+                    'baby.height AS height', 'baby.circumference AS circumference',
+                    'baby.birthDate AS birthDate', 'baby.gestationalAge AS gestationalAge',
+                    'baby.childBirthType AS childBirthType', 'baby.birthMother AS birthMother'])
+                // .where('baby.therapist = :id', { id: req.body.jwtObject.id })
+                // .orWhere('baby.therapist is null')
+                .getRawMany();
+            return res.status(HttpStatus.OK).json(baby);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao consultar os bebês' });
+        }
     };
-
 }

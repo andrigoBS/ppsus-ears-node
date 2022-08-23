@@ -34,10 +34,14 @@ export default class EquipmentController extends AbstractController {
             }]
         */
 
-        let equipment = req.body as Equipment;
+        try{
+            let equipment = req.body as Equipment;
+            equipment = await Equipment.save(equipment);
 
-        equipment = await Equipment.save(equipment);
-        return res.status(HttpStatus.OK).json(equipment);
+            return res.status(HttpStatus.OK).json(equipment);
+        } catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o equipamento' });
+        }
     };
 
     private getAll = async (req: Request, res: Response) => {
@@ -49,16 +53,20 @@ export default class EquipmentController extends AbstractController {
             }]
         */
 
-        const equipment = await Equipment.createQueryBuilder('equipment')
-            .select([
-                'equipment.id AS id',
-                'equipment.model AS name',
-                'equipment.model AS model',
-                'equipment.brand AS brand',
-                'equipment.dateOfLastCalibration AS dateOfLastCalibration'
-            ])
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(equipment);
-    };
+        try {
+            const equipment = await Equipment.createQueryBuilder('equipment')
+                .select([
+                    'equipment.id AS id',
+                    'equipment.model AS name',
+                    'equipment.model AS model',
+                    'equipment.brand AS brand',
+                    'equipment.dateOfLastCalibration AS dateOfLastCalibration'
+                ])
+                .getRawMany();
 
+            return res.status(HttpStatus.OK).json(equipment);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar os equipamentos' });
+        }
+    };
 }

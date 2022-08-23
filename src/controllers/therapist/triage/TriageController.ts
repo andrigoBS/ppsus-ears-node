@@ -110,14 +110,18 @@ export default class TriageController extends AbstractController {
             }]
         */
 
-        const triage = await Triage.createQueryBuilder('triage')
-            .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
-                             'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
-                             'triage.observation AS observation', 'triage.conduct AS conduct',
-                             'triage.orientation AS orientation'])
-            // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-            // .orWhere('orientation.therapist is null')
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(triage);
+        try{
+            const triage = await Triage.createQueryBuilder('triage')
+                .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
+                    'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
+                    'triage.observation AS observation', 'triage.conduct AS conduct',
+                    'triage.orientation AS orientation'])
+                // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
+                // .orWhere('orientation.therapist is null')
+                .getRawMany();
+            return res.status(HttpStatus.OK).json(triage);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens' });
+        }
     };
 }

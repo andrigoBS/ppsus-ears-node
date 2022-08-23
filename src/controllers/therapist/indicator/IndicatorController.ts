@@ -34,10 +34,15 @@ export default class IndicatorController extends AbstractController {
             }]
         */
 
-        let indicator = req.body as Indicator;
-        indicator.therapist = req.body.jwtObject.id;
-        indicator = await Indicator.save(indicator);
-        return res.status(HttpStatus.OK).json(indicator);
+        try{
+            let indicator = req.body as Indicator;
+            indicator.therapist = req.body.jwtObject.id;
+            indicator = await Indicator.save(indicator);
+
+            return res.status(HttpStatus.OK).json(indicator);
+        } catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o indicador de risco' });
+        }
     };
 
     private getAll = async (req: Request, res: Response) => {
@@ -59,12 +64,16 @@ export default class IndicatorController extends AbstractController {
             }]
         */
 
-        const indicator = await Indicator.createQueryBuilder('indicator')
-            .select(['indicator.id', 'indicator.name'])
-            .where('indicator.therapist = :id', { id: req.body.jwtObject.id })
-            .orWhere('indicator.therapist is null')
-            .getMany();
-        return res.status(HttpStatus.OK).json(indicator);
+        try {
+            const indicator = await Indicator.createQueryBuilder('indicator')
+                .select(['indicator.id', 'indicator.name'])
+                .where('indicator.therapist = :id', { id: req.body.jwtObject.id })
+                .orWhere('indicator.therapist is null')
+                .getMany();
+            return res.status(HttpStatus.OK).json(indicator);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar os indicadores de risco' });
+        }
     };
 
 }

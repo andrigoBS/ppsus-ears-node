@@ -35,12 +35,17 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        let therapistId = req.body.jwtObject.id;
+        try{
+            let therapistId = req.body.jwtObject.id;
 
-        let conduct = req.body as Conduct;
-        conduct.therapist = therapistId;
-        conduct = await this.conductRepository.save(conduct);
-        return res.status(HttpStatus.OK).json(conduct);
+            let conduct = req.body as Conduct;
+            conduct.therapist = therapistId;
+            conduct = await this.conductRepository.save(conduct);
+
+            return res.status(HttpStatus.OK).json(conduct);
+        } catch (e: any){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar a conduta' });
+        }
     };
 
     private getAll = async (req: Request, res: Response) => {
@@ -62,9 +67,14 @@ export default class ConductController extends AbstractController {
             }]
         */
 
-        let therapistId = req.body.jwtObject.id;
-        const conduct = await this.conductRepository.getAll(therapistId);
-        return res.status(HttpStatus.OK).json(conduct);
+        try{
+            let therapistId = req.body.jwtObject.id;
+            const conduct = await this.conductRepository.getAll(therapistId);
+
+            return res.status(HttpStatus.OK).json(conduct);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar as condutas' });
+        }
     };
 
 }

@@ -1,19 +1,18 @@
-import {Therapist} from "../../entity/therapist/Therapist";
-import {UserTemplate} from "../../entity/decorators/templates/UserTemplate";
-import {TherapistEmail} from "../../entity/therapist/TherapistEmail";
-import {TherapistPhone} from "../../entity/therapist/TherapistPhone";
+import { Therapist } from '../../entity/therapist/Therapist';
+import { TherapistEmail } from '../../entity/therapist/TherapistEmail';
+import { TherapistPhone } from '../../entity/therapist/TherapistPhone';
 
 export default class TherapistRepository {
 
     public findLogin({ login }: Therapist): Promise<{ id: number } | undefined>{
-        let query = Therapist.createQueryBuilder('therapist')
+        const query = Therapist.createQueryBuilder('therapist')
             .select(['therapist.id AS id'])
             .where('therapist.login = :login', { login: login });
         return query.getRawOne();
     }
 
     public getEditableFields(therapistId: string): Promise<Therapist | undefined>{
-        let query = Therapist.createQueryBuilder('therapist')
+        const query = Therapist.createQueryBuilder('therapist')
             .select([
                 'therapist.crfa AS crfa',
                 'therapist.xp AS xp',
@@ -26,7 +25,7 @@ export default class TherapistRepository {
                 // 'conduct.irda AS irda',
                 // 'conduct.testType AS testType'
             ])
-            .where('therapist.id = :id', { id: therapistId});
+            .where('therapist.id = :id', { id: therapistId });
             // .where('therapist.id = :id', { id: therapistId })
         return query.getRawOne();
     }
@@ -50,7 +49,7 @@ export default class TherapistRepository {
         TherapistPhone.save(
             phones.map((number: string) =>
                 ({ phoneNumber: number,
-                   therapist: therapistId
+                    therapist: therapistId
                 })
             )
         );

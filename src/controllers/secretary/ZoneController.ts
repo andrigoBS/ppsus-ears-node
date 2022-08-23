@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { City } from '../../entity/secretaries/City';
+import { State } from '../../entity/secretaries/State';
 import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import AbstractController from '../AbstractController';
@@ -11,10 +13,11 @@ export default class ZoneController extends AbstractController {
 
     constructor() {
         super();
-        const { getAll, getById, updateSecretary, createZone, createZoneUser, deleteZone, recoverZone } = this;
+        const { getAll, getAllWithCities, getById, updateSecretary, createZone, createZoneUser, deleteZone, recoverZone } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
+        router.get('/with-cities', verifyJWTMiddleware, getAllWithCities);
         router.get('/:id', getById);
         router.put('/:id', verifyJWTMiddleware, updateSecretary);
         router.post('/', verifyJWTMiddleware, createZone);
@@ -30,10 +33,53 @@ export default class ZoneController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
+
+        let zones = Zone.createQueryBuilder('z')
+            .select(['z.id AS id', 'z.secretary.name AS name'])
+        ;
+        if(req.query.stateId){
+            zones = zones.where('z.state = :state',  { state: req.query.stateId });
+        }
+        zones = await zones.execute();
+        return res.status(HttpStatus.OK).json(zones);
+    };
+
+    private getAllWithCities = async (req: Request, res: Response) => {
+        /*
+           #swagger.description = 'Endpoint para recuperar todas as secretarias regionais'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+
+        const state = await SecretaryUser.createQueryBuilder('u')
+            .select(['u.state.id AS id'])
+            .where('u.id = :stateUser', { stateUser: req.body.jwtObject.id })
+            .getRawOne()
+        ;
+
         const zones = await Zone.createQueryBuilder('z')
             .select(['z.id AS id', 'z.secretary.name AS name'])
-            .execute()
+            .where('z.state = :state',  { state: state.id })
+            .getRawMany()
         ;
+
+        for (const zone of zones) {
+            zone.values = await City.createQueryBuilder('c')
+                .select(['c.id AS id', 'c.name AS name'])
+                .where('c.zone = :zone',  { zone: zone.id })
+                .getRawMany()
+            ;
+        }
+
+        const notLinked = await City.createQueryBuilder('c')
+            .select(['c.id AS id', 'c.name AS name'])
+            .where('c.state = :state',  { state: state.id })
+            .andWhere('c.zone IS NULL')
+            .getRawMany()
+        ;
+        zones.push({ id: 0, name: 'Cidades não vinculadas', values: notLinked });
+
         return res.status(HttpStatus.OK).json(zones);
     };
 

@@ -3,14 +3,12 @@ import { Therapist, TherapistXP, TherapistXPString } from '../../entity/therapis
 import CryptoHelper from '../../helpers/CryptoHelper';
 import { HttpStatus } from '../../helpers/HttpStatus';
 import AbstractController from '../AbstractController';
+import ConductController from './conduct/ConductController';
 import EquipmentController from './equipment/EquipmentController';
 import IndicatorController from './indicator/IndicatorController';
 import OrientationController from './orientation/OrientationController';
+import TherapistRepository from './TherapistRepository';
 import TriageController from './triage/TriageController';
-import ConductController from './conduct/ConductController';
-import TherapistRepository from "./TherapistRepository";
-import {TherapistEmail} from "../../entity/therapist/TherapistEmail";
-import {TherapistPhone} from "../../entity/therapist/TherapistPhone";
 
 export default class TherapistController extends AbstractController {
     private readonly therapistRepository = new TherapistRepository();
@@ -94,20 +92,20 @@ export default class TherapistController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        let therapistId = req.params.id;
+        const therapistId = req.params.id;
         const therapist = await this.therapistRepository.getEditableFields(therapistId);
 
         if(!therapist){
             return res.status(HttpStatus.NOT_FOUND).json({ message: 'Usuário não encontrado!', fancyMessage: 'Usuário não encontrado!' });
         }
 
-        const retornoTherapist: any = {...therapist};
+        const retornoTherapist: any = { ...therapist };
         // retornoTherapist.xp = Object.keys(TherapistXP).filter((key) => TherapistXP[key as TherapistXPString] === therapist.xp)[0];
-        retornoTherapist.xp = {id: 'LESS_ONE', name: 'Menos de 1 ano'}
+        retornoTherapist.xp = { id: 'LESS_ONE', name: 'Menos de 1 ano' };
 
         // therapist.xp = Object.keys(TherapistXP).filter((key) => TherapistXP[key as TherapistXPString] === therapist.xp)[0];
         return res.status(HttpStatus.OK).json(retornoTherapist);
-    }
+    };
 
     private getDashboard = async (req: Request, res: Response) => {
         /*

@@ -1,13 +1,12 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:sort/recommended"
   ],
   "rules": {
     "@typescript-eslint/array-type": "error",
@@ -59,6 +58,17 @@
       "before": false,
       "after": true
     }],
+    "sort/imports": [
+      "warn",
+      {
+        "groups": [
+          { "type": "dependency", "order": 1 },
+          { "type": "other", "order": 2 }
+        ]
+      }
+    ],
+    "unused-imports/no-unused-imports": "warn",
+    "no-unused-vars": "off",
     "arrow-return-shorthand": "off",
     "forin": "off",
     "member-access": "off",

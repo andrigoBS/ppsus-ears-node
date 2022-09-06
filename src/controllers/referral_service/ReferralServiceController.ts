@@ -1,115 +1,37 @@
+import { HttpError, HttpStatus } from '../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import { ReferralService, ReferralServiceType, ReferralServiceTypeString } from '../../entity/referral_service/ReferralService';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import AbstractController from '../AbstractController';
+import { ReferralService } from '../../entity/referral_service/ReferralService';
+import ReferralServiceService from './ReferralServiceService';
 
-export default class ReferralServiceController extends AbstractController {
+export default class ReferralServiceController {
+    private readonly referralServiceService: ReferralServiceService;
 
     constructor() {
-        super();
-        const { getAll, getById, createService, updateService, deleteService, listType } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-
-        router.get('/types', verifyJWTMiddleware, listType);
-
-        router.get('/', verifyJWTMiddleware, getAll);
-        router.post('/', verifyJWTMiddleware, createService);
-
-        router.get('/:id', verifyJWTMiddleware, getById);
-        router.put('/:id', verifyJWTMiddleware, updateService);
-        router.delete('/:id', verifyJWTMiddleware, deleteService);
-
+        this.referralServiceService = new ReferralServiceService();
     }
 
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['ReferralService']
-           #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
-    };
+    public async create(req: Request, res: Response) {
+        try {
+            let referralService = req.body as ReferralService;
+            referralService = await this.referralServiceService.create(referralService);
+            return res.status(HttpStatus.OK).json(referralService);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-    private getById = async (req: Request, res: Response) => {
-        /*
-               #swagger.tags = ['ReferralService']
-               #swagger.description = 'Endpoint para recuperar um serviço de referencia pelo id'
-               #swagger.security = [{
-                    "ApiKeyAuth": []
-                }]
-            */
-        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
-    };
-
-    private createService = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['ReferralService']
-            #swagger.description = 'Endpoint para adicionar um serviço de referencia'
-            #swagger.parameters['referralService'] = {
-               in: 'body',
-               required: 'true',
-               description: 'Nome e telefone do contado',
-               type: 'object',
-                schema: {name: 'João S. da Silva', cellphone: '554130306905'}
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        let referralService = req.body as ReferralService;
-        referralService = await ReferralService.save(referralService);
-        return res.status(HttpStatus.OK).json(referralService);
-
-        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
-    };
-
-    private updateService = async (req: Request, res: Response) => {
-
-        /*
-            #swagger.tags = ['ReferralService']
-            #swagger.description = 'Endpoint para atualizar um serviço de referencia'
-            #swagger.parameters['referralService'] = {
-               in: 'body',
-               required: 'true',
-               description: 'Nome e telefone do contado',
-               type: 'object',
-                schema: {name: 'João S. da Silva', cellphone: '554130306905'}
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        const { name, cellphone, jwtObject } = req.body;
-
-        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
-    };
-
-    private deleteService = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['ReferralService']
-           #swagger.description = 'Endpoint para deletar um serviço de referencia pelo id'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
-        return res.status(HttpStatus.OK).send({ message: 'respond with a resource' });
-    };
-
-    private listType = async (req: Request, res: Response) => {
-        /*
-               #swagger.tags = ['ReferralService']
-               #swagger.description = 'Tipos de serviço de referencia'
-               #swagger.security = [{
-                    "ApiKeyAuth": []
-                }]
-        */
-        const referralServiceType = Object.keys(ReferralServiceType).map((key) => (
-            { id: key, name: ReferralServiceType[key as ReferralServiceTypeString] }
-        ));
-        return res.status(HttpStatus.OK).send(referralServiceType);
-    };
+    public async listType(req: Request, res: Response) {
+        try{
+            const referralServiceType = await this.referralServiceService.listType();
+            return res.status(HttpStatus.OK).send(referralServiceType);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 }

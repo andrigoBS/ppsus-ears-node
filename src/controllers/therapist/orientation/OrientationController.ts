@@ -1,9 +1,9 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Orientation } from '../../../entity/orientation/Orientation';
 
-export default class OrientationController extends AbstractController {
+export default class OrientationController extends AbstractRoutes {
 
     constructor() {
         super();
@@ -41,7 +41,7 @@ export default class OrientationController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(orientation);
         } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar a orientação' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a orientação', message: e });
         }
     };
 
@@ -72,7 +72,7 @@ export default class OrientationController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(orientation);
         } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar as orientações' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as orientações', message: e });
         }
     };
 

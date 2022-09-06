@@ -1,8 +1,8 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
 import { Therapist, TherapistXP, TherapistXPString } from '../../entity/therapist/Therapist';
 import CryptoHelper from '../../helpers/CryptoHelper';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import AbstractController from '../AbstractController';
 import ConductController from './conduct/ConductController';
 import EquipmentController from './equipment/EquipmentController';
 import IndicatorController from './indicator/IndicatorController';
@@ -10,12 +10,12 @@ import OrientationController from './orientation/OrientationController';
 import TherapistRepository from './TherapistRepository';
 import TriageController from './triage/TriageController';
 
-export default class TherapistController extends AbstractController {
+export default class TherapistController extends AbstractRoutes {
     private readonly therapistRepository = new TherapistRepository();
 
     constructor() {
         super();
-        const { create, getDashboard, getXpTypes, getEditableFields } = this;
+        const { create, getDashboard, getEditableFields, getXpTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
 
@@ -58,16 +58,16 @@ export default class TherapistController extends AbstractController {
             therapistJson.institutions = therapistJson.institutions.map((i: number) => ({ id: i }));
             therapist = therapistJson as Therapist;
         }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o usuario', message: e });
         }
 
         try{
             const therapist2 = await this.therapistRepository.findLogin(therapist);
             if(therapist2){
-                return res.status(HttpStatus.BAD_REQUEST).json({ message: { id: therapist2.id }, fancyMessage: 'Já existe um usuario com esse login' });
+                return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Já existe um usuario com esse login', message: { id: therapist2.id } });
             }
         }catch (e: any) {
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o usuario', message: e });
         }
 
         try{
@@ -79,7 +79,7 @@ export default class TherapistController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(therapist);
         }catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o usuario' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o usuario', message: e });
         }
     };
 
@@ -96,7 +96,7 @@ export default class TherapistController extends AbstractController {
         const therapist = await this.therapistRepository.getEditableFields(therapistId);
 
         if(!therapist){
-            return res.status(HttpStatus.NOT_FOUND).json({ message: 'Usuário não encontrado!', fancyMessage: 'Usuário não encontrado!' });
+            return res.status(HttpStatus.NOT_FOUND).json({ fancyMessage: 'Usuário não encontrado!', message: 'Usuário não encontrado!' });
         }
 
         const retornoTherapist: any = { ...therapist };

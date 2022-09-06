@@ -1,9 +1,9 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Indicator } from '../../../entity/indicator/Indicator';
 
-export default class IndicatorController extends AbstractController {
+export default class IndicatorController extends AbstractRoutes {
 
     constructor() {
         super();
@@ -41,7 +41,7 @@ export default class IndicatorController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(indicator);
         } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o indicador de risco' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o indicador de risco', message: e });
         }
     };
 
@@ -72,7 +72,7 @@ export default class IndicatorController extends AbstractController {
                 .getMany();
             return res.status(HttpStatus.OK).json(indicator);
         } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar os indicadores de risco' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar os indicadores de risco', message: e });
         }
     };
 

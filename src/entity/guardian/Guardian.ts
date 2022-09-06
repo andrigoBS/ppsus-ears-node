@@ -1,21 +1,21 @@
 import { ValidateNested } from 'class-validator';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
-import { AddressComponent as Address } from '../decorators/components/Address';
 import { Baby } from '../baby/Baby';
+import { AddressComponent as Address } from '../decorators/components/Address';
+import { UserTemplate as User } from '../decorators/templates/UserTemplate';
 import { GuardianEmail as Email } from './GuardianEmail';
 import { GuardianPhone as Phone } from './GuardianPhone';
-import { UserTemplate as User } from '../decorators/templates/UserTemplate';
 
 @Entity('responsavel')
 export class Guardian extends User {
 
-    @Column({ name: 'data_nascimento', type: 'date', update: false,
-        comment: 'Data de nascimento do responsável (para cálculo de idade e afins)',
+    @Column({ comment: 'Data de nascimento do responsável (para cálculo de idade e afins)', name: 'data_nascimento', type: 'date',
+        update: false,
     })
     birthDate: Date;
 
-    @Column({ name: 'cpf', type: 'varchar', length: 11, nullable: true,
-        comment: 'CPF do responsável',
+    @Column({ comment: 'CPF do responsável', length: 11, name: 'cpf', nullable: true,
+        type: 'varchar',
     })
     cpf: string;
 

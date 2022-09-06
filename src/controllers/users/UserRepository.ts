@@ -1,32 +1,17 @@
 import { getRepository } from 'typeorm';
 import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
-import { Guardian } from '../../entity/guardian/Guardian';
-import { InstitutionUser } from '../../entity/institution/InstitutionUser';
-import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import { Therapist } from '../../entity/therapist/Therapist';
 import CryptoHelper from '../../helpers/CryptoHelper';
-import { AuthUser } from '../../helpers/LoginHelper';
-
-export type UserString = 'secretary' | 'institution' | 'therapist' | 'parents';
-
-export type User = SecretaryUser | InstitutionUser | Therapist | Guardian | undefined;
-
-export enum MappingUser {
-    secretary = 'SecretaryUser',
-    institution = 'InstitutionUser',
-    therapist = 'Therapist',
-    parents = 'Guardian',
-}
+import { AuthUser, MappingUser, User } from './UserTypes';
 
 export class UserRepository{
-    public async save(userType: string, user: UserTemplate): Promise<User>{
-        user.password = CryptoHelper.encrypt(user.password);
-
-        return getRepository<User>(MappingUser[userType as UserString]).save(user);
+    public async save<Type>(userType: MappingUser, user: UserTemplate): Promise<Type>{
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return getRepository<Type>(userType).save(user);
     }
 
-    public async findOne(userType: string, authObj: AuthUser): Promise<User[]> {
-        let query = getRepository<User>(MappingUser[userType as UserString])
+    public async findOne(userType: MappingUser, authObj: AuthUser): Promise<User | undefined> {
+        let query = getRepository<User>(userType)
             .createQueryBuilder('u')
             .select('u.id','id')
             .addSelect('u.name','name')
@@ -34,13 +19,10 @@ export class UserRepository{
             .andWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
         ;
 
-        if(userType === 'secretary'){
+        if(userType === MappingUser.secretary){
             query = query.addSelect('IF(u.state IS NULL, "ZONE", "STATE")', 'type');
         }
 
-        return query
-            .limit(1)
-            .execute()
-        ;
+        return query.getOne();
     }
 }

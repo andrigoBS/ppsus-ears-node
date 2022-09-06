@@ -1,9 +1,9 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Equipment } from '../../../entity/equipment/Equipment';
 
-export default class EquipmentController extends AbstractController {
+export default class EquipmentController extends AbstractRoutes {
 
     constructor() {
         super();
@@ -40,7 +40,7 @@ export default class EquipmentController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(equipment);
         } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar o equipamento' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o equipamento', message: e });
         }
     };
 
@@ -66,7 +66,7 @@ export default class EquipmentController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(equipment);
         } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar os equipamentos' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar os equipamentos', message: e });
         }
     };
 }

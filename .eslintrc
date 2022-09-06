@@ -62,8 +62,9 @@
       "warn",
       {
         "groups": [
-          { "type": "dependency", "order": 1 },
-          { "type": "other", "order": 2 }
+          { "regex": "(A|a)bstract", "order": 1 },
+          { "type": "dependency", "order": 2 },
+          { "type": "other", "order": 3 }
         ]
       }
     ],
@@ -85,7 +86,6 @@
     "prefer-conditional-expression": "off",
     "ban-comma-operator": "off",
     "restrict-plus-operands": "off",
-    "max-classes-per-file": "error",
     "no-increment-decrement": "off",
     "member-ordering": "off",
     "no-angle-bracket-type-assertion": "off",

@@ -1,10 +1,10 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Conduct } from '../../../entity/conduct/Conduct';
-import ConductRepository from "./ConductRepository";
+import ConductRepository from './ConductRepository';
 
-export default class ConductController extends AbstractController {
+export default class ConductController extends AbstractRoutes {
     private readonly conductRepository = new ConductRepository();
 
     constructor() {
@@ -36,7 +36,7 @@ export default class ConductController extends AbstractController {
         */
 
         try{
-            let therapistId = req.body.jwtObject.id;
+            const therapistId = req.body.jwtObject.id;
 
             let conduct = req.body as Conduct;
             conduct.therapist = therapistId;
@@ -44,7 +44,7 @@ export default class ConductController extends AbstractController {
 
             return res.status(HttpStatus.OK).json(conduct);
         } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar criar a conduta' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a conduta', message: e });
         }
     };
 
@@ -68,12 +68,12 @@ export default class ConductController extends AbstractController {
         */
 
         try{
-            let therapistId = req.body.jwtObject.id;
+            const therapistId = req.body.jwtObject.id;
             const conduct = await this.conductRepository.getAll(therapistId);
 
             return res.status(HttpStatus.OK).json(conduct);
         } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e, fancyMessage: 'Ocorreu um erro ao tentar consultar as condutas' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as condutas', message: e });
         }
     };
 

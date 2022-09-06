@@ -1,79 +1,71 @@
+import { HttpError, HttpStatus } from '../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import AbstractController from '../AbstractController';
-import { HttpStatus } from '../../helpers/HttpStatus';
+import ReportsService from './ReportsService';
 
-export default class ReportsController extends AbstractController {
+export default class ReportsController {
+    private readonly reportsService: ReportsService;
 
     constructor() {
-        super();
-        const { getBabiesPassFail, getBabiesComeBorn, getIndicatorsPercent, getIndicators, getEquipment } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.get('/baby-pass-fail/:userType', verifyJWTMiddleware, getBabiesPassFail);
-        router.get('/baby-come-born/:userType', verifyJWTMiddleware, getBabiesComeBorn);
-        router.get('/indicators-percent/:userType', verifyJWTMiddleware, getIndicatorsPercent);
-        router.get('/indicators/:userType', verifyJWTMiddleware, getIndicators);
-        router.get('/equipment/:userType', verifyJWTMiddleware, getEquipment);
+        this.reportsService = new ReportsService();
     }
 
-    private getBabiesPassFail = async (req: Request, res: Response) => {
-        const pass = 10;
-        const fails = 5;
-
-        return res.status(HttpStatus.OK).json({
-            title: 'Quantidade de bebes que passaram e falharam.',
-            labels: ['Passou', 'Falhou'],
-            quantities: [pass, fails],
-        });
-    };
-
-    private getBabiesComeBorn = async (req: Request, res: Response) => {
-        const come = 10;
-        const born = 5;
-
-        return res.status(HttpStatus.OK).json({
-            title: 'Quantos compareceram para o teste e quantos que nasceram (vivos).',
-            labels: ['Compareceram', 'Nasceram'],
-            quantities: [come, born],
-        });
-    };
-
-    private getIndicatorsPercent = async (req: Request, res: Response) => {
-        const indicators = [];
-        for (let i = 0; i < 20; i++) {
-            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
+    public async getBabiesPassFail(req: Request, res: Response) {
+        try{
+            const result = await this.reportsService.getBabiesPassFail();
+            return res.status(HttpStatus.OK).json(result);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
+    }
 
-        return res.status(HttpStatus.OK).json({
-            title: 'Porcentagem para cada indicador.',
-            labels: indicators.map(indicator => indicator.label),
-            quantities: indicators.map(indicator => indicator.quantities),
-        });
-    };
-
-    private getIndicators = async (req: Request, res: Response) => {
-        const indicators = [];
-        for (let i = 0; i < 40; i++) {
-            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
+    public async getBabiesComeBorn(req: Request, res: Response) {
+        try{
+            const result = await this.reportsService.getBabiesComeBorn();
+            return res.status(HttpStatus.OK).json(result);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
+    }
 
-        return res.status(HttpStatus.OK).json({
-            title: 'Único ou múltiplo (Relacionado a quantidade de indicadores selecionados no momento da consulta).',
-            labels: indicators.map(indicator => indicator.label),
-            quantities: indicators.map(indicator => indicator.quantities),
-        });
-    };
-
-    private getEquipment = async (req: Request, res: Response) => {
-        const equipments = [];
-        for (let i = 0; i < 40; i++) {
-            equipments.push({ label: 'Equipamento '+i, quantities: Math.random() * 100 });
+    public async getIndicatorsPercent(req: Request, res: Response) {
+        try{
+            const result = await this.reportsService.getIndicatorsPercent();
+            return res.status(HttpStatus.OK).json(result);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
+    }
 
-        return res.status(HttpStatus.OK).json({
-            title: 'Passou e falhou (Para analisar melhor os resultados comparando com os equipamentos)',
-            labels: equipments.map(equipment => equipment.label),
-            quantities: equipments.map(equipment => equipment.quantities),
-        });
-    };
+    public async getIndicators(req: Request, res: Response) {
+        try{
+            const result = await this.reportsService.getIndicators();
+            return res.status(HttpStatus.OK).json(result);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
+
+    public async getEquipment(req: Request, res: Response) {
+        try{
+            const result = await this.reportsService.getEquipment();
+            return res.status(HttpStatus.OK).json(result);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 }

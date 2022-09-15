@@ -18,7 +18,8 @@ export default class UserService{
     }
 
     public async findOne(userType: string, authObj: AuthUser) {
-        const user = await this.userRepository.findOne(MappingUser[userType as UserString], authObj);
+        const userTypeMap: MappingUser = MappingUser[userType as UserString];
+        const user = await this.userRepository.findOne(userTypeMap, authObj);
 
         if (!user) {
             throw new NotFoundUserError();

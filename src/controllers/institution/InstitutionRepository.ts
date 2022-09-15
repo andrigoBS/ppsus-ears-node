@@ -24,7 +24,7 @@ export default class InstitutionRepository {
         let query = Institution
             .createQueryBuilder('i')
             .select(['i.id AS id', 'i.institutionName AS name'])
-        ;
+            .orderBy('name','DESC');
         if(limit) {
             query = query.limit(limit);
         }

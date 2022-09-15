@@ -5,7 +5,7 @@ import ParentsRoutes from './parents/ParentsRoutes';
 import ReferralServiceRoutes from './referral_service/ReferralServiceRoutes';
 import ReportsRoutes from './reports/ReportsRoutes';
 import SecretaryController from './secretary/SecretaryController';
-import TherapistController from './therapist/TherapistController';
+import TherapistRoutes from './therapist/TherapistRoutes';
 import UserRoutes from './users/UserRoutes';
 
 export default class Routes extends AbstractRoutes {
@@ -19,7 +19,7 @@ export default class Routes extends AbstractRoutes {
         router.use('/referral-service', new ReferralServiceRoutes().getRouter());
         router.use('/reports', new ReportsRoutes().getRouter());
         router.use('/secretary', new SecretaryController().getRouter());
-        router.use('/therapist', new TherapistController().getRouter());
+        router.use('/therapist', new TherapistRoutes().getRouter());
         router.use('/user', new UserRoutes().getRouter());
     }
 

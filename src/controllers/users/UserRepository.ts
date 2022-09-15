@@ -23,6 +23,6 @@ export class UserRepository{
             query = query.addSelect('IF(u.state IS NULL, "ZONE", "STATE")', 'type');
         }
 
-        return query.getOne();
+        return query.getRawOne();
     }
 }

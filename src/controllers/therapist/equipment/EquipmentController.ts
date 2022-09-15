@@ -1,72 +1,39 @@
-import { HttpStatus } from '../../AbstractHttpErrors';
-import AbstractRoutes from '../../AbstractRoutes';
+import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
 import { Request, Response } from 'express';
 import { Equipment } from '../../../entity/equipment/Equipment';
+import EquipmentService from './EquipmentService';
 
-export default class EquipmentController extends AbstractRoutes {
+export default class EquipmentController {
+    private equipmentService: EquipmentService;
 
     constructor() {
-        super();
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
-
+        this.equipmentService = new EquipmentService();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Equipment']
-           #swagger.description = 'Endpoint para criar um equipamento'
-           #swagger.parameters['equipment'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Equipamento',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
+    public async create(req: Request, res: Response) {
         try{
             let equipment = req.body as Equipment;
-            equipment = await Equipment.save(equipment);
+            equipment = await this.equipmentService.create(equipment);
 
             return res.status(HttpStatus.OK).json(equipment);
-        } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar o equipamento', message: e });
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    };
+    }
 
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Equipment']
-           #swagger.description = 'Endpoint para pegar todos os equipamentos'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
+    public async getAll(req: Request, res: Response) {
         try {
-            const equipment = await Equipment.createQueryBuilder('equipment')
-                .select([
-                    'equipment.id AS id',
-                    'equipment.model AS name',
-                    'equipment.model AS model',
-                    'equipment.brand AS brand',
-                    'equipment.dateOfLastCalibration AS dateOfLastCalibration'
-                ])
-                .getRawMany();
+            const equipment = await this.equipmentService.getAll();
 
             return res.status(HttpStatus.OK).json(equipment);
-        } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar os equipamentos', message: e });
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    };
+    }
 }

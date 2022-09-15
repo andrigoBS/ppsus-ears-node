@@ -1,79 +1,40 @@
-import { HttpStatus } from '../../AbstractHttpErrors';
-import AbstractRoutes from '../../AbstractRoutes';
+import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
 import { Request, Response } from 'express';
 import { Orientation } from '../../../entity/orientation/Orientation';
+import OrientationService from './OrientationService';
 
-export default class OrientationController extends AbstractRoutes {
+export default class OrientationController {
+    private orientationService: OrientationService;
 
     constructor() {
-        super();
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
-
+        this.orientationService = new OrientationService();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para criar uma orientacao'
-           #swagger.parameters['orientation'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Orientação',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
+    public async create(req: Request, res: Response) {
         try{
             let orientation = req.body as Orientation;
             orientation.therapist = req.body.jwtObject.id;
-            orientation = await Orientation.save(orientation);
+            orientation = await this.orientationService.create(orientation);
 
             return res.status(HttpStatus.OK).json(orientation);
-        } catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a orientação', message: e });
-        }
-    };
-
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para pegar todos as orientações'
-           #swagger.parameters['orientation'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Orientação',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        try{
-            const orientation = await Orientation.createQueryBuilder('orientation')
-                .select(['orientation.id AS id', 'orientation.description AS name', 'orientation.description AS description'])
-                .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-                .orWhere('orientation.therapist is null')
-                .getRawMany();
-
-            return res.status(HttpStatus.OK).json(orientation);
-        } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as orientações', message: e });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
-    };
+    }
+
+    public async getAll(req: Request, res: Response) {
+        try{
+            const orientation = await this.orientationService.getAll(req);
+            return res.status(HttpStatus.OK).json(orientation);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
 }

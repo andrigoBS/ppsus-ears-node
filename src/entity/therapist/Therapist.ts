@@ -1,18 +1,11 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { TherapistXP } from '../../controllers/therapist/TherapistTypes';
+import { UserTemplate as User } from '../decorators/templates/UserTemplate';
 import { Institution } from '../institution/Institution';
+import { Orientation } from '../orientation/Orientation';
 import { Triage } from '../triage/Triage';
 import { TherapistEmail as Email } from './TherapistEmail';
 import { TherapistPhone as Phone } from './TherapistPhone';
-import { UserTemplate as User } from '../decorators/templates/UserTemplate';
-import { Orientation } from '../orientation/Orientation';
-
-export type TherapistXPString = 'LESS_ONE' | 'ONE_TO_THREE' | 'THREE_TO_FIVE' | 'MORE_FIVE';
-export enum TherapistXP {
-    LESS_ONE = 'Menos de 1 ano',
-    ONE_TO_THREE = 'De 1 a 3 anos',
-    THREE_TO_FIVE = 'De 3 a 5 anos',
-    MORE_FIVE = 'Mais de 5 anos',
-}
 
 /**
  * O profissional de fonoaudiologia que ira atender o bebe
@@ -20,13 +13,13 @@ export enum TherapistXP {
 @Entity('fonoaudiologo')
 export class Therapist extends User {
     @Column({
-        name: 'crfa', type: 'varchar', length: 8,
-        comment: 'crfa', nullable: false
+        comment: 'crfa', length: 8, name: 'crfa',
+        nullable: false, type: 'varchar'
     })
     crfa: string;
 
-    @Column({ name: 'tempo_experiencia', type: 'enum', update: false, enum: TherapistXP,
-        comment: 'Json do tempo de experiência',
+    @Column({ comment: 'Json do tempo de experiência', enum: TherapistXP, name: 'tempo_experiencia', type: 'enum',
+        update: false,
     })
     xp: TherapistXP;
 
@@ -42,8 +35,8 @@ export class Therapist extends User {
     })
     phones: Phone[];
 
-    @JoinTable ({ name: 'fonoaudiologo_instituicao',
-        joinColumn: { name: 'fk_fonoaudiologo' }, inverseJoinColumn: { name: 'fk_instituicao' },
+    @JoinTable ({ inverseJoinColumn: { name: 'fk_instituicao' },
+        joinColumn: { name: 'fk_fonoaudiologo' }, name: 'fonoaudiologo_instituicao',
     })
     @ManyToMany(() => Institution, (institution) => institution.therapists)
     institutions: Institution[];

@@ -1,17 +1,17 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import { Baby, ChildBirth, ChildBirthString } from '../../../entity/baby/Baby';
+import { Baby } from '../../../entity/baby/Baby';
 import { Guardian } from '../../../entity/guardian/Guardian';
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
 import CryptoHelper from '../../../helpers/CryptoHelper';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Orientation} from "../../../entity/orientation/Orientation";
+import { ChildBirth, ChildBirthString } from '../../baby/BabyTypes';
 
-export default class TriageController extends AbstractController {
+export default class TriageController extends AbstractRoutes {
 
     constructor() {
         super();
-        const { create, triageTypes, getAll } = this;
+        const { create, getAll, triageTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', verifyJWTMiddleware, create);
@@ -66,14 +66,14 @@ export default class TriageController extends AbstractController {
 
             triage = triageJson as Triage;
         }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e.message, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
         }
 
         try{
             triage = await Triage.save(triage);
             return res.status(HttpStatus.OK).json(triage);
         }catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
         }
     };
 
@@ -110,14 +110,18 @@ export default class TriageController extends AbstractController {
             }]
         */
 
-        const triage = await Triage.createQueryBuilder('triage')
-            .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
-                             'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
-                             'triage.observation AS observation', 'triage.conduct AS conduct',
-                             'triage.orientation AS orientation'])
-            // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-            // .orWhere('orientation.therapist is null')
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(triage);
+        try{
+            const triage = await Triage.createQueryBuilder('triage')
+                .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
+                    'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
+                    'triage.observation AS observation', 'triage.conduct AS conduct',
+                    'triage.orientation AS orientation'])
+                // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
+                // .orWhere('orientation.therapist is null')
+                .getRawMany();
+            return res.status(HttpStatus.OK).json(triage);
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens', message: e });
+        }
     };
 }

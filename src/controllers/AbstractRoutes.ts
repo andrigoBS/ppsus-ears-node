@@ -1,7 +1,7 @@
-import { JwtAuth } from '../middleware/JwtAuth';
 import { Router } from 'express';
+import { JwtAuth } from '../middleware/JwtAuth';
 
-export default abstract class AbstractController {
+export default abstract class AbstractRoutes {
 
     private readonly router = Router();
 

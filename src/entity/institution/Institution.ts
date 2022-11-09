@@ -1,48 +1,41 @@
 import { ValidateNested } from 'class-validator';
 import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { InstitutionType } from '../../controllers/institution/InstitutionTypes';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Therapist } from '../therapist/Therapist';
 import { Triage } from '../triage/Triage';
 import { InstitutionUser as User } from './InstitutionUser';
 
-export type InstitutionString = 'HOSPITAL' | 'MATERNITY' | 'HOSPITAL_AND_MATERNITY';
-export enum InstitutionType
-{
-    HOSPITAL = 'Hospital',
-    MATERNITY = 'Maternidade',
-    HOSPITAL_AND_MATERNITY = 'Hospital e Maternidade',
-}
-
 @Entity('instituicao')
 export class Institution extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        name: 'id_instituicao',
         comment: 'Chave primária da instituição',
+        name: 'id_instituicao',
     })
     id: number;
 
     @Column({
-        name: 'nome_instituicao', type: 'varchar', length: 255,
-        comment: 'Nome instituição', nullable: false
+        comment: 'Nome instituição', length: 255, name: 'nome_instituicao',
+        nullable: false, type: 'varchar'
     })
     institutionName: string;
 
     @Column({
-        name: 'cnes', type: 'varchar', length: 11,
-        comment: 'CNES', nullable: false
+        comment: 'CNES', length: 11, name: 'cnes',
+        nullable: false, type: 'varchar'
     })
     cnes: string;
 
     @Column({
-        name: 'cnpj', type: 'varchar', length: 14,
-        comment: 'CNPJ', nullable: true
+        comment: 'CNPJ', length: 14, name: 'cnpj',
+        nullable: true, type: 'varchar'
     })
     cnpj: string;
 
     @Column({
-        name: 'tipo_instituicao', type: 'enum', update: false, enum: InstitutionType,
-        comment: 'Tipo de Instituição', nullable: false
+        comment: 'Tipo de Instituição', enum: InstitutionType, name: 'tipo_instituicao', nullable: false,
+        type: 'enum', update: false
     })
     institutionType: InstitutionType;
 

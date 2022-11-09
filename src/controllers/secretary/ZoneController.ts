@@ -1,19 +1,18 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
-import { City } from '../../entity/secretaries/City';
-import { State } from '../../entity/secretaries/State';
-import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import CryptoHelper from '../../helpers/CryptoHelper';
-import AbstractController from '../AbstractController';
 import { FindOneOptions } from 'typeorm';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import SecretaryService from '../../services/SecretaryService';
+import { City } from '../../entity/secretaries/City';
+import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
 import { Zone } from '../../entity/secretaries/Zone';
+import CryptoHelper from '../../helpers/CryptoHelper';
+import SecretaryService from './SecretaryService';
 
-export default class ZoneController extends AbstractController {
+export default class ZoneController extends AbstractRoutes {
 
     constructor() {
         super();
-        const { getAll, getAllWithCities, getById, updateSecretary, createZone, createZoneUser, deleteZone, recoverZone } = this;
+        const { createZone, createZoneUser, deleteZone, getAll, getAllWithCities, getById, recoverZone, updateSecretary } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
@@ -113,7 +112,7 @@ export default class ZoneController extends AbstractController {
         const id = Number(req.params.id);
         const zone = await Zone.findOne(id);
         const [status, response] = await SecretaryService.saveSecretary(zone, req.body);
-        return res.status(status).json(response);
+        return res.status(status as HttpStatus).json(response);
     };
 
     private createZone = async (req: Request, res: Response) => {

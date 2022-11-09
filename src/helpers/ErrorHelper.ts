@@ -1,10 +1,9 @@
-import { HttpStatus } from './HttpStatus';
-import { RestResponse } from './ComposedTypes';
+import { HttpStatus } from '../controllers/AbstractHttpErrors';
 import { ValidationError } from 'class-validator';
 
 export default class ErrorHelper {
 
-    public static validationError(e: any): RestResponse | undefined {
+    public static validationError(e: any) {
         if (Array.isArray(e) && e.every((err) => err instanceof ValidationError)) {
             const message = e.flatMap((field) => {
                 if (field.children.length === 0) { return[{ name: field.property, rules: field.constraints }]; }

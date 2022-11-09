@@ -11,22 +11,16 @@ export default class TherapistRepository {
         return query.getRawOne();
     }
 
-    public getEditableFields(therapistId: string): Promise<Therapist | undefined>{
+    public getEditableFields(therapistId: number): Promise<Therapist | undefined>{
         const query = Therapist.createQueryBuilder('therapist')
             .select([
                 'therapist.crfa AS crfa',
                 'therapist.xp AS xp',
-                // 'therapist.emails AS emails',
-                // 'therapist.phones AS phones',
-                // 'therapist.institutions AS institutions',
                 'therapist.id AS id',
                 'therapist.login AS login',
                 'therapist.name AS name'
-                // 'conduct.irda AS irda',
-                // 'conduct.testType AS testType'
             ])
             .where('therapist.id = :id', { id: therapistId });
-            // .where('therapist.id = :id', { id: therapistId })
         return query.getRawOne();
     }
 

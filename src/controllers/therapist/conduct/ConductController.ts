@@ -1,70 +1,57 @@
+import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Conduct } from '../../../entity/conduct/Conduct';
-import ConductRepository from "./ConductRepository";
+import ConductService from './ConductService';
 
-export default class ConductController extends AbstractController {
-    private readonly conductRepository = new ConductRepository();
+export default class ConductController {
+    private conductService: ConductService;
 
     constructor() {
-        super();
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
+        this.conductService = new ConductService();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Conduct']
-           #swagger.description = 'Endpoint para criar uma conduta'
-           #swagger.parameters['conduct'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Conduta',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+    public async create(req: Request, res: Response) {
+        try{
+            const therapistId = req.body.jwtObject.id;
+
+            let conduct = req.body as Conduct;
+            conduct.therapist = therapistId;
+            conduct = await this.conductService.create(conduct);
+
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+    public async getAll(req: Request, res: Response) {
+        try{
+            const therapistId = req.body.jwtObject.id;
+            const conduct = await this.conductService.getAll(therapistId);
 
-        let therapistId = req.body.jwtObject.id;
-
-        let conduct = req.body as Conduct;
-        conduct.therapist = therapistId;
-        conduct = await this.conductRepository.save(conduct);
-        return res.status(HttpStatus.OK).json(conduct);
-    };
-
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Conduct']
-           #swagger.description = 'Endpoint para pegar todos as condutas'
-           #swagger.parameters['conduct'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Conduta',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+    public async get(req: Request, res: Response) {
+        try{
+            const conduct = await this.conductService.get(req.body.leftEar, req.body.rightEar, req.body.irda, req.body.testType);
 
-        let therapistId = req.body.jwtObject.id;
-        const conduct = await this.conductRepository.getAll(therapistId);
-        return res.status(HttpStatus.OK).json(conduct);
-    };
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
 }

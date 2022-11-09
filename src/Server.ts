@@ -1,11 +1,11 @@
-import 'reflect-metadata';
-import Express, { Application } from 'express';
-import { createConnection, getConnectionOptions } from 'typeorm';
 import Cors from 'cors';
 import Dotenv from 'dotenv';
-import Routes from './controllers/Routes';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import Express, { Application } from 'express';
+import 'reflect-metadata';
 import SwaggerUI from 'swagger-ui-express';
+import { createConnection, getConnectionOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import Routes from './controllers/Routes';
 
 export default class Server {
     private readonly express: Application;

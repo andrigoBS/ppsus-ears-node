@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import { HttpStatus } from '../helpers/HttpStatus';
+import { HttpStatus } from '../controllers/AbstractHttpErrors';
 import { isArray } from 'class-validator';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 export class JwtAuth {

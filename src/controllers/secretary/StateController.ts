@@ -1,10 +1,10 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
-import AbstractController from '../AbstractController';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import SecretaryService from '../../services/SecretaryService';
 import { State } from '../../entity/secretaries/State';
+import SecretaryService from './SecretaryService';
 
-export default class StateController extends AbstractController {
+export default class StateController extends AbstractRoutes {
 
     constructor() {
         super();
@@ -57,10 +57,10 @@ export default class StateController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
-        const { name, emails } = req.body;
+        const { emails, name } = req.body;
         const id = Number(req.params.id);
         const state = await State.findOne(id);
-        const [status, response] = await SecretaryService.saveSecretary(state, { name, emails });
-        return res.status(status).json(response);
+        const [status, response] = await SecretaryService.saveSecretary(state, { emails, name });
+        return res.status(status as HttpStatus).json(response);
     };
 }

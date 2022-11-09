@@ -1,13 +1,12 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
 import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import CryptoHelper from '../../helpers/CryptoHelper';
-import AbstractController from '../AbstractController';
-import { HttpStatus } from '../../helpers/HttpStatus';
+import CityController from './CityController';
 import StateController from './StateController';
 import ZoneController from './ZoneController';
-import CityController from './CityController';
 
-export default class SecretaryController extends AbstractController {
+export default class SecretaryController extends AbstractRoutes {
 
     constructor() {
         super();

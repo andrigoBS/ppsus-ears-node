@@ -111,15 +111,36 @@ export default class TriageController extends AbstractRoutes {
         */
 
         try{
-            const triage = await Triage.createQueryBuilder('triage')
+
+            let triageQuery = Triage.createQueryBuilder('triage')
                 .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
                     'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
-                    'triage.observation AS observation', 'triage.conduct AS conduct',
-                    'triage.orientation AS orientation'])
+                    'conduct.resultDescription AS conduct',
+                    'institution.institutionName AS institution, conduct.testType AS testType'])
+                .leftJoin('triage.conduct', 'conduct')
+                .leftJoin('triage.institution', 'institution')
                 // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
                 // .orWhere('orientation.therapist is null')
-                .getRawMany();
-            return res.status(HttpStatus.OK).json(triage);
+                ;
+
+
+            if(req.query.rightEar){
+                triageQuery = triageQuery.where('triage.rightEar = :rightEar', { rightEar: req.query.rightEar });
+            }
+
+            if(req.query.leftEar){
+                triageQuery = triageQuery.andWhere('triage.leftEar = :leftEar', { leftEar: req.query.leftEar });
+            }
+
+            if(req.query.evaluationDate){
+                triageQuery = triageQuery.andWhere('triage.evaluationDate like :evaluationDate', { evaluationDate: `%${req.query.evaluationDate}%` });
+            }
+
+            if(req.query.testType){
+                triageQuery = triageQuery.andWhere('conduct.testType = :testType', { testType: req.query.testType });
+            }
+
+            return res.status(HttpStatus.OK).json(await triageQuery.getRawMany());
         } catch (e: any){
             return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens', message: e });
         }

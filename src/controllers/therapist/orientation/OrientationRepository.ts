@@ -8,10 +8,13 @@ export default class OrientationRepository {
 
     public getAll(req: Request): Promise<Orientation[] | undefined>{
         const query = Orientation.createQueryBuilder('orientation')
-            .select(['orientation.id AS id', 'orientation.description AS name', 'orientation.description AS description'])
-            .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-            .orWhere('orientation.therapist is null').orderBy('name', 'ASC');
+            .select(['orientation.id AS id', 'orientation.description AS name'])
+            .where('(orientation.therapist = :id OR orientation.therapist is null)', { id: req.body.jwtObject.id })
+            .orderBy('orientation.description', 'ASC');
 
+        if(req.query.description){
+            query.andWhere('orientation.description like :description', { description: `%${req.query.description}%` });
+        }
         return query.getRawMany();
     }
 }

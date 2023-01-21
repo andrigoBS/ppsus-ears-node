@@ -29,8 +29,7 @@ export default class ConductController {
 
     public async getAll(req: Request, res: Response) {
         try{
-            const therapistId = req.body.jwtObject.id;
-            const conduct = await this.conductService.getAll(therapistId);
+            const conduct = await this.conductService.getAll(req);
 
             return res.status(HttpStatus.OK).json(conduct);
         }catch (e: HttpError | any){

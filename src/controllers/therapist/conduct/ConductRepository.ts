@@ -1,8 +1,9 @@
+import { Request } from 'express';
 import { Conduct } from '../../../entity/conduct/Conduct';
 
 export default class ConductRepository {
 
-    public getAll(therapistId: number): Promise<Conduct[] | undefined>{
+    public getAll(req: Request): Promise<Conduct[] | undefined>{
         const query = Conduct.createQueryBuilder('conduct')
             .select([
                 'conduct.id AS id',
@@ -14,8 +15,24 @@ export default class ConductRepository {
                 'conduct.irda AS irda',
                 'conduct.testType AS testType'
             ])
-            .where('conduct.therapist = :id', { id: therapistId })
-            .orWhere('conduct.therapist is null');
+            .where('conduct.therapist is null');
+
+        if(req.query.rightEar){
+            query.andWhere('conduct.rightEar = :rightEar', { rightEar: Number(req.query.rightEar) });
+        }
+
+        if(req.query.leftEar){
+            query.andWhere('conduct.leftEar = :leftEar', { leftEar: Number(req.query.leftEar) });
+        }
+
+        if(req.query.irda){
+            query.andWhere('conduct.irda = :irda', { irda: Number(req.query.irda) });
+        }
+
+        if(req.query.testType){
+            query.andWhere('conduct.testType = :testType', { testType: Number(req.query.testType) });
+        }
+
         return query.getRawMany();
     }
 

@@ -26,7 +26,7 @@ export default class EquipmentController {
 
     public async getAll(req: Request, res: Response) {
         try {
-            const equipment = await this.equipmentService.getAll();
+            const equipment = await this.equipmentService.getAll(req);
 
             return res.status(HttpStatus.OK).json(equipment);
         }catch (e: HttpError | any){

@@ -14,7 +14,7 @@ export default class ConductService {
         return this.conductRepository.save(conduct as Conduct);
     }
 
-    public async get(leftEar: boolean, rightEar: boolean, irda: boolean, testType: number): Promise<Conduct | undefined>{
+    public async get(leftEar: number, rightEar: number, irda: number, testType: number): Promise<Conduct | undefined>{
         return this.conductRepository.get(leftEar, rightEar, irda, testType);
     }
 

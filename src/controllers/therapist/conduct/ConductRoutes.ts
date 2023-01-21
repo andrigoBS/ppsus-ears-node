@@ -10,6 +10,7 @@ export default class ConductRoutes extends AbstractRoutes {
 
         this.conductController = new ConductController();
 
+
         const { create, get, getAll } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();

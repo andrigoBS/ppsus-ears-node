@@ -36,16 +36,16 @@ export default class ConductRepository {
         return query.getRawMany();
     }
 
-    public get(leftEar: boolean, rightEar: boolean, irda: boolean, testType: number): Promise<Conduct | undefined>{
+    public get(leftEar: number, rightEar: number, irda: number, testType: number): Promise<Conduct | undefined>{
         const query = Conduct.createQueryBuilder('conduct')
             .select([
                 'conduct.id AS id',
                 'CONCAT(conduct.resultDescription, conduct.accompanyDescription) AS name',
             ])
-            .where('conduct.leftEar =: leftEar', { leftEar: leftEar })
-            .andWhere('conduct.rightEar =: rightEar', { rightEar: rightEar })
-            .andWhere('conduct.irda =: irda', { irda: irda })
-            .andWhere('conduct.testType =: testType', { testType: testType });
+            .where('conduct.leftEar = :leftEar', { leftEar: leftEar })
+            .andWhere('conduct.rightEar = :rightEar', { rightEar: rightEar })
+            .andWhere('conduct.irda = :irda', { irda: irda })
+            .andWhere('conduct.testType = :testType', { testType: testType });
         return query.getRawOne();
     }
 

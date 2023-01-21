@@ -42,7 +42,12 @@ export default class ConductController {
 
     public async get(req: Request, res: Response) {
         try{
-            const conduct = await this.conductService.get(req.body.leftEar, req.body.rightEar, req.body.irda, req.body.testType);
+            const conduct = await this.conductService.get(
+                Number(req.params.leftEar),
+                Number(req.params.rightEar),
+                Number(req.params.irda),
+                Number(req.params.testType)
+            );
 
             return res.status(HttpStatus.OK).json(conduct);
         }catch (e: HttpError | any){

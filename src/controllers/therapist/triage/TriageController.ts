@@ -119,10 +119,9 @@ export default class TriageController extends AbstractRoutes {
                     'institution.institutionName AS institution, conduct.testType AS testType'])
                 .leftJoin('triage.conduct', 'conduct')
                 .leftJoin('triage.institution', 'institution')
-                // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-                // .orWhere('orientation.therapist is null')
-                ;
-
+                .leftJoin('triage.therapist', 'therapist')
+                .leftJoin('therapist.institutions', 'therapistInstitutions')
+                .where('triage.institution = therapistInstitutions.id');
 
             if(req.query.rightEar){
                 triageQuery = triageQuery.where('triage.rightEar = :rightEar', { rightEar: req.query.rightEar });

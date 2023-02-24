@@ -6,6 +6,16 @@ export default class OrientationRepository {
         return Orientation.save(orientation);
     }
 
+    public async deleteOne(idOrientation: number) {
+        return Orientation.createQueryBuilder('orientation')
+            .update()
+            .set({
+                dateOfDeactivation: new Date()
+            })
+            .where('id = :id', { id: idOrientation })
+            .execute();
+    }
+
     public getAll(req: Request): Promise<Orientation[] | undefined>{
         const query = Orientation.createQueryBuilder('orientation')
             .select(
@@ -20,6 +30,12 @@ export default class OrientationRepository {
         if(req.query.description){
             query.andWhere('orientation.description like :description', { description: `%${req.query.description}%` });
         }
+
+        if(req.query.listAllActives){
+            query.andWhere('orientation.dateOfDeactivation IS NULL');
+        }
+
+
         return query.getRawMany();
     }
 }

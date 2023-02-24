@@ -13,6 +13,10 @@ export default class OrientationService{
         return this.orientationRepository.create(orientation);
     }
 
+    public async deleteOne(idOrientation: number) {
+        return this.orientationRepository.deleteOne(idOrientation);
+    }
+
     public async getAll(req: Request): Promise<Orientation[] | undefined>{
         return this.orientationRepository.getAll(req);
     }

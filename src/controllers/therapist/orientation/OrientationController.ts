@@ -37,4 +37,18 @@ export default class OrientationController {
         }
     }
 
+    public async deleteOne(req: Request, res: Response) {
+        try{
+            const idOrientation = req.params.id;
+            await this.orientationService.deleteOne(Number(idOrientation));
+
+            return res.status(HttpStatus.OK).json();
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
+
 }

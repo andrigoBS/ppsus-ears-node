@@ -10,11 +10,12 @@ export default class OrientationRoutes extends AbstractRoutes {
 
         this.orientationController = new OrientationController();
 
-        const { create, getAll } = this;
+        const { create, deleteOne, getAll } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', verifyJWTMiddleware, create);
         router.get('/', verifyJWTMiddleware, getAll);
+        router.delete('/:id', verifyJWTMiddleware, deleteOne);
     }
 
 
@@ -58,5 +59,26 @@ export default class OrientationRoutes extends AbstractRoutes {
              }]
          */
         return this.orientationController.getAll(req, res);
+    };
+
+    private deleteOne = async (req: Request, res: Response) => {
+        /*
+            #swagger.tags = ['Orientation']
+            #swagger.description = 'Endpoint para deletar um orientação'
+            #swagger.parameters['orientation'] = {
+             in: 'body',
+             required: 'true',
+             description: 'Orientação',
+             type: 'object',
+             schema: {
+                 "lembrar": "arrumarEsseJson"
+             }
+
+            }
+            #swagger.security = [{
+                 "ApiKeyAuth": []
+             }]
+         */
+        return this.orientationController.deleteOne(req, res);
     };
 }

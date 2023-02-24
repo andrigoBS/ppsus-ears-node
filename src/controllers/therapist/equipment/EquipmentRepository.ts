@@ -23,7 +23,8 @@ export default class EquipmentRepository {
                 'equipment.model AS name',
                 'equipment.model AS model',
                 'equipment.brand AS brand',
-                'equipment.dateOfLastCalibration AS dateOfLastCalibration'
+                'equipment.dateOfLastCalibration AS dateOfLastCalibration',
+                'equipment.dateOfDeactivation AS dateOfDeactivation'
             ]).orderBy('name','ASC');
 
         if(req.query.model){

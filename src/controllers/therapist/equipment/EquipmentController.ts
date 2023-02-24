@@ -36,4 +36,18 @@ export default class EquipmentController {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
         }
     }
+
+    public async deleteOne(req: Request, res: Response) {
+        try{
+            const idEquipment = req.params.id;
+            await this.equipmentService.deleteOne(Number(idEquipment));
+
+            return res.status(HttpStatus.OK).json();
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 }

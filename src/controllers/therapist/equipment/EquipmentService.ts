@@ -13,7 +13,12 @@ export default class EquipmentService{
         return this.equipmentRepository.create(equipment);
     }
 
+    public async deleteOne(idEquipment: number) {
+        return this.equipmentRepository.deleteOne(idEquipment);
+    }
+
     public async getAll(req: Request): Promise<Equipment[] | undefined>{
         return this.equipmentRepository.getAll(req);
     }
+
 }

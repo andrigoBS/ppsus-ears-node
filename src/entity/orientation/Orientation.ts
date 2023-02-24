@@ -7,10 +7,17 @@ export class Orientation extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_orientation' })
     id: number;
 
-    @Column({ name: 'descricao', type: 'varchar', length: 255,
-        comment: 'Descreve a orientação',
+    @Column({ comment: 'Descreve a orientação', length: 255, name: 'descricao',
+        type: 'varchar',
     })
     description: string;
+
+    @Column({ comment: 'Data de desativação do equipamento', default: null,
+        name: 'data_desativacao',
+        nullable: true,
+        type: 'date'
+    })
+    dateOfDeactivation: Date;
 
     @JoinColumn({ name: 'fk_fonoaudiologo' })
     @ManyToOne(() => Therapist, { nullable: true })

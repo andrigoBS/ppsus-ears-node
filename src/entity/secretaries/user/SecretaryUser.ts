@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { SecretaryPhone as Phone } from './SecretaryPhone';
-import { SecretaryEmail as Email } from './SecretaryEmail';
-import { State } from '../State';
 import { UserTemplate as User } from '../../decorators/templates/UserTemplate';
+import { State } from '../State';
 import { Zone } from '../Zone';
+import { SecretaryEmail as Email } from './SecretaryEmail';
+import { SecretaryPhone as Phone } from './SecretaryPhone';
 
 @Entity('usuario_secretaria')
 export class SecretaryUser extends User {
@@ -31,5 +31,4 @@ export class SecretaryUser extends User {
     @JoinColumn({ name: 'fk_secretaria_regiao' })
     @ManyToOne(() => Zone, (zone) => zone.secretary.users)
     zone: Zone;
-
 }

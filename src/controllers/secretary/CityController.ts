@@ -1,9 +1,9 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
 import { City } from '../../entity/secretaries/City';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import AbstractController from '../AbstractController';
 
-export default class CityController extends AbstractController {
+export default class CityController extends AbstractRoutes {
 
     constructor() {
         super();

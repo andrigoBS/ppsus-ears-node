@@ -1,13 +1,12 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:sort/recommended"
   ],
   "rules": {
     "@typescript-eslint/array-type": "error",
@@ -59,6 +58,18 @@
       "before": false,
       "after": true
     }],
+    "sort/imports": [
+      "warn",
+      {
+        "groups": [
+          { "regex": "(A|a)bstract", "order": 1 },
+          { "type": "dependency", "order": 2 },
+          { "type": "other", "order": 3 }
+        ]
+      }
+    ],
+    "unused-imports/no-unused-imports": "warn",
+    "no-unused-vars": "off",
     "arrow-return-shorthand": "off",
     "forin": "off",
     "member-access": "off",
@@ -69,13 +80,12 @@
     "no-object-literal-type-assertion": "off",
     "no-shadowed-variable": "off",
     "no-submodule-imports": "off",
-    "sort-imports": "warn",
+    "sort-imports": "off",
     "import-name": "off",
     "match-default-export-name": "off",
     "prefer-conditional-expression": "off",
     "ban-comma-operator": "off",
     "restrict-plus-operands": "off",
-    "max-classes-per-file": "error",
     "no-increment-decrement": "off",
     "member-ordering": "off",
     "no-angle-bracket-type-assertion": "off",

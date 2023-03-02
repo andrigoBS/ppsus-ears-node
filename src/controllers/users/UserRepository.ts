@@ -1,0 +1,28 @@
+import { getRepository } from 'typeorm';
+import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
+import CryptoHelper from '../../helpers/CryptoHelper';
+import { AuthUser, MappingUser, User } from './UserTypes';
+
+export class UserRepository{
+    public async save<Type>(userType: MappingUser, user: UserTemplate): Promise<Type>{
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return getRepository<Type>(userType).save(user);
+    }
+
+    public async findOne(userType: MappingUser, authObj: AuthUser): Promise<User | undefined> {
+        let query = getRepository<User>(userType)
+            .createQueryBuilder('u')
+            .select('u.id','id')
+            .addSelect('u.name','name')
+            .where('u.login = :login', { login: authObj.login })
+            .andWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
+        ;
+
+        if(userType === MappingUser.secretary){
+            query = query.addSelect('IF(u.state IS NULL, "ZONE", "STATE")', 'type');
+        }
+
+        return query.getRawOne();
+    }
+}

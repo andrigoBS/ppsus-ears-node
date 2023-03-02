@@ -1,19 +1,22 @@
+import { HttpStatus } from '../AbstractHttpErrors';
+import AbstractRoutes from '../AbstractRoutes';
 import { Request, Response } from 'express';
-import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import AbstractController from '../AbstractController';
 import { FindOneOptions } from 'typeorm';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import SecretaryService from '../../services/SecretaryService';
+import { City } from '../../entity/secretaries/City';
+import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
 import { Zone } from '../../entity/secretaries/Zone';
+import CryptoHelper from '../../helpers/CryptoHelper';
+import SecretaryService from './SecretaryService';
 
-export default class ZoneController extends AbstractController {
+export default class ZoneController extends AbstractRoutes {
 
     constructor() {
         super();
-        const { getAll, getById, updateSecretary, createZone, createZoneUser, deleteZone, recoverZone } = this;
+        const { createZone, createZoneUser, deleteZone, getAll, getAllWithCities, getById, recoverZone, updateSecretary } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.get('/', getAll);
+        router.get('/with-cities', verifyJWTMiddleware, getAllWithCities);
         router.get('/:id', getById);
         router.put('/:id', verifyJWTMiddleware, updateSecretary);
         router.post('/', verifyJWTMiddleware, createZone);
@@ -29,10 +32,53 @@ export default class ZoneController extends AbstractController {
                 "ApiKeyAuth": []
             }]
         */
+
+        let zones = Zone.createQueryBuilder('z')
+            .select(['z.id AS id', 'z.secretary.name AS name'])
+        ;
+        if(req.query.stateId){
+            zones = zones.where('z.state = :state',  { state: req.query.stateId });
+        }
+        zones = await zones.execute();
+        return res.status(HttpStatus.OK).json(zones);
+    };
+
+    private getAllWithCities = async (req: Request, res: Response) => {
+        /*
+           #swagger.description = 'Endpoint para recuperar todas as secretarias regionais'
+           #swagger.security = [{
+                "ApiKeyAuth": []
+            }]
+        */
+
+        const state = await SecretaryUser.createQueryBuilder('u')
+            .select(['u.state.id AS id'])
+            .where('u.id = :stateUser', { stateUser: req.body.jwtObject.id })
+            .getRawOne()
+        ;
+
         const zones = await Zone.createQueryBuilder('z')
             .select(['z.id AS id', 'z.secretary.name AS name'])
-            .execute()
+            .where('z.state = :state',  { state: state.id })
+            .getRawMany()
         ;
+
+        for (const zone of zones) {
+            zone.values = await City.createQueryBuilder('c')
+                .select(['c.id AS id', 'c.name AS name'])
+                .where('c.zone = :zone',  { zone: zone.id })
+                .getRawMany()
+            ;
+        }
+
+        const notLinked = await City.createQueryBuilder('c')
+            .select(['c.id AS id', 'c.name AS name'])
+            .where('c.state = :state',  { state: state.id })
+            .andWhere('c.zone IS NULL')
+            .getRawMany()
+        ;
+        zones.push({ id: 0, name: 'Cidades não vinculadas', values: notLinked });
+
         return res.status(HttpStatus.OK).json(zones);
     };
 
@@ -66,7 +112,7 @@ export default class ZoneController extends AbstractController {
         const id = Number(req.params.id);
         const zone = await Zone.findOne(id);
         const [status, response] = await SecretaryService.saveSecretary(zone, req.body);
-        return res.status(status).json(response);
+        return res.status(status as HttpStatus).json(response);
     };
 
     private createZone = async (req: Request, res: Response) => {
@@ -116,6 +162,7 @@ export default class ZoneController extends AbstractController {
         */
         let zone = req.body as SecretaryUser;
         try {
+            zone.password = CryptoHelper.encrypt(zone.password);
             zone = await SecretaryUser.save(zone);
             return res.status(HttpStatus.OK).json(zone);
         } catch (e: any) {

@@ -1,64 +1,53 @@
+import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Equipment } from '../../../entity/equipment/Equipment';
+import EquipmentService from './EquipmentService';
 
-export default class EquipmentController extends AbstractController {
+export default class EquipmentController {
+    private equipmentService: EquipmentService;
 
     constructor() {
-        super();
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
-
+        this.equipmentService = new EquipmentService();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Equipment']
-           #swagger.description = 'Endpoint para criar um equipamento'
-           #swagger.parameters['equipment'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Equipamento',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+    public async create(req: Request, res: Response) {
+        try{
+            let equipment = req.body as Equipment;
+            equipment = await this.equipmentService.create(equipment);
+
+            return res.status(HttpStatus.OK).json(equipment);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+    public async getAll(req: Request, res: Response) {
+        try {
+            const equipment = await this.equipmentService.getAll(req);
 
-        let equipment = req.body as Equipment;
+            return res.status(HttpStatus.OK).json(equipment);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-        equipment = await Equipment.save(equipment);
-        return res.status(HttpStatus.OK).json(equipment);
-    };
+    public async deleteOne(req: Request, res: Response) {
+        try{
+            const idEquipment = req.params.id;
+            await this.equipmentService.deleteOne(Number(idEquipment));
 
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Equipment']
-           #swagger.description = 'Endpoint para pegar todos os equipamentos'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
-        const equipment = await Equipment.createQueryBuilder('equipment')
-            .select([
-                'equipment.id AS id',
-                'equipment.model AS name',
-                'equipment.model AS model',
-                'equipment.brand AS brand',
-                'equipment.dateOfLastCalibration AS dateOfLastCalibration'
-            ])
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(equipment);
-    };
-
+            return res.status(HttpStatus.OK).json();
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 }

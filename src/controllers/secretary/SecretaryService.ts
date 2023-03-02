@@ -1,21 +1,20 @@
-import { Equal, Like, Not } from 'typeorm';
-import ErrorHelper from '../helpers/ErrorHelper';
-import { HttpStatus } from '../helpers/HttpStatus';
-import { RestResponse } from '../helpers/ComposedTypes';
-import { SecretaryComponent } from '../entity/decorators/components/Secretary';
-import { State } from '../entity/secretaries/State';
-import { Zone } from '../entity/secretaries/Zone';
+import { HttpStatus } from '../AbstractHttpErrors';
 import { validateOrReject } from 'class-validator';
+import { Equal, Like, Not } from 'typeorm';
+import { SecretaryComponent } from '../../entity/decorators/components/Secretary';
+import { State } from '../../entity/secretaries/State';
+import { Zone } from '../../entity/secretaries/Zone';
+import ErrorHelper from '../../helpers/ErrorHelper';
 
 export default class SecretaryService {
 
-    public static async saveSecretary(entity: Secretary , secretary: SecretaryComponent): Promise<RestResponse> {
+    public static async saveSecretary(entity: Secretary , secretary: SecretaryComponent) {
         if (!entity) {
             return [HttpStatus.NOT_FOUND, { message: 'ID não encontrado' }];
         }
         if (secretary.emails) {
             secretary.emails = [...new Set(secretary.emails)];
-            const { id, constructor } = entity;
+            const { constructor, id } = entity;
             const matchingEmails = await SecretaryService.verifyUniqueEmail(secretary.emails, id, constructor as SecretaryType);
             if (matchingEmails.length !== 0) {
                 return [HttpStatus.CONFLICT, {
@@ -40,10 +39,10 @@ export default class SecretaryService {
         const dbEmails = await secretary.find({
             select: ['secretary.emails'],
             where: emails.map((email: string) => ({
+                id: Not(Equal(ignoreId)),
                 secretary: {
                     emails: Like(`%${email}%`),
                 },
-                id: Not(Equal(ignoreId)),
             })),
         });
         return dbEmails

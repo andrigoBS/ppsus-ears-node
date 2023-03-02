@@ -1,75 +1,42 @@
-import { Guardian } from '../../entity/guardian/Guardian';
-import { InstitutionUser } from '../../entity/institution/InstitutionUser';
-import { Therapist } from '../../entity/therapist/Therapist';
-import CryptoHelper from '../../helpers/CryptoHelper';
-import { AuthUser, LoginHelper } from '../../helpers/LoginHelper';
+import { HttpError, HttpStatus } from '../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import AbstractController from '../AbstractController';
-import { HttpStatus } from '../../helpers/HttpStatus';
-import { SecretaryUser } from '../../entity/secretaries/user/SecretaryUser';
-import { getRepository } from 'typeorm';
+import { JwtAuth } from '../../middleware/JwtAuth';
+import { AuthUserError } from './UserErrors';
+import UserService from './UserService';
+import { AuthUser, User } from './UserTypes';
 
-type UserString = 'secretary'   | 'institution'   | 'therapist' | 'parents';
-type User       = SecretaryUser | InstitutionUser | Therapist   | Guardian | undefined;
-enum MappingUser {
-    secretary = 'SecretaryUser',
-    institution = 'InstitutionUser',
-    therapist = 'Therapist',
-    parents = 'Guardian',
-}
+export default class UserController {
+    private readonly userService: UserService;
 
-export default class UserController extends AbstractController {
     constructor() {
-        super();
-        const { login } = this;
-        const router = this.getRouter();
-        router.post('/:userType/login', login);
+        this.userService = new UserService();
     }
 
-    private login = async (req: Request, res: Response) => {
-        /*
-            #swagger.description = 'Endpoint para logar um usuario'
-            #swagger.security = [{
-                "basicApiKeyAuth": []
+    public async login(req: Request, res: Response, jwt: JwtAuth) {
+        try{
+            const authObj: AuthUser = this.basicAuthToObj(req.headers['authorization']);
+
+            const user: User = await this.userService.findOne(req.params.userType, authObj);
+
+            const token = jwt.createJWToken({ id: user.id });
+
+            return res.status(HttpStatus.OK).send({ token, user: user });
+
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
-        */
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-        let authObj: AuthUser;
-
-        try {
-            authObj = LoginHelper.basicAuthToObj(req.headers['authorization']);
-        } catch (e: any) {
-            return res.status(HttpStatus.UNAUTHORIZED).send({ message: e.message, fancyMessage: 'Usuario não autorizado, contate um administrador' });
+    private basicAuthToObj(bearerHeader?: string): AuthUser {
+        if (!bearerHeader) {
+            throw new AuthUserError();
         }
 
-        const users: User[] = await this.findOne(req.params.userType, authObj);
+        const [login, password] = Buffer.from(bearerHeader.replace('Basic ', ''), 'base64').toString().split(':');
 
-        if (!users || users.length !== 1 || !users[0]) {
-            return res.status(HttpStatus.NOT_FOUND).send({ fancyMessage: 'Usuário não encontrado, register ou senha incorreto', message: 'Not Found' });
-        }
-
-        const user: User = users[0];
-
-        const token = this.getJwt().createJWToken({ id: user.id });
-        return res.status(HttpStatus.OK).send({ message: 'Created Token', fancyMessage: 'OK', token, user: user });
-    };
-
-    private async findOne(userType: string, authObj: AuthUser): Promise<User[]> {
-        let query = getRepository<User>(MappingUser[userType as UserString])
-            .createQueryBuilder('u')
-            .select('u.id','id')
-            .addSelect('u.name','name')
-            .where('u.login = :login', { login: authObj.login })
-            .andWhere('u.password = :password', { password: CryptoHelper.encrypt(authObj.password) })
-        ;
-
-        if(userType === 'secretary'){
-            query = query.addSelect('IF(u.state IS NULL, "ZONE", "STATE")', 'type');
-        }
-
-        return query
-            .limit(1)
-            .execute()
-        ;
+        return { login, password };
     }
 }

@@ -1,78 +1,61 @@
+import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
 import { Request, Response } from 'express';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
 import { Conduct } from '../../../entity/conduct/Conduct';
+import ConductService from './ConductService';
 
-export default class ConductController extends AbstractController {
+export default class ConductController {
+    private conductService: ConductService;
 
     constructor() {
-        super();
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
+        this.conductService = new ConductService();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Conduct']
-           #swagger.description = 'Endpoint para criar uma conduta'
-           #swagger.parameters['conduct'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Conduta',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+    public async create(req: Request, res: Response) {
+        try{
+            const therapistId = req.body.jwtObject.id;
+
+            let conduct = req.body as Conduct;
+            conduct.therapist = therapistId;
+            conduct = await this.conductService.create(conduct);
+
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+    public async getAll(req: Request, res: Response) {
+        try{
+            const conduct = await this.conductService.getAll(req);
 
-        let conduct = req.body as Conduct;
-        conduct.therapist = req.body.jwtObject.id;
-        conduct = await Conduct.save(conduct);
-        return res.status(HttpStatus.OK).json(conduct);
-    };
-
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Conduct']
-           #swagger.description = 'Endpoint para pegar todos as condutas'
-           #swagger.parameters['conduct'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Conduta',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
             }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+    public async get(req: Request, res: Response) {
+        try{
+            const conduct = await this.conductService.get(
+                Number(req.params.leftEar),
+                Number(req.params.rightEar),
+                Number(req.params.irda),
+                Number(req.params.testType)
+            );
 
-        const conduct = await Conduct.createQueryBuilder('conduct')
-            .select([
-                'conduct.id AS id',
-                'CONCAT(conduct.resultDescription, conduct.accompanyDescription) AS name',
-                'conduct.resultDescription AS resultDescription',
-                'conduct.accompanyDescription AS accompanyDescription',
-                'conduct.leftEar AS leftEar',
-                'conduct.rightEar AS rightEar',
-                'conduct.irda AS irda',
-                'conduct.testType AS testType'
-            ])
-            .where('conduct.therapist = :id', { id: req.body.jwtObject.id })
-            .orWhere('conduct.therapist is null')
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(conduct);
-    };
+            return res.status(HttpStatus.OK).json(conduct);
+        }catch (e: HttpError | any){
+            if(e instanceof HttpError){
+                return res.status(e.httpStatus).json(e.messages);
+            }
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
+        }
+    }
 
 }

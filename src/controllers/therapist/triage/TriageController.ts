@@ -1,16 +1,17 @@
+import { HttpStatus } from '../../AbstractHttpErrors';
+import AbstractRoutes from '../../AbstractRoutes';
 import { Request, Response } from 'express';
-import { Baby, ChildBirth, ChildBirthString } from '../../../entity/baby/Baby';
+import { Baby } from '../../../entity/baby/Baby';
 import { Guardian } from '../../../entity/guardian/Guardian';
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
-import AbstractController from '../../AbstractController';
-import { HttpStatus } from '../../../helpers/HttpStatus';
-import {Orientation} from "../../../entity/orientation/Orientation";
+import CryptoHelper from '../../../helpers/CryptoHelper';
+import { ChildBirth, ChildBirthString } from '../../baby/BabyTypes';
 
-export default class TriageController extends AbstractController {
+export default class TriageController extends AbstractRoutes {
 
     constructor() {
         super();
-        const { create, triageTypes, getAll } = this;
+        const { create, getAll, triageTypes } = this;
         const { verifyJWTMiddleware } = this.getJwt();
         const router = this.getRouter();
         router.post('/', verifyJWTMiddleware, create);
@@ -48,11 +49,13 @@ export default class TriageController extends AbstractController {
 
             triageJson.baby.birthMother.login = triageJson.baby.birthMother.name.toLowerCase().replaceAll(' ', '.');
             triageJson.baby.birthMother.password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
+            triageJson.baby.birthMother.password = CryptoHelper.encrypt(triageJson.baby.birthMother.password);
             triageJson.baby.birthMother = await Guardian.save(triageJson.baby.birthMother);
 
             for(let index = 0; index < triageJson.baby.guardians.length; index++) {
                 triageJson.baby.guardians[index].login = triageJson.baby.guardians[index].name.toLowerCase().replaceAll(' ', '.');
                 triageJson.baby.guardians[index].password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
+                triageJson.baby.guardians[index].password = CryptoHelper.encrypt(triageJson.baby.guardians[index].password);
                 triageJson.baby.guardians[index] = await Guardian.save(triageJson.baby.guardians[index]);
             }
 
@@ -63,14 +66,14 @@ export default class TriageController extends AbstractController {
 
             triage = triageJson as Triage;
         }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ message: e.message, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
         }
 
         try{
             triage = await Triage.save(triage);
             return res.status(HttpStatus.OK).json(triage);
         }catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message, fancyMessage: 'Ocorreu um erro ao tentar criar a triagem' });
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
         }
     };
 
@@ -107,14 +110,38 @@ export default class TriageController extends AbstractController {
             }]
         */
 
-        const triage = await Triage.createQueryBuilder('triage')
-            .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
-                             'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
-                             'triage.observation AS observation', 'triage.conduct AS conduct',
-                             'triage.orientation AS orientation'])
-            // .where('orientation.therapist = :id', { id: req.body.jwtObject.id })
-            // .orWhere('orientation.therapist is null')
-            .getRawMany();
-        return res.status(HttpStatus.OK).json(triage);
+        try{
+
+            let triageQuery = Triage.createQueryBuilder('triage')
+                .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
+                    'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
+                    'conduct.resultDescription AS conduct',
+                    'institution.institutionName AS institution, conduct.testType AS testType'])
+                .leftJoin('triage.conduct', 'conduct')
+                .leftJoin('triage.institution', 'institution')
+                .leftJoin('triage.therapist', 'therapist')
+                .leftJoin('therapist.institutions', 'therapistInstitutions')
+                .where('triage.institution = therapistInstitutions.id');
+
+            if(req.query.rightEar){
+                triageQuery = triageQuery.where('triage.rightEar = :rightEar', { rightEar: req.query.rightEar });
+            }
+
+            if(req.query.leftEar){
+                triageQuery = triageQuery.andWhere('triage.leftEar = :leftEar', { leftEar: req.query.leftEar });
+            }
+
+            if(req.query.evaluationDate){
+                triageQuery = triageQuery.andWhere('triage.evaluationDate like :evaluationDate', { evaluationDate: `%${req.query.evaluationDate}%` });
+            }
+
+            if(req.query.testType){
+                triageQuery = triageQuery.andWhere('conduct.testType = :testType', { testType: req.query.testType });
+            }
+
+            return res.status(HttpStatus.OK).json(await triageQuery.getRawMany());
+        } catch (e: any){
+            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens', message: e });
+        }
     };
 }

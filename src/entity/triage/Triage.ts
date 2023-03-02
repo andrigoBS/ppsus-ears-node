@@ -21,29 +21,29 @@ export class Triage extends BaseEntity {
     id: number;
 
     @Column({
-        name: 'orelha_esquerda', type: 'tinyint',
-        comment: 'Se a orelha esquerda passou no teste', nullable: false
+        comment: 'Se a orelha esquerda passou no teste', name: 'orelha_esquerda',
+        nullable: false, type: 'tinyint'
     })
     leftEar: boolean;
 
     @Column({
-        name: 'orelha_direita', type: 'tinyint',
-        comment: 'Se a orelha direita passou no teste', nullable: false
+        comment: 'Se a orelha direita passou no teste', name: 'orelha_direita',
+        nullable: false, type: 'tinyint'
     })
     rightEar: boolean;
 
-    @Column({ name: 'data_avaliacao', type: 'datetime', update: false,
-        comment: 'Data em que foi feito a avaliação)',
+    @Column({ comment: 'Data em que foi feito a avaliação)', name: 'data_avaliacao', type: 'datetime',
+        update: false,
     })
     evaluationDate: Date;
 
-    @Column({ name: 'tipo_triagem', type: 'enum', update: false, enum: TriageType,
-        comment: 'Tipo de triagem',
+    @Column({ comment: 'Tipo de triagem', enum: TriageType, name: 'tipo_triagem', type: 'enum',
+        update: false,
     })
     type: TriageType;
 
-    @Column({ name: 'observacao', type: 'text',
-        comment: 'Qualquer tipo de observação sobre a triagem',
+    @Column({ comment: 'Qualquer tipo de observação sobre a triagem', name: 'observacao',
+        type: 'text',
     })
     observation: string;
 
@@ -73,8 +73,8 @@ export class Triage extends BaseEntity {
     @ManyToOne(() => Baby, { nullable: false })
     baby: Baby;
 
-    @JoinTable ({ name: 'triagem_indicador',
-        joinColumn: { name: 'fk_triagem' }, inverseJoinColumn: { name: 'fk_indicador' },
+    @JoinTable ({ inverseJoinColumn: { name: 'fk_indicador' },
+        joinColumn: { name: 'fk_triagem' }, name: 'triagem_indicador',
     })
     @ManyToMany(() => Indicator, (indicator) => indicator.triages)
     indicators: Indicator[];

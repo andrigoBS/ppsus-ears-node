@@ -11,7 +11,7 @@ export class City extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_municipio' })
     id: number;
 
-    @Column({ name: 'nome', type: 'varchar', length: 48, update: false })
+    @Column({ length: 48, name: 'nome', type: 'varchar', update: false })
     name: string;
 
     @JoinColumn({ name: 'fk_regiao' })
@@ -22,8 +22,8 @@ export class City extends BaseEntity {
     @ManyToOne(() => State, (state) => state.cities, { nullable: false })
     state: State;
 
-    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
-        comment: 'Data de cadastro do município',
+    @CreateDateColumn({ comment: 'Data de cadastro do município', name: 'data_cadastro',
+        type: 'datetime',
     })
     registrationDate: Date;
 

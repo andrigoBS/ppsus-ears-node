@@ -5,7 +5,6 @@ import {
     DeleteDateColumn,
     PrimaryGeneratedColumn
 } from 'typeorm';
-import CryptoHelper from '../../../helpers/CryptoHelper';
 
 /**
  * Entidade abstrata representando um usuário.
@@ -15,44 +14,44 @@ import CryptoHelper from '../../../helpers/CryptoHelper';
  */
 export abstract class UserTemplate extends BaseEntity {
 
-    @PrimaryGeneratedColumn({ name: 'id_usuario',
-        comment: 'Chave primária de um usuário. é única apenas dentro de uma tabela.',
+    @PrimaryGeneratedColumn({ comment: 'Chave primária de um usuário. é única apenas dentro de uma tabela.',
+        name: 'id_usuario',
     })
     id: number;
 
     @Column({
-        name: 'login', type: 'varchar', length: 255, nullable: false, unique: true, update: false,
-        comment: 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema'
+        comment: 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema', length: 255, name: 'login', nullable: false, type: 'varchar', unique: true,
+        update: false
     })
     login: string;
 
     @Column({
-        name: 'password', type: 'varchar', length: 255,
-        comment: 'password do usuário', nullable: false
+        comment: 'password do usuário', length: 255, name: 'password',
+        nullable: false, type: 'varchar'
     })
     password: string;
 
     @Column ({
-        name:'resetar_senha', type: 'boolean', default: false,
-        comment: 'Força a mudança de senha no próximo login'
+        comment: 'Força a mudança de senha no próximo login', default: false, name:'resetar_senha',
+        type: 'boolean'
     })
     forcePasswordReset: boolean;
 
     @Column({
-        name: 'nome_usuario', type: 'varchar', length: 255,
-        comment: 'Nome do usuário', nullable: false
+        comment: 'Nome do usuário', length: 255, name: 'nome_usuario',
+        nullable: false, type: 'varchar'
     })
     name: string;
 
     // Controle
 
-    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
-        comment: 'Data de cadastro do usuário',
+    @CreateDateColumn({ comment: 'Data de cadastro do usuário', name: 'data_cadastro',
+        type: 'datetime',
     })
     registrationDate: Date;
 
-    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
-        comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data',
+    @DeleteDateColumn({ comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data', name: 'data_desativado', nullable: true,
+        type: 'datetime',
     })
     disableDate: Date;
 }

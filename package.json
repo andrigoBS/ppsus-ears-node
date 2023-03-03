@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/scripts/StartServer.js",
     "start:dev": "cd build && npm start",
-    "dev": "npm run build:env && npm run lint:fix && npm run start:dev",
+    "dev": "npm run build:env && npm run start:dev",
     "dev:nodemon": "nodemon -L --ignore node_modules --ignore build --ext ts --exec npm run dev",
     "doc": "node build/src/scripts/SwaggerGenerate.js",
     "env": "node build/src/scripts/CopyEnv.js",

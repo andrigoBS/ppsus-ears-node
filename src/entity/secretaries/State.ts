@@ -1,5 +1,5 @@
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ValidateNested, validateOrReject } from 'class-validator';
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
 import { City } from './City';
 import { Zone } from './Zone';
@@ -10,13 +10,13 @@ export class State extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_estado' })
     id: number;
 
-    @Column({ name: 'codigo_ibge', type: 'int', update: false, unique: true })
+    @Column({ name: 'codigo_ibge', type: 'int', unique: true, update: false })
     code: number;
 
-    @Column({ name: 'nome', type: 'varchar', length: 20, update: false })
+    @Column({ length: 20, name: 'nome', type: 'varchar', update: false })
     name: string;
 
-    @Column({ name: 'uf', type: 'varchar', length: 2, update: false, unique: true })
+    @Column({ length: 2, name: 'uf', type: 'varchar', unique: true, update: false })
     uf: string;
 
     @ValidateNested()

@@ -1,4 +1,8 @@
 import {
+    ValidateNested,
+    validateOrReject
+} from 'class-validator';
+import {
     BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     CreateDateColumn,
@@ -9,12 +13,8 @@ import {
     OneToMany,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import {
-    ValidateNested,
-    validateOrReject
-} from 'class-validator';
-import { City } from './City';
 import { SecretaryComponent as Secretary } from '../decorators/components/Secretary';
+import { City } from './City';
 import { State } from './State';
 
 @Entity('regiao')
@@ -36,7 +36,7 @@ export class Zone extends BaseEntity {
     @CreateDateColumn({ name: 'data_cadastro', type: 'datetime' })
     registrationDate: Date;
 
-    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true })
+    @DeleteDateColumn({ name: 'data_desativado', nullable: true, type: 'datetime' })
     disableDate: Date;
 
     @OneToMany(() => City, (city) => city.zone)

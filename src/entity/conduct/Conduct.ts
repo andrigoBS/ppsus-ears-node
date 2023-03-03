@@ -7,37 +7,37 @@ export class Conduct extends BaseEntity {
     @PrimaryGeneratedColumn({ name: 'id_conduct' })
     id: number;
 
-    @Column({ name: 'descricao_resultado', type: 'text',
-        comment: 'Descrição da conduta',
+    @Column({ comment: 'Descrição da conduta', name: 'descricao_resultado',
+        type: 'text',
     })
     resultDescription: string;
 
-    @Column({ name: 'descricao_acompanhamento', type: 'text',
-        comment: 'Descrição do acompanhamento',
+    @Column({ comment: 'Descrição do acompanhamento', name: 'descricao_acompanhamento',
+        type: 'text',
     })
     accompanyDescription: string;
 
     @Column({
-        name: 'orelha_esquerda', type: 'tinyint',
-        comment: 'Se a orelha esquerda passou no teste', nullable: false
+        comment: 'Se a orelha esquerda passou no teste', name: 'orelha_esquerda',
+        nullable: false, type: 'tinyint'
     })
     leftEar: boolean;
 
     @Column({
-        name: 'orelha_direita', type: 'tinyint',
-        comment: 'Se a orelha direita passou no teste', nullable: false
+        comment: 'Se a orelha direita passou no teste', name: 'orelha_direita',
+        nullable: false, type: 'tinyint'
     })
     rightEar: boolean;
 
     @Column({
-        name: 'irda', type: 'tinyint',
-        comment: 'Se o a conduta está relacionada com o irda', nullable: false
+        comment: 'Se o a conduta está relacionada com o irda', name: 'irda',
+        nullable: false, type: 'tinyint'
     })
     irda: boolean;
 
     @Column({
-        name: 'tipo_teste', type: 'int',
-        comment: 'Se é relacionado ao teste, reteste e teste e reteste', nullable: false
+        comment: 'Se é relacionado ao teste, reteste e teste e reteste', name: 'tipo_teste',
+        nullable: false, type: 'int'
     })
     testType: number;
 

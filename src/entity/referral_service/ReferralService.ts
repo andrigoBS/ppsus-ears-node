@@ -27,27 +27,27 @@ export enum ReferralServiceType {
 export class ReferralService extends BaseEntity {
 
     @PrimaryGeneratedColumn({
-        name: 'id_servico',
         comment: 'Chave primária do servico de referencia',
+        name: 'id_servico',
     })
     id: number;
 
     @Column({
-        name: 'nome_servico', type: 'varchar', length: 255,
-        comment: 'Nome do Serviço',
+        comment: 'Nome do Serviço', length: 255, name: 'nome_servico',
+        type: 'varchar',
     })
     name: string;
 
-    @Column({ name: 'cnpj', type: 'varchar', length: 13, nullable: true,
-        comment: 'CNPJ do servico de referencia',
+    @Column({ comment: 'CNPJ do servico de referencia', length: 13, name: 'cnpj', nullable: true,
+        type: 'varchar',
     })
     cnpj: string;
 
-    @Column({ name: 'cnes', type: 'varchar', length: 7, nullable: true })
+    @Column({ length: 7, name: 'cnes', nullable: true, type: 'varchar' })
     cnes: string;
 
-    @Column({ name: 'tipo_servico', type: 'enum', update: false, enum: ReferralServiceType,
-        comment: 'Tipo de Serviço',
+    @Column({ comment: 'Tipo de Serviço', enum: ReferralServiceType, name: 'tipo_servico', type: 'enum',
+        update: false,
     })
     typeService: ReferralServiceType;
 
@@ -57,13 +57,13 @@ export class ReferralService extends BaseEntity {
 
     // Controle
 
-    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
-        comment: 'Data de cadastro do serviço de referencia',
+    @CreateDateColumn({ comment: 'Data de cadastro do serviço de referencia', name: 'data_cadastro',
+        type: 'datetime',
     })
     registrationDate: Date;
 
-    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
-        comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data',
+    @DeleteDateColumn({ comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o serviço de referencia foi inativado nessa data', name: 'data_desativado', nullable: true,
+        type: 'datetime',
     })
     disableDate: Date;
 

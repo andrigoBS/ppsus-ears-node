@@ -1,15 +1,15 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { InstitutionEmail as Email } from './InstitutionEmail';
-import { Institution } from './Institution';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';
+import { Institution } from './Institution';
+import { InstitutionEmail as Email } from './InstitutionEmail';
 import { InstitutionPhone as Phone } from './InstitutionPhone';
 
 @Entity('usuario_instituicao')
 export class InstitutionUser extends User {
 
     @Column({
-        name: 'cargo', type: 'varchar', length: 255,
-        comment: 'Cargo', nullable: true
+        comment: 'Cargo', length: 255, name: 'cargo',
+        nullable: true, type: 'varchar'
     })
     role: string;
 

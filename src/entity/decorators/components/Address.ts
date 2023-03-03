@@ -8,23 +8,23 @@ import { City } from '../../secretaries/City';
  */
 export class AddressComponent {
 
-    @Column({ name: 'rua', type: 'varchar', length: 255,
-        comment: 'Rua em que se encontra esse endereço',
+    @Column({ comment: 'Rua em que se encontra esse endereço', length: 255, name: 'rua',
+        type: 'varchar',
     })
     street: string;
 
-    @Column({ name: 'numero', type: 'int',
-        comment: 'Numero do estabelecimento',
+    @Column({ comment: 'Numero do estabelecimento', name: 'numero',
+        type: 'int',
     })
     number: number;
 
-    @Column({ name: 'complemento', type: 'varchar', length: 255, nullable: true,
-        comment: 'Complemento para o endereço',
+    @Column({ comment: 'Complemento para o endereço', length: 255, name: 'complemento', nullable: true,
+        type: 'varchar',
     })
     adjunct: string;
 
-    @Column({ name: 'CEP', type: 'varchar', length: 8,
-        comment: 'CEP do endereço',
+    @Column({ comment: 'CEP do endereço', length: 8, name: 'CEP',
+        type: 'varchar',
     })
     cep: string;
 

@@ -9,8 +9,8 @@ import { SecretaryPhone as Phone } from './SecretaryPhone';
 export class SecretaryUser extends User {
 
     @Column({
-        name: 'cargo', type: 'varchar', length: 255,
-        comment: 'Cargo', nullable: true
+        comment: 'Cargo', length: 255, name: 'cargo',
+        nullable: true, type: 'varchar'
     })
     role: string;
 

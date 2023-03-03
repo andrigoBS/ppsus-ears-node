@@ -1,7 +1,7 @@
+import { Baby } from '../../entity/baby/Baby';
 import { OnFindBabyError } from './BabyErrors';
 import BabyRepository from './BabyRepository';
 import { ChildBirth, ChildBirthIdName, ChildBirthString } from './BabyTypes';
-import { Baby } from '../../entity/baby/Baby';
 
 export default class BabyService{
     private babyRepository: BabyRepository;

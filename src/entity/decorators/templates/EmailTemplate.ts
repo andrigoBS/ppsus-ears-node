@@ -1,5 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEmail } from 'class-validator';
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 /**
  * Entidade abstrata representando um e-mail.
@@ -9,29 +9,29 @@ import { IsEmail } from 'class-validator';
  */
 export abstract class EmailTemplate extends BaseEntity {
 
-    @PrimaryGeneratedColumn({ name: 'id_email',
-        comment: 'Chave primaria de um email',
+    @PrimaryGeneratedColumn({ comment: 'Chave primaria de um email',
+        name: 'id_email',
     })
     id: number;
 
     @IsEmail()
-    @Column({ name: 'email', type: 'varchar', length: 255, unique: true,
-        comment: 'Endereço de email para contato',
+    @Column({ comment: 'Endereço de email para contato', length: 255, name: 'email', type: 'varchar',
+        unique: true,
     })
     email: string;
 
-    @Column({ name: 'is_principal', type: 'boolean', default: false,
-        comment: 'Marca o email principal da conta',
+    @Column({ comment: 'Marca o email principal da conta', default: false, name: 'is_principal',
+        type: 'boolean',
     })
     isMainEmail: boolean;
 
-    @CreateDateColumn({ name: 'data_cadastro', type: 'datetime',
-        comment: 'Data de cadastro do email',
+    @CreateDateColumn({ comment: 'Data de cadastro do email', name: 'data_cadastro',
+        type: 'datetime',
     })
     registrationDate: Date;
 
-    @DeleteDateColumn({ name: 'data_desativado', type: 'datetime', nullable: true,
-        comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o email foi inativado nessa data',
+    @DeleteDateColumn({ comment: 'Coluna usada para o Soft Delete, caso tenha um valor, o email foi inativado nessa data', name: 'data_desativado', nullable: true,
+        type: 'datetime',
     })
     disableDate: Date;
 

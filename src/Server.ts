@@ -14,7 +14,6 @@ export default class Server {
         /* Setup dot env */
         Dotenv.config();
         this.express = Express();
-
         this.database();
         this.middlewares();
         this.routes();

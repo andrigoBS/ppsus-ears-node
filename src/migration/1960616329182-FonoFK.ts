@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class FonoFK1660616329182 implements MigrationInterface {
-    name = 'FonoFK1660616329182';
+export class FonoFK1960616329182 implements MigrationInterface {
+    name = 'FonoFK1960616329182';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query('ALTER TABLE `conduta` ADD `fk_fonoaudiologo` int NULL COMMENT \'Chave primária de um usuário. é única apenas dentro de uma tabela.\'');

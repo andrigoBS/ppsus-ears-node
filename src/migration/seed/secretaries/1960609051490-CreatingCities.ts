@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreatingCities1660609051490 implements MigrationInterface {
+export class CreatingCities1960609051490 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.clearTable('municipio');

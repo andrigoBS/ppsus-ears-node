@@ -1,6 +1,6 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreatingConducts1660616524265 implements MigrationInterface {
+export class CreatingConducts1960616524265 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -25,7 +25,7 @@ export class CreatingConducts1660616524265 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.clearTable('conduta')
+        queryRunner.clearTable('conduta');
     }
 
 }

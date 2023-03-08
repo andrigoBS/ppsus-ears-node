@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class GeneratingStateDefaultUser1660612028888 implements MigrationInterface {
+export class GeneratingStateDefaultUser1960612028888 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`

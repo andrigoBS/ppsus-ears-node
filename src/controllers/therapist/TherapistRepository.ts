@@ -28,24 +28,25 @@ export default class TherapistRepository {
         return Therapist.save(therapist);
     }
 
-    public saveEmails(therapistId: number,  emails: any){
-        TherapistEmail.save(
-            emails.map((email: string) =>
-                ({
-                    email: email,
-                    therapist: therapistId
-                })
-            )
+    public saveEmails(therapist: Therapist,  emails: string[]): Promise<TherapistEmail[]>{
+        return TherapistEmail.save(
+            emails.map((email) => {
+                const entity = new TherapistEmail();
+                entity.email = email;
+                entity.therapist = therapist;
+                return entity;
+            })
         );
     }
 
-    public savePhones(therapistId: number,  phones: any){
-        TherapistPhone.save(
-            phones.map((number: string) =>
-                ({ phoneNumber: number,
-                    therapist: therapistId
-                })
-            )
+    public savePhones(therapist: Therapist,  phones: string[]): Promise<TherapistPhone[]>{
+        return TherapistPhone.save(
+            phones.map((number) => {
+                const entity = new TherapistPhone();
+                entity.phoneNumber = number;
+                entity.therapist = therapist;
+                return entity;
+            })
         );
     }
 }

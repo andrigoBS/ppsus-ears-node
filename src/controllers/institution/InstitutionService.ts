@@ -19,7 +19,7 @@ export default class InstitutionService {
     }
 
     public async findOneById(id: number | string): Promise<Institution | undefined> {
-        const institution = this.institutionRepository.findOne({ id: id as number });
+        const institution = await this.institutionRepository.findOne({ id: id as number });
 
         if(!institution) {
             throw new NotFoundOneInstitutionError();

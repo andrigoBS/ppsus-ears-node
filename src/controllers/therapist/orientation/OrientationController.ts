@@ -27,7 +27,7 @@ export default class OrientationController {
 
     public async getAll(req: Request, res: Response) {
         try{
-            const orientation = await this.orientationService.getAll(req);
+            const orientation = await this.orientationService.getAll(req.query, req.body.jwtObject.id);
             return res.status(HttpStatus.OK).json(orientation);
         }catch (e: HttpError | any){
             if(e instanceof HttpError){
@@ -40,9 +40,8 @@ export default class OrientationController {
     public async deleteOne(req: Request, res: Response) {
         try{
             const idOrientation = req.params.id;
-            await this.orientationService.deleteOne(Number(idOrientation));
-
-            return res.status(HttpStatus.OK).json();
+            const orientation = await this.orientationService.deleteOne(Number(idOrientation));
+            return res.status(HttpStatus.OK).json(orientation);
         }catch (e: HttpError | any){
             if(e instanceof HttpError){
                 return res.status(e.httpStatus).json(e.messages);

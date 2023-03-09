@@ -14,7 +14,6 @@ export default class EquipmentController {
         try{
             let equipment = req.body as Equipment;
             equipment = await this.equipmentService.create(equipment);
-
             return res.status(HttpStatus.OK).json(equipment);
         }catch (e: HttpError | any){
             if(e instanceof HttpError){
@@ -26,8 +25,7 @@ export default class EquipmentController {
 
     public async getAll(req: Request, res: Response) {
         try {
-            const equipment = await this.equipmentService.getAll(req);
-
+            const equipment = await this.equipmentService.getAll(req.query);
             return res.status(HttpStatus.OK).json(equipment);
         }catch (e: HttpError | any){
             if(e instanceof HttpError){
@@ -40,9 +38,8 @@ export default class EquipmentController {
     public async deleteOne(req: Request, res: Response) {
         try{
             const idEquipment = req.params.id;
-            await this.equipmentService.deleteOne(Number(idEquipment));
-
-            return res.status(HttpStatus.OK).json();
+            const equipment = await this.equipmentService.deleteOne(Number(idEquipment));
+            return res.status(HttpStatus.OK).json(equipment);
         }catch (e: HttpError | any){
             if(e instanceof HttpError){
                 return res.status(e.httpStatus).json(e.messages);

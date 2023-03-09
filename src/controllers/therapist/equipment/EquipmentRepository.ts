@@ -1,22 +1,20 @@
-import { Request } from 'express';
 import { Equipment } from '../../../entity/equipment/Equipment';
 
 export default class EquipmentRepository {
-    public async create(equipment: Equipment) {
+    public async create(equipment: Equipment): Promise<Equipment> {
         return Equipment.save(equipment);
     }
 
-    public async deleteOne(idEquipment: number) {
-        return Equipment.createQueryBuilder('equipment')
-            .update()
-            .set({
-                dateOfDeactivation: new Date()
-            })
-            .where('id = :id', { id: idEquipment })
-            .execute();
+    public async deleteOne(equipment: Equipment): Promise<Equipment> {
+        equipment.dateOfDeactivation = new Date();
+        return equipment.save();
     }
 
-    public getAll(req: Request): Promise<Equipment[] | undefined>{
+    public async getOne(idEquipment: number): Promise<Equipment | undefined> {
+        return Equipment.findOne(idEquipment);
+    }
+
+    public getAll(model?: string, brand?: string, dateOfLastCalibration?: string, listAllActives?: boolean): Promise<Equipment[] | undefined>{
         const query = Equipment.createQueryBuilder('equipment')
             .select([
                 'equipment.id AS id',
@@ -27,19 +25,19 @@ export default class EquipmentRepository {
                 'equipment.dateOfDeactivation AS dateOfDeactivation'
             ]).orderBy('name','ASC');
 
-        if(req.query.model){
-            query.andWhere('equipment.model like :model', { model: `%${req.query.model}%` });
+        if(model){
+            query.andWhere('equipment.model like :model', { model: `%${model}%` });
         }
 
-        if(req.query.brand){
-            query.andWhere('equipment.brand like :brand', { brand: `%${req.query.brand}%` });
+        if(brand){
+            query.andWhere('equipment.brand like :brand', { brand: `%${brand}%` });
         }
 
-        if(req.query.dateOfLastCalibration){
-            query.andWhere('equipment.dateOfLastCalibration like :date', { date: `%${req.query.dateOfLastCalibration}%` });
+        if(dateOfLastCalibration){
+            query.andWhere('equipment.dateOfLastCalibration like :date', { date: `%${dateOfLastCalibration}%` });
         }
 
-        if(req.query.listAllActives){
+        if(listAllActives){
             query.andWhere('equipment.dateOfDeactivation IS NULL');
         }
 

@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import { Orientation } from '../../../entity/orientation/Orientation';
 
 export default class OrientationRepository {
@@ -6,32 +5,31 @@ export default class OrientationRepository {
         return Orientation.save(orientation);
     }
 
-    public async deleteOne(idOrientation: number) {
-        return Orientation.createQueryBuilder('orientation')
-            .update()
-            .set({
-                dateOfDeactivation: new Date()
-            })
-            .where('id = :id', { id: idOrientation })
-            .execute();
+    public async deleteOne(orientation: Orientation): Promise<Orientation> {
+        orientation.dateOfDeactivation = new Date();
+        return orientation.save();
     }
 
-    public getAll(req: Request): Promise<Orientation[] | undefined>{
+    public async getOne(idOrientation: number): Promise<Orientation | undefined> {
+        return Orientation.findOne(idOrientation);
+    }
+
+    public async getAll(therapistID: number, description?: string, listAllActives?: boolean): Promise<Orientation[] | undefined>{
         const query = Orientation.createQueryBuilder('orientation')
             .select(
                 ['orientation.id AS id',
-                    'orientation.description AS name',
+                    'orientation.description AS description',
                     'orientation.dateOfDeactivation AS dateOfDeactivation',
                     'orientation.therapist AS therapist'
                 ])
-            .where('(orientation.therapist = :id OR orientation.therapist is null)', { id: req.body.jwtObject.id })
+            .where('(orientation.therapist = :therapistID OR orientation.therapist is null)', { therapistID })
             .orderBy('orientation.description', 'ASC');
 
-        if(req.query.description){
-            query.andWhere('orientation.description like :description', { description: `%${req.query.description}%` });
+        if(description){
+            query.andWhere('orientation.description like :description', { description: `%${description}%` });
         }
 
-        if(req.query.listAllActives){
+        if(listAllActives){
             query.andWhere('orientation.dateOfDeactivation IS NULL');
         }
 

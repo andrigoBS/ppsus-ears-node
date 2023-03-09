@@ -7,6 +7,7 @@ export class UsuarioInstituicao1760606354021 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE \`usuario_instituicao\` (
                 \`id_usuario\` int NOT NULL AUTO_INCREMENT COMMENT 'Chave primária de um usuário. é única apenas dentro de uma tabela.', 
                 \`login\` varchar(255) NOT NULL COMMENT 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema', 
+                \`resetar_senha\` int DEFAULT 0 COMMENT 'Força a mudança de senha no próximo login',
                 \`password\` varchar(255) NOT NULL COMMENT 'password do usuário', 
                 \`nome_usuario\` varchar(255) NOT NULL COMMENT 'Nome do usuário', 
                 \`data_cadastro\` datetime(6) NOT NULL COMMENT 'Data de cadastro do usuário' DEFAULT CURRENT_TIMESTAMP(6), 

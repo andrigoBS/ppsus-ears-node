@@ -6,8 +6,9 @@ export class Fonoaudiologo1760606354018 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`fonoaudiologo\` (
                 \`id_usuario\` int NOT NULL AUTO_INCREMENT COMMENT 'Chave primária de um usuário. é única apenas dentro de uma tabela.', 
-                \`login\` varchar(255) NOT NULL COMMENT 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema', 
-                \`password\` varchar(255) NOT NULL COMMENT 'password do usuário', 
+                \`login\` varchar(255) NOT NULL COMMENT 'Login do usuário, definido pelo user, exceto pais que é gerado pelo sistema',
+                \`password\` varchar(255) NOT NULL COMMENT 'password do usuário',
+                \`resetar_senha\` int DEFAULT 0 COMMENT 'Força a mudança de senha no próximo login',
                 \`nome_usuario\` varchar(255) NOT NULL COMMENT 'Nome do usuário', 
                 \`data_cadastro\` datetime(6) NOT NULL COMMENT 'Data de cadastro do usuário' DEFAULT CURRENT_TIMESTAMP(6), 
                 \`data_desativado\` datetime(6) NULL COMMENT 'Coluna usada para o Soft Delete, caso tenha um valor, o usuário foi inativado nessa data', 

@@ -11,7 +11,6 @@ export class Conduta1760606354012 implements MigrationInterface {
                 \`orelha_esquerda\` tinyint NOT NULL COMMENT 'Se a orelha esquerda passou no teste', 
                 \`orelha_direita\` tinyint NOT NULL COMMENT 'Se a orelha direita passou no teste', 
                 \`irda\` tinyint NOT NULL COMMENT 'Se o a conduta está relacionada com o irda', 
-                \`tipo_triagem\` enum ('EOE transitente', 'EOE produto de distorção', 'PEATE automático', 'EOE transitente + PEATE automático') NOT NULL COMMENT 'Tipo de triagem', 
                 \`tipo_teste\` int NOT NULL COMMENT 'Se é relacionado ao teste, reteste e teste e reteste', 
             PRIMARY KEY (\`id_conduct\`)) ENGINE=InnoDB`);
     }

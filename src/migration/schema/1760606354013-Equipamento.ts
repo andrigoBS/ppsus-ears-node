@@ -8,7 +8,8 @@ export class Equipamento1760606354013 implements MigrationInterface {
                 \`id_equipamento\` int NOT NULL AUTO_INCREMENT, 
                 \`modelo\` varchar(255) NOT NULL COMMENT 'Modelo do equipamento', 
                 \`marca\` varchar(255) NOT NULL COMMENT 'Marca do equipamento', 
-                \`data_calibracao\` date NOT NULL COMMENT 'Data do último calibramento do equipamento', 
+                \`data_calibracao\` date NOT NULL COMMENT 'Data do último calibramento do equipamento',
+                \`data_desativacao\` date DEFAULT NULL COMMENT 'Data de desativação do equipamento' 
             PRIMARY KEY (\`id_equipamento\`)) ENGINE=InnoDB`);
     }
 

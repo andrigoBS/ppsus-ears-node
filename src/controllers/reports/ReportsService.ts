@@ -7,18 +7,34 @@ export default class ReportsService {
         this.reportsRepository = new ReportsRepository();
     }
 
-    public async getBabiesPassFail() {
-        const pass = 10;
-        const fails = 5;
+    public async getBabiesPassFailSecretary(userID: number) {
+        // const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
+        // return this.getBabiesPassFail(institutionsIDs);
+    }
+
+    public async getBabiesPassFailTherapist(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        return this.getBabiesPassFail(institutionsIDs);
+    }
+
+    public async getBabiesPassFailInstitution(userID: number) {
+        const idInstitution = await this.reportsRepository.getInstitutionsIDsOfInstitutionUser(userID);
+        const institutionsIDs: number[] = [idInstitution];
+        return this.getBabiesPassFail(institutionsIDs);
+    }
+
+    private async getBabiesPassFail(institutionsIDs: number[]) {
+        const pass = await this.reportsRepository.passBabiesByInstitutions(institutionsIDs);
+        const fails = await this.reportsRepository.failBabiesByInstitutions(institutionsIDs);
 
         return {
-            labels: ['Passou', 'Falhou'],
-            quantities: [pass, fails],
+            labels: ['Falhou', 'Passou'],
+            quantities: [fails, pass],
             title: 'Quantidade de bebes que passaram e falharam.',
         };
     }
 
-    public async getBabiesComeBorn() {
+    public async getBabiesComeBorn(userType: string, userID: number) {
         const come = 10;
         const born = 5;
 
@@ -29,7 +45,7 @@ export default class ReportsService {
         };
     }
 
-    public async getIndicatorsPercent() {
+    public async getIndicatorsPercent(userType: string, userID: number) {
         const indicators = [];
         for (let i = 0; i < 20; i++) {
             indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
@@ -42,7 +58,7 @@ export default class ReportsService {
         };
     }
 
-    public async getIndicators() {
+    public async getIndicators(userType: string, userID: number) {
         const indicators = [];
         for (let i = 0; i < 40; i++) {
             indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
@@ -55,7 +71,7 @@ export default class ReportsService {
         };
     }
 
-    public async getEquipment() {
+    public async getEquipment(userType: string, userID: number) {
         const equipments = [];
         for (let i = 0; i < 40; i++) {
             equipments.push({ label: 'Equipamento '+i, quantities: Math.random() * 100 });

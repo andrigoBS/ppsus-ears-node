@@ -8,8 +8,8 @@ export default class ReportsService {
     }
 
     public async getBabiesPassFailSecretary(userID: number) {
-        // const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
-        // return this.getBabiesPassFail(institutionsIDs);
+        //const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
+        return this.getBabiesPassFail([1]);
     }
 
     public async getBabiesPassFailTherapist(userID: number) {

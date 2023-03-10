@@ -47,16 +47,18 @@ export default class TriageController extends AbstractRoutes {
 
             triageJson.therapist = { id: req.body.jwtObject.id };
 
-            triageJson.baby.birthMother.login = triageJson.baby.birthMother.name.toLowerCase().replaceAll(' ', '.');
-            triageJson.baby.birthMother.password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
+            triageJson.baby.birthMother.login = this.createUserName(triageJson.baby.birthMother);
+            triageJson.baby.birthMother.password = this.createPassword();
             triageJson.baby.birthMother.password = CryptoHelper.encrypt(triageJson.baby.birthMother.password);
             triageJson.baby.birthMother = await Guardian.save(triageJson.baby.birthMother);
 
-            for(let index = 0; index < triageJson.baby.guardians.length; index++) {
-                triageJson.baby.guardians[index].login = triageJson.baby.guardians[index].name.toLowerCase().replaceAll(' ', '.');
-                triageJson.baby.guardians[index].password = Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
-                triageJson.baby.guardians[index].password = CryptoHelper.encrypt(triageJson.baby.guardians[index].password);
-                triageJson.baby.guardians[index] = await Guardian.save(triageJson.baby.guardians[index]);
+            if(triageJson.baby.guardians){
+                for(let index = 0; index < triageJson.baby.guardians.length; index++) {
+                    triageJson.baby.guardians[index].login = this.createUserName(triageJson.baby.guardians[index]);
+                    triageJson.baby.guardians[index].password = this.createPassword();
+                    triageJson.baby.guardians[index].password = CryptoHelper.encrypt(triageJson.baby.guardians[index].password);
+                    triageJson.baby.guardians[index] = await Guardian.save(triageJson.baby.guardians[index]);
+                }
             }
 
             triageJson.baby.childBirthType = ChildBirth[triageJson.baby.childBirthType as ChildBirthString];
@@ -143,5 +145,13 @@ export default class TriageController extends AbstractRoutes {
         } catch (e: any){
             return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens', message: e });
         }
+    };
+
+    private createUserName = (json: any) => {
+        return json.name.toLowerCase().replaceAll(' ', '.') + json.birthDate.replaceAll('-','');
+    };
+
+    private createPassword = () => {
+        return Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
     };
 }

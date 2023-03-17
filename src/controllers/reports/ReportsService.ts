@@ -8,79 +8,115 @@ export default class ReportsService {
     }
 
     public async getBabiesPassFailSecretary(userID: number) {
-        //const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
-        return this.getBabiesPassFail([1]);
-    }
-
-    public async getBabiesPassFailTherapist(userID: number) {
-        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
         return this.getBabiesPassFail(institutionsIDs);
     }
-
     public async getBabiesPassFailInstitution(userID: number) {
         const idInstitution = await this.reportsRepository.getInstitutionsIDsOfInstitutionUser(userID);
         const institutionsIDs: number[] = [idInstitution];
         return this.getBabiesPassFail(institutionsIDs);
     }
-
+    public async getBabiesPassFailTherapist(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        return this.getBabiesPassFail(institutionsIDs);
+    }
     private async getBabiesPassFail(institutionsIDs: number[]) {
-        const pass = await this.reportsRepository.passBabiesByInstitutions(institutionsIDs);
-        const fails = await this.reportsRepository.failBabiesByInstitutions(institutionsIDs);
+        const failsPromise = this.reportsRepository.failBabiesByInstitutions(institutionsIDs);
+        const passPromise = this.reportsRepository.passBabiesByInstitutions(institutionsIDs);
+
+        const result = await Promise.all([failsPromise, passPromise]);
 
         return {
+            description: '',
             labels: ['Falhou', 'Passou'],
-            quantities: [fails, pass],
-            title: 'Quantidade de bebes que passaram e falharam.',
+            quantities: result,
+            title: 'Quantidade de bebes que passaram e falharam.'
         };
     }
 
-    public async getBabiesComeBorn(userType: string, userID: number) {
-        const come = 10;
-        const born = 5;
+    // public async getBabiesComeBorn(userType: string, userID: number) {
+    //     const come = 10;
+    //     const born = 5;
+    //
+    //     return {
+    //         labels: ['Compareceram', 'Nasceram'],
+    //         quantities: [come, born],
+    //         title: 'Quantos compareceram para o teste e quantos que nasceram (vivos).',
+    //     };
+    // }
+
+    public async getIndicatorsPercentSecretary(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
+        return this.getIndicatorsPercent(institutionsIDs);
+    }
+    public async getIndicatorsPercentInstitution(userID: number) {
+        const idInstitution = await this.reportsRepository.getInstitutionsIDsOfInstitutionUser(userID);
+        const institutionsIDs: number[] = [idInstitution];
+        return this.getIndicatorsPercent(institutionsIDs);
+    }
+    public async getIndicatorsPercentTherapist(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        return this.getIndicatorsPercent(institutionsIDs);
+    }
+    private async getIndicatorsPercent(institutionsIDs: number[]) {
+        const indicators = await this.reportsRepository.getIndicatorsPercentByInstitutions(institutionsIDs);
+        const triagesTotal = await this.reportsRepository.getTriagesTotal(institutionsIDs);
 
         return {
-            labels: ['Compareceram', 'Nasceram'],
-            quantities: [come, born],
-            title: 'Quantos compareceram para o teste e quantos que nasceram (vivos).',
+            description: '',
+            labels: indicators.map(indicator => indicator.name),
+            quantities: indicators.map(indicator => indicator.total*100/triagesTotal),
+            title: 'Porcentagem para cada indicador.'
         };
     }
 
-    public async getIndicatorsPercent(userType: string, userID: number) {
-        const indicators = [];
-        for (let i = 0; i < 20; i++) {
-            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
-        }
+    public async getIndicatorsSecretary(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
+        return this.getIndicators(institutionsIDs);
+    }
+    public async getIndicatorsInstitution(userID: number) {
+        const idInstitution = await this.reportsRepository.getInstitutionsIDsOfInstitutionUser(userID);
+        const institutionsIDs: number[] = [idInstitution];
+        return this.getIndicators(institutionsIDs);
+    }
+    public async getIndicatorsTherapist(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        return this.getIndicators(institutionsIDs);
+    }
+    private async getIndicators(institutionsIDs: number[]) {
+        const result = await this.reportsRepository.getIndicatorsByInstitutions(institutionsIDs);
+
+        const { multiple, one, zero } = result || { multiple: 0, one: 0, zero: 0 };
 
         return {
-            labels: indicators.map(indicator => indicator.label),
-            quantities: indicators.map(indicator => indicator.quantities),
-            title: 'Porcentagem para cada indicador.',
+            description: '(Relacionado a quantidade de indicadores selecionados no momento da consulta)',
+            labels: ['Nenhum', 'Único', 'Múltiplo'],
+            quantities: [zero, one, multiple],
+            title: 'Nenhum, Único ou múltiplo Indicadores.'
         };
     }
 
-    public async getIndicators(userType: string, userID: number) {
-        const indicators = [];
-        for (let i = 0; i < 40; i++) {
-            indicators.push({ label: 'Indicador '+i, quantities: Math.random() * 100 });
-        }
-
-        return {
-            labels: indicators.map(indicator => indicator.label),
-            quantities: indicators.map(indicator => indicator.quantities),
-            title: 'Único ou múltiplo (Relacionado a quantidade de indicadores selecionados no momento da consulta).',
-        };
+    public async getEquipmentSecretary(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfSecretary(userID);
+        return this.getEquipment(institutionsIDs);
     }
-
-    public async getEquipment(userType: string, userID: number) {
-        const equipments = [];
-        for (let i = 0; i < 40; i++) {
-            equipments.push({ label: 'Equipamento '+i, quantities: Math.random() * 100 });
-        }
+    public async getEquipmentInstitution(userID: number) {
+        const idInstitution = await this.reportsRepository.getInstitutionsIDsOfInstitutionUser(userID);
+        const institutionsIDs: number[] = [idInstitution];
+        return this.getEquipment(institutionsIDs);
+    }
+    public async getEquipmentTherapist(userID: number) {
+        const institutionsIDs: number[] = await this.reportsRepository.getInstitutionsIDsOfTherapist(userID);
+        return this.getEquipment(institutionsIDs);
+    }
+    private async getEquipment(institutionsIDs: number[]) {
+        const equipments = await this.reportsRepository.getEquipmentByInstitutions(institutionsIDs);
 
         return {
-            labels: equipments.map(equipment => equipment.label),
-            quantities: equipments.map(equipment => equipment.quantities),
-            title: 'Passou e falhou (Para analisar melhor os resultados comparando com os equipamentos)',
+            description: '(Para analise dos resultados comparando com os equipamentos)',
+            labels: equipments.map(equipment => equipment.model),
+            quantities: equipments.map(equipment => equipment.total),
+            title: 'Quantidade de bebes que falharam por equipamento'
         };
     }
 }

@@ -38,7 +38,7 @@ export default class TherapistService {
     public async getDashboard(): Promise<{type: string}[]> {
         return [
             { type: 'baby-pass-fail' },
-            { type: 'baby-come-born' },
+            // { type: 'baby-come-born' },
             { type: 'indicators-percent' },
             { type: 'indicators' },
             { type: 'equipment' }

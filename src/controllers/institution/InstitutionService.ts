@@ -49,7 +49,7 @@ export default class InstitutionService {
     public async getDashboard(): Promise<{ type: string }[]> {
         return [
             { type: 'baby-pass-fail' },
-            { type: 'baby-come-born' },
+            // { type: 'baby-come-born' },
             { type: 'indicators-percent' },
             { type: 'indicators' }
         ];

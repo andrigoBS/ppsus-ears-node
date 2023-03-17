@@ -39,7 +39,7 @@ export default class SecretaryController extends AbstractRoutes {
         */
         return res.status(HttpStatus.OK).json([
             { type: 'baby-pass-fail' },
-            { type: 'baby-come-born' },
+            // { type: 'baby-come-born' },
             { type: 'indicators-percent' },
             { type: 'indicators' }
         ]);
@@ -59,7 +59,6 @@ export default class SecretaryController extends AbstractRoutes {
             .limit(1)
             .execute()
         ;
-        console.log(user);
         return res.status(HttpStatus.OK).json(user.state !== null);
     };
 }

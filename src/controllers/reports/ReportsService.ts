@@ -92,7 +92,7 @@ export default class ReportsService {
             description: '(Relacionado a quantidade de indicadores selecionados no momento da consulta)',
             labels: ['Nenhum', 'Único', 'Múltiplo'],
             quantities: [zero, one, multiple],
-            title: 'Nenhum, Único ou múltiplo Indicadores.'
+            title: 'Nenhum, Único ou múltiplos Indicadores.'
         };
     }
 

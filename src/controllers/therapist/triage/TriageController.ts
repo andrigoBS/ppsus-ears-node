@@ -64,7 +64,9 @@ export default class TriageController extends AbstractRoutes {
             triageJson.baby.childBirthType = ChildBirth[triageJson.baby.childBirthType as ChildBirthString];
             triageJson.baby = await Baby.save(triageJson.baby);
 
-            triageJson.indicators = triageJson.indicators.map((id: number) => ({ id }));
+            if(triageJson.indicators){
+                triageJson.indicators = triageJson.indicators.map((id: number) => ({ id }));
+            }
 
             triage = triageJson as Triage;
         }catch (e: any){

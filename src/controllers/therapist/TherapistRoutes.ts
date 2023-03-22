@@ -71,7 +71,7 @@ export default class TherapistRoutes extends AbstractRoutes {
                 "ApiKeyAuth": []
             }]
         */
-        return this.therapistController.getDashboard(res);
+        return this.therapistController.getDashboard(req, res);
     };
 
     private getXpTypes = async (req: Request, res: Response) => {
@@ -82,6 +82,6 @@ export default class TherapistRoutes extends AbstractRoutes {
                 "ApiKeyAuth": []
             }]
         */
-        return this.therapistController.getXpTypes(res);
+        return this.therapistController.getXpTypes(req, res);
     };
 }

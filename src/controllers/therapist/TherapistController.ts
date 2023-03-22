@@ -1,3 +1,4 @@
+import AbstractController from '../AbstractController';
 import { HttpError, HttpStatus } from '../AbstractHttpErrors';
 import { Request, Response } from 'express';
 import { Therapist } from '../../entity/therapist/Therapist';
@@ -5,10 +6,11 @@ import CryptoHelper from '../../helpers/CryptoHelper';
 import TherapistService from './TherapistService';
 import { TherapistXP, TherapistXPString } from './TherapistTypes';
 
-export default class TherapistController {
+export default class TherapistController extends AbstractController {
     private therapistService: TherapistService;
 
     constructor() {
+        super();
         this.therapistService = new TherapistService();
     }
 
@@ -42,10 +44,10 @@ export default class TherapistController {
             const therapistId = req.params.id;
             const therapist = await this.therapistService.isAExistentTherapist(Number(therapistId));
 
-            const retornoTherapist: any = { ...therapist };
-            retornoTherapist.xp = { id: 'LESS_ONE', name: 'Menos de 1 ano' };
+            const resultTherapist: any = { ...therapist };
+            resultTherapist.xp = { id: 'LESS_ONE', name: 'Menos de 1 ano' };
 
-            return res.status(HttpStatus.OK).json(retornoTherapist);
+            return res.status(HttpStatus.OK).json(resultTherapist);
         }catch (e: HttpError | any) {
             if (e instanceof HttpError) {
                 return res.status(e.httpStatus).json(e.messages);
@@ -54,27 +56,19 @@ export default class TherapistController {
         }
     }
 
-    public async getDashboard(res: Response) {
-        try{
-            const dashboard = await this.therapistService.getDashboard();
-            return res.status(HttpStatus.OK).json(dashboard);
-        }catch (e: HttpError | any) {
-            if (e instanceof HttpError) {
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getDashboard(req: Request, res: Response) {
+        const validateParams = {};
+
+        return super.genericProcess<any>(req, res, validateParams, async () => {
+            return this.therapistService.getDashboard();
+        });
     }
 
-    public async getXpTypes(res: Response) {
-        try{
-            const therapistXp = await this.therapistService.getXpTypes();
-            return res.status(HttpStatus.OK).json(therapistXp);
-        }catch (e: HttpError | any) {
-            if (e instanceof HttpError) {
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getXpTypes(req: Request, res: Response) {
+        const validateParams = {};
+
+        return super.genericProcess<any>(req, res, validateParams, async () => {
+            return this.therapistService.getXpTypes();
+        });
     }
 }

@@ -1,40 +1,29 @@
-import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../../helpers/http/AbstractHttpErrors';
 import { Indicator } from '../../../entity/indicator/Indicator';
+import { Therapist } from '../../../entity/therapist/Therapist';
 import IndicatorService from './IndicatorService';
+import { IndicatorJwt, QueryIndicatorJwt } from './IndicatorTypes';
 
 export default class IndicatorController {
-    private indicatorService: IndicatorService;
+    public async create(params: IndicatorJwt) {
+        const indicatorService = new IndicatorService();
 
-    constructor() {
-        this.indicatorService = new IndicatorService();
+        const therapistId = params.jwtObject.id;
+
+        const indicator = params as Indicator;
+        indicator.therapist = { id: therapistId } as Therapist;
+
+        const result = await indicatorService.create(indicator);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        try{
-            let indicator = req.body as Indicator;
-            indicator.therapist = req.body.jwtObject.id;
-            indicator = await this.indicatorService.create(indicator);
+    public async getAll(params: QueryIndicatorJwt) {
+        const indicatorService = new IndicatorService();
 
-            return res.status(HttpStatus.OK).json(indicator);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
-    }
+        const result = await indicatorService.getAll(params);
 
-    public async getAll(req: Request, res: Response) {
-        try {
-            const indicator = await this.indicatorService.getAll(req);
-            return res.status(HttpStatus.OK).json(indicator);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        return { httpStatus: HttpStatus.OK, result };
     }
 
 }

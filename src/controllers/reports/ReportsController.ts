@@ -1,159 +1,88 @@
-import { HttpError, HttpStatus } from '../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../helpers/http/AbstractHttpErrors';
+import { JwtUserInterface } from '../../helpers/JwtAuth';
 import ReportsService from './ReportsService';
 
 export default class ReportsController {
-    private readonly reportsService: ReportsService;
+    public async getBabiesPassFailSecretary(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
 
-    constructor() {
-        this.reportsService = new ReportsService();
+        const result = await reportsService.getBabiesPassFailSecretary(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
+    public async getBabiesPassFailInstitution(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
 
-    public async getBabiesPassFailSecretary(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getBabiesPassFailSecretary(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        const result = await reportsService.getBabiesPassFailInstitution(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getBabiesPassFailInstitution(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getBabiesPassFailInstitution(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
-    }
-    public async getBabiesPassFailTherapist(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getBabiesPassFailTherapist(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getBabiesPassFailTherapist(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getBabiesPassFailTherapist(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    // public async getBabiesComeBorn(req: Request, res: Response) {
-    //     try{
-    //         const result = await this.reportsService.getBabiesComeBorn(req.params.userType, req.body.jwtObject.id);
-    //         return res.status(HttpStatus.OK).json(result);
-    //     }catch (e: HttpError | any){
-    //         if(e instanceof HttpError){
-    //             return res.status(e.httpStatus).json(e.messages);
-    //         }
-    //         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-    //     }
+    // public async getBabiesComeBorn(params: JwtUserInterface) {
+    //     const reportsService = new ReportsService();
+    //
+    //     const result = await reportsService.getBabiesComeBorn(params.jwtObject.id);
+    //     return { httpStatus: HttpStatus.OK, result };
     // }
 
-    public async getIndicatorsPercentSecretary(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsPercentSecretary(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsPercentSecretary(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsPercentSecretary(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getIndicatorsPercentInstitution(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsPercentInstitution(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsPercentInstitution(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsPercentInstitution(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getIndicatorsPercentTherapist(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsPercentTherapist(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsPercentTherapist(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsPercentTherapist(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getIndicatorsSecretary(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsSecretary(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsSecretary(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsSecretary(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getIndicatorsInstitution(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsInstitution(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsInstitution(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsInstitution(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getIndicatorsTherapist(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getIndicatorsTherapist(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getIndicatorsTherapist(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getIndicatorsTherapist(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getEquipmentSecretary(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getEquipmentSecretary(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getEquipmentSecretary(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getEquipmentSecretary(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getEquipmentInstitution(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getEquipmentInstitution(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getEquipmentInstitution(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getEquipmentInstitution(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
-    public async getEquipmentTherapist(req: Request, res: Response) {
-        try{
-            const result = await this.reportsService.getEquipmentTherapist(req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(result);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getEquipmentTherapist(params: JwtUserInterface) {
+        const reportsService = new ReportsService();
+
+        const result = await reportsService.getEquipmentTherapist(params.jwtObject.id);
+        return { httpStatus: HttpStatus.OK, result };
     }
 }

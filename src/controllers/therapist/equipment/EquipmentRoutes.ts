@@ -1,75 +1,69 @@
-import AbstractRoutes from '../../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../../helpers/http/AbstractRoutesTypes';
+import { Equipment } from '../../../entity/equipment/Equipment';
+import { ValidatorBoolean } from '../../../helpers/validator/ValidatorBoolean';
+import { ValidatorDate } from '../../../helpers/validator/ValidatorDate';
+import { ValidatorNumber } from '../../../helpers/validator/ValidatorNumber';
+import { ValidatorObject } from '../../../helpers/validator/ValidatorObject';
+import { ValidatorRequest } from '../../../helpers/validator/ValidatorRequest';
+import { ValidatorString } from '../../../helpers/validator/ValidatorString';
 import EquipmentController from './EquipmentController';
+import { QueryEquipmentDTO } from './EquipmentTypes';
 
 export default class EquipmentRoutes extends AbstractRoutes {
     private equipmentController: EquipmentController;
 
     constructor() {
         super();
-
         this.equipmentController = new EquipmentController();
 
-        const { create, deleteOne, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
-        router.delete('/:id', verifyJWTMiddleware, deleteOne);
+        this.create();
+        this.deleteOne();
+        this.getAll();
     }
 
+    private create(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para criar um equipamento',
+            method: 'post',
+            params: new ValidatorRequest(new ValidatorObject('body', [
+                new ValidatorString('brand').withDescription('marca').required(true),
+                new ValidatorDate('dateOfLastCalibration').withDescription('data da ultima calibração').required(true),
+                new ValidatorString('model').withDescription('modelo').required(true),
+            ]).withDescription('Equipment').required(true)),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<Equipment>(config, this.equipmentController.create);
+    }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Equipment']
-            #swagger.description = 'Endpoint para criar um equipamento'
-            #swagger.parameters['equipment'] = {
-             in: 'body',
-             required: 'true',
-             description: 'Equipamento',
-             type: 'object',
-             schema: {
-                 "lembrar": "arrumarEsseJson"
-             }
+    public getAll(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para pegar todos os equipamentos',
+            method: 'get',
+            params: new ValidatorRequest(undefined, new ValidatorObject('query', [
+                new ValidatorString('brand').withDescription('marca').required(false),
+                new ValidatorDate('dateOfLastCalibration').withDescription('data da ultima calibração').required(false),
+                new ValidatorBoolean('listAllActives').withDescription('listar todos os ativos').required(false),
+                new ValidatorString('model').withDescription('modelo').required(false),
+            ]).required(false).withDescription('Equipment')),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<QueryEquipmentDTO>(config, this.equipmentController.getAll);
+    }
 
-            }
-            #swagger.security = [{
-                 "ApiKeyAuth": []
-             }]
-         */
-        return this.equipmentController.create(req, res);
-    };
-
-    public getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Equipment']
-           #swagger.description = 'Endpoint para pegar todos os equipamentos'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.equipmentController.getAll(req, res);
-    };
-
-    private deleteOne = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Equipment']
-            #swagger.description = 'Endpoint para deletar um equipamento'
-            #swagger.parameters['equipment'] = {
-             in: 'body',
-             required: 'true',
-             description: 'Equipamento',
-             type: 'object',
-             schema: {
-                 "lembrar": "arrumarEsseJson"
-             }
-
-            }
-            #swagger.security = [{
-                 "ApiKeyAuth": []
-             }]
-         */
-        return this.equipmentController.deleteOne(req, res);
-    };
+    private deleteOne(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para deletar um equipamento',
+            method: 'delete',
+            params: new ValidatorRequest(undefined, undefined, new ValidatorObject('params', [
+                new ValidatorNumber('id').min(1).required(true).withExample(1)
+            ])),
+            path: '/:id',
+            withJWT: true
+        };
+        this.addRoute<{id: number}>(config, this.equipmentController.deleteOne);
+    }
 
 }

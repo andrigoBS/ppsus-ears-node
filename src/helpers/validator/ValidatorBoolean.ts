@@ -1,7 +1,7 @@
 import { Validator } from './Validator';
 
 export class ValidatorBoolean extends Validator<boolean> {
-    constructor(name: string, isRequired?: boolean) {
-        super(name, isRequired);
+    constructor(name: string) {
+        super(name, 'boolean');
     }
 }

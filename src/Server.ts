@@ -6,6 +6,7 @@ import SwaggerUI from 'swagger-ui-express';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import Routes from './controllers/Routes';
+import SwaggerGenerateHelper from './helpers/SwaggerGenerateHelper';
 
 export default class Server {
     private readonly express: Application;
@@ -52,8 +53,12 @@ export default class Server {
     }
 
     private routes(): void {
-        this.express.use(new Routes().getRouter());
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        this.express.use('/docs', SwaggerUI.serve, SwaggerUI.setup(require('../swaggerOutput.json')));
+        const routes = new Routes();
+        this.express.use(routes.getRouter());
+
+        const docs = new SwaggerGenerateHelper().getBaseSwagger(routes.getDocs());
+        this.express.use('/docs', SwaggerUI.serve, SwaggerUI.setup(docs));
     }
+
+
 }

@@ -2,8 +2,8 @@ import { Validator, ValidatorFunction } from './Validator';
 import { FieldLengthError, FieldMaxLengthError, FieldMinLengthError } from './ValidatorErrors';
 
 export class ValidatorString extends Validator<string> {
-    constructor(name: string, isRequired?: boolean) {
-        super(name, isRequired);
+    constructor(name: string) {
+        super(name, 'string');
     }
 
     public length(lengthValue: number): ValidatorString {

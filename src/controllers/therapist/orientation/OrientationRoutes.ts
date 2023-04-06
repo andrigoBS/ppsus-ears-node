@@ -1,84 +1,63 @@
-import AbstractRoutes from '../../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../../helpers/http/AbstractRoutesTypes';
+import { ValidatorBoolean } from '../../../helpers/validator/ValidatorBoolean';
+import { ValidatorNumber } from '../../../helpers/validator/ValidatorNumber';
+import { ValidatorObject } from '../../../helpers/validator/ValidatorObject';
+import { ValidatorRequest } from '../../../helpers/validator/ValidatorRequest';
+import { ValidatorString } from '../../../helpers/validator/ValidatorString';
 import OrientationController from './OrientationController';
+import { OrientationJwt, QueryOrientationDTO } from './OrientationTypes';
 
 export default class OrientationRoutes extends AbstractRoutes {
     private orientationController: OrientationController;
 
     constructor() {
         super();
-
         this.orientationController = new OrientationController();
 
-        const { create, deleteOne, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
-        router.delete('/:id', verifyJWTMiddleware, deleteOne);
+        this.create();
+        this.deleteOne();
+        this.getAll();
     }
 
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Orientation']
-           #swagger.description = 'Endpoint para criar uma orientacao'
-           #swagger.parameters['orientation'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Orientação',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
+    private create(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para criar uma orientação',
+            method: 'post',
+            params: new ValidatorRequest(new ValidatorObject('body', [
+                //TODO: ajustar parametros
+            ]).withDescription('Orientation').required(true)),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<OrientationJwt>(config, this.orientationController.create);
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.orientationController.create(req, res);
-    };
+    public getAll(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para pegar todos as orientações',
+            method: 'get',
+            params: new ValidatorRequest(undefined, new ValidatorObject('query', [
+                new ValidatorBoolean('listAllActives').withDescription('listar todos os ativos').required(false),
+                new ValidatorString('description').withDescription('Descrição').required(false),
+            ]).withDescription('Orientation').required(false)),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<QueryOrientationDTO>(config, this.orientationController.getAll);
+    }
 
-    public getAll = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Orientation']
-            #swagger.description = 'Endpoint para pegar todos as orientações'
-            #swagger.parameters['orientation'] = {
-             in: 'body',
-             required: 'true',
-             description: 'Orientação',
-             type: 'object',
-             schema: {
-                 "lembrar": "arrumarEsseJson"
-             }
-
-            }
-            #swagger.security = [{
-                 "ApiKeyAuth": []
-             }]
-         */
-        return this.orientationController.getAll(req, res);
-    };
-
-    private deleteOne = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Orientation']
-            #swagger.description = 'Endpoint para deletar um orientação'
-            #swagger.parameters['orientation'] = {
-             in: 'body',
-             required: 'true',
-             description: 'Orientação',
-             type: 'object',
-             schema: {
-                 "lembrar": "arrumarEsseJson"
-             }
-
-            }
-            #swagger.security = [{
-                 "ApiKeyAuth": []
-             }]
-         */
-        return this.orientationController.deleteOne(req, res);
-    };
+    private deleteOne(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para deletar um orientação',
+            method: 'delete',
+            params: new ValidatorRequest(undefined, undefined, new ValidatorObject('params', [
+                new ValidatorNumber('id').min(1).required(true).withExample(1)
+            ])),
+            path: '/:id',
+            withJWT: true
+        };
+        this.addRoute<{id: number}>(config, this.orientationController.deleteOne);
+    }
 }

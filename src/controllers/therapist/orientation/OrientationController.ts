@@ -1,53 +1,34 @@
-import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../../helpers/http/AbstractHttpErrors';
 import { Orientation } from '../../../entity/orientation/Orientation';
+import { Therapist } from '../../../entity/therapist/Therapist';
 import OrientationService from './OrientationService';
+import { OrientationJwt, QueryOrientationDTO } from './OrientationTypes';
 
 export default class OrientationController {
-    private orientationService: OrientationService;
+    public async create(params: OrientationJwt) {
+        const orientationService = new OrientationService();
 
-    constructor() {
-        this.orientationService = new OrientationService();
+        const orientation = params as Orientation;
+        orientation.therapist = { id: params.jwtObject.id } as Therapist;
+        const result = await orientationService.create(orientation);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        try{
-            let orientation = req.body as Orientation;
-            orientation.therapist = req.body.jwtObject.id;
-            orientation = await this.orientationService.create(orientation);
+    public async getAll(params: QueryOrientationDTO) {
+        const orientationService = new OrientationService();
 
-            return res.status(HttpStatus.OK).json(orientation);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        const result = await orientationService.getAll(params.jwtObject.id, params.description, params.listAllActives);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getAll(req: Request, res: Response) {
-        try{
-            const orientation = await this.orientationService.getAll(req.query, req.body.jwtObject.id);
-            return res.status(HttpStatus.OK).json(orientation);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
-    }
+    public async deleteOne(params: {id: number}) {
+        const orientationService = new OrientationService();
 
-    public async deleteOne(req: Request, res: Response) {
-        try{
-            const idOrientation = req.params.id;
-            const orientation = await this.orientationService.deleteOne(Number(idOrientation));
-            return res.status(HttpStatus.OK).json(orientation);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        const result = await orientationService.deleteOne(params.id);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
 }

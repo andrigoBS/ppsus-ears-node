@@ -1,4 +1,4 @@
-import { InternalServerErrorError } from '../../AbstractHttpErrors';
+import { InternalServerErrorError } from '../../../helpers/http/AbstractHttpErrors';
 
 export class NotFoundEquipmentError extends InternalServerErrorError {
     constructor(message: string) {

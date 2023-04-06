@@ -1,74 +1,46 @@
-import AbstractController from '../AbstractController';
-import { HttpError, HttpStatus } from '../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../helpers/http/AbstractHttpErrors';
+import { Institution } from '../../entity/institution/Institution';
 import { Therapist } from '../../entity/therapist/Therapist';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import TherapistService from './TherapistService';
 import { TherapistXP, TherapistXPString } from './TherapistTypes';
 
-export default class TherapistController extends AbstractController {
-    private therapistService: TherapistService;
+export default class TherapistController {
+    public async create(therapist: Therapist) {
+        const therapistService = new TherapistService();
 
-    constructor() {
-        super();
-        this.therapistService = new TherapistService();
+        therapist.xp = TherapistXP[therapist.xp as unknown as TherapistXPString];
+        therapist.institutions = therapist.institutions.map((i) => ({ id: i })) as unknown as Institution[];
+
+        await therapistService.isATherapistUser(therapist);
+
+        therapist.password = CryptoHelper.encrypt(therapist.password);
+        const result = await therapistService.create(therapist, therapist.emails, therapist.phones);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        let therapist: Therapist;
+    public async getEditableFields(params: {id: number}) {
+        const therapistService = new TherapistService();
 
-        try{
-            const therapistJson = req.body;
+        const therapistId = params.id;
+        const therapist = await therapistService.isAExistentTherapist(Number(therapistId));
 
-            therapistJson.xp = TherapistXP[therapistJson.xp as TherapistXPString];
-            therapistJson.institutions = therapistJson.institutions.map((i: number) => ({ id: i }));
-            therapist = therapistJson as Therapist;
+        const result: any = { ...therapist };
+        result.xp = { id: 'LESS_ONE', name: 'Menos de 1 ano' }; //TODO: tem que consultar isso do banco
 
-            await this.therapistService.isATherapistUser(therapist);
-
-            therapist.password = CryptoHelper.encrypt(therapist.password);
-            await this.therapistService.create(therapist, therapistJson.emails, therapistJson.phones);
-
-            return res.status(HttpStatus.OK).json(therapist);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-
-    public async getEditableFields(req: Request, res: Response) {
-        try{
-            const therapistId = req.params.id;
-            const therapist = await this.therapistService.isAExistentTherapist(Number(therapistId));
-
-            const resultTherapist: any = { ...therapist };
-            resultTherapist.xp = { id: 'LESS_ONE', name: 'Menos de 1 ano' };
-
-            return res.status(HttpStatus.OK).json(resultTherapist);
-        }catch (e: HttpError | any) {
-            if (e instanceof HttpError) {
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+    public async getDashboard() {
+        const therapistService = new TherapistService();
+        const result = await therapistService.getDashboard();
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getDashboard(req: Request, res: Response) {
-        const validateParams = {};
-
-        return super.genericProcess<any>(req, res, validateParams, async () => {
-            return this.therapistService.getDashboard();
-        });
-    }
-
-    public async getXpTypes(req: Request, res: Response) {
-        const validateParams = {};
-
-        return super.genericProcess<any>(req, res, validateParams, async () => {
-            return this.therapistService.getXpTypes();
-        });
+    public async getXpTypes() {
+        const therapistService = new TherapistService();
+        const result = await therapistService.getXpTypes();
+        return { httpStatus: HttpStatus.OK, result };
     }
 }

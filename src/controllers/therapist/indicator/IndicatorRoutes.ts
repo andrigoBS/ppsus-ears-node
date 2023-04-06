@@ -1,6 +1,10 @@
-import AbstractRoutes from '../../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../../helpers/http/AbstractRoutesTypes';
+import { ValidatorObject } from '../../../helpers/validator/ValidatorObject';
+import { ValidatorRequest } from '../../../helpers/validator/ValidatorRequest';
+import { ValidatorString } from '../../../helpers/validator/ValidatorString';
 import IndicatorController from './IndicatorController';
+import { IndicatorJwt, QueryIndicatorJwt } from './IndicatorTypes';
 
 export default class IndicatorRoutes extends AbstractRoutes {
     private indicatorController: IndicatorController;
@@ -10,53 +14,33 @@ export default class IndicatorRoutes extends AbstractRoutes {
 
         this.indicatorController = new IndicatorController();
 
-        const { create, getAll } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', verifyJWTMiddleware, getAll);
+        this.create();
+        this.getAll();
     }
 
+    private create(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para criar uma indicador de risco',
+            method: 'post',
+            params: new ValidatorRequest(new ValidatorObject('body', [
+                //TODO: ajustar parametros
+            ]).withDescription('Indicator').required(true)),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<IndicatorJwt>(config, this.indicatorController.create);
+    }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Indicator']
-           #swagger.description = 'Endpoint para criar uma indicador de risco'
-           #swagger.parameters['indicator'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Indicador de risco',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.indicatorController.create(req, res);
-    };
-
-    public getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Indicator']
-           #swagger.description = 'Endpoint para pegar todos os indicadores'
-           #swagger.parameters['indicator'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Indicador',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.indicatorController.getAll(req, res);
-    };
+    public getAll(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para pegar todos os indicadores',
+            method: 'get',
+            params: new ValidatorRequest(undefined, new ValidatorObject('query', [
+                new ValidatorString('name').required(true).withExample('indicador1')
+            ])),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<QueryIndicatorJwt>(config, this.indicatorController.getAll);
+    }
 }

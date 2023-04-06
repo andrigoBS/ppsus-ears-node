@@ -1,4 +1,4 @@
-import { BadRequestError } from '../../controllers/AbstractHttpErrors';
+import { BadRequestError } from '../http/AbstractHttpErrors';
 
 export class FieldRequiredError extends BadRequestError {
     constructor(fieldName: string) {

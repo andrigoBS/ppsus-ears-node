@@ -2,8 +2,8 @@ import { Validator, ValidatorFunction } from './Validator';
 import { FieldMaxError, FieldMinError } from './ValidatorErrors';
 
 export class ValidatorNumber extends Validator<number> {
-    constructor(name: string, isRequired?: boolean) {
-        super(name, isRequired);
+    constructor(name: string) {
+        super(name, 'number');
     }
 
     public min(minValue: number): ValidatorNumber {

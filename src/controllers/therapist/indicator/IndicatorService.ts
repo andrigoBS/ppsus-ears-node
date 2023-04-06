@@ -1,6 +1,6 @@
-import { Request } from 'express';
 import { Indicator } from '../../../entity/indicator/Indicator';
 import IndicatorRepository from './IndicatorRepository';
+import { QueryIndicatorJwt } from './IndicatorTypes';
 
 export default class IndicatorService{
     private indicatorRepository: IndicatorRepository;
@@ -13,7 +13,7 @@ export default class IndicatorService{
         return this.indicatorRepository.create(indicator);
     }
 
-    public async getAll(req: Request): Promise<Indicator[] | undefined>{
-        return this.indicatorRepository.getAll(req);
+    public async getAll(params: QueryIndicatorJwt): Promise<Indicator[] | undefined>{
+        return this.indicatorRepository.getAll(params);
     }
 }

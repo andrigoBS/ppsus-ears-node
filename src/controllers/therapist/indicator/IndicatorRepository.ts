@@ -1,19 +1,19 @@
-import { Request } from 'express';
 import { Indicator } from '../../../entity/indicator/Indicator';
+import { QueryIndicatorJwt } from './IndicatorTypes';
 
 export default class IndicatorRepository {
     public async create(indicator: Indicator) {
         return Indicator.save(indicator);
     }
 
-    public getAll(req: Request): Promise<Indicator[] | undefined>{
+    public getAll(params: QueryIndicatorJwt): Promise<Indicator[] | undefined>{
         const query = Indicator.createQueryBuilder('indicator')
             .select(['indicator.id  AS id', 'indicator.name AS name'])
-            .where('indicator.therapist = :id', { id: req.body.jwtObject.id })
+            .where('indicator.therapist = :id', { id: params.jwtObject.id })
             .orWhere('indicator.therapist is null').orderBy('indicator.name','ASC');
 
-        if(req.query.name){
-            query.andWhere('indicator.name like :name', { name: `%${req.query.name}%` });
+        if(params.name){
+            query.andWhere('indicator.name like :name', { name: `%${params.name}%` });
         }
         return query.getRawMany();
     }

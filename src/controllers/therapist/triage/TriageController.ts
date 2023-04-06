@@ -1,159 +1,51 @@
-import { HttpStatus } from '../../AbstractHttpErrors';
-import AbstractRoutes from '../../AbstractRoutes';
-import { Request, Response } from 'express';
-import { Baby } from '../../../entity/baby/Baby';
-import { Guardian } from '../../../entity/guardian/Guardian';
+import { HttpStatus } from '../../../helpers/http/AbstractHttpErrors';
+import { ResponseHttpController } from '../../../helpers/http/AbstractRoutesTypes';
+import { Indicator } from '../../../entity/indicator/Indicator';
+import { Therapist } from '../../../entity/therapist/Therapist';
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
-import CryptoHelper from '../../../helpers/CryptoHelper';
-import { ChildBirth, ChildBirthString } from '../../baby/BabyTypes';
+import BabyService from '../../baby/BabyService';
+import GuardianService from '../../guardian/GuardianService';
+import TriageService from './TriageService';
+import { QueryTriageDTO, TriageJwt } from './TriageTypes';
 
-export default class TriageController extends AbstractRoutes {
+export default class TriageController {
+    public async create(triageJson: TriageJwt) {
+        const guardianService = new GuardianService();
+        const babyService = new BabyService();
+        const triageService = new TriageService();
 
-    constructor() {
-        super();
-        const { create, getAll, triageTypes } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', verifyJWTMiddleware, create);
-        router.get('/', getAll);
-        router.get('/types', triageTypes);
+        triageJson.type = TriageType[triageJson.type as unknown as TriageString];
 
+        triageJson.therapist = { id: triageJson.jwtObject.id } as Therapist;
+
+        triageJson.baby.birthMother = await guardianService.create(triageJson.baby.birthMother, true);
+        if(triageJson.baby.guardians){
+            triageJson.baby.guardians = await guardianService.bulkCreate(triageJson.baby.guardians, true);
+        }
+
+        triageJson.baby = await babyService.create(triageJson.baby, true);
+
+        if(triageJson.indicators){
+            triageJson.indicators = triageJson.indicators.map((id) => ({ id: (id as unknown as number) } as Indicator));
+        }
+
+        const result = await triageService.create(triageJson as Triage);
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Triage']
-           #swagger.description = 'Endpoint para criar uma consulta/triagem'
-           #swagger.parameters['triage'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Triagem',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
+    public async getAll(params: QueryTriageDTO) {
+        const triageService = new TriageService();
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
+        const result = await triageService.getAll(params);
 
-        let triage = null;
+        return { httpStatus: HttpStatus.OK, result };
+    }
 
-        try{
-            const triageJson = req.body;
-            triageJson.type = TriageType[triageJson.type as TriageString];
+    public async triageTypes(): Promise<ResponseHttpController> {
+        const triageService = new TriageService();
 
-            triageJson.therapist = { id: req.body.jwtObject.id };
+        const result = await triageService.triageTypes();
 
-            triageJson.baby.birthMother.login = this.createUserName(triageJson.baby.birthMother);
-            triageJson.baby.birthMother.password = this.createPassword();
-            triageJson.baby.birthMother.password = CryptoHelper.encrypt(triageJson.baby.birthMother.password);
-            triageJson.baby.birthMother = await Guardian.save(triageJson.baby.birthMother);
-
-            if(triageJson.baby.guardians){
-                for(let index = 0; index < triageJson.baby.guardians.length; index++) {
-                    triageJson.baby.guardians[index].login = this.createUserName(triageJson.baby.guardians[index]);
-                    triageJson.baby.guardians[index].password = this.createPassword();
-                    triageJson.baby.guardians[index].password = CryptoHelper.encrypt(triageJson.baby.guardians[index].password);
-                    triageJson.baby.guardians[index] = await Guardian.save(triageJson.baby.guardians[index]);
-                }
-            }
-
-            triageJson.baby.childBirthType = ChildBirth[triageJson.baby.childBirthType as ChildBirthString];
-            triageJson.baby = await Baby.save(triageJson.baby);
-
-            if(triageJson.indicators){
-                triageJson.indicators = triageJson.indicators.map((id: number) => ({ id }));
-            }
-
-            triage = triageJson as Triage;
-        }catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
-        }
-
-        try{
-            triage = await Triage.save(triage);
-            return res.status(HttpStatus.OK).json(triage);
-        }catch (e: any){
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ fancyMessage: 'Ocorreu um erro ao tentar criar a triagem', message: e.message });
-        }
-    };
-
-    private triageTypes = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Triage']
-            #swagger.description = 'Tipos de triagem'
-            #swagger.security = [{
-                "ApiKeyAuth": []
-            }
-        */
-        const triageType = Object.keys(TriageType).map((key) => (
-            { id: key, name: TriageType[key as TriageString] }
-        ));
-        return res.status(HttpStatus.OK).send(triageType);
-    };
-
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Triage']
-           #swagger.description = 'Endpoint para pegar todas as triagens'
-           #swagger.parameters['triage'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Triagem',
-            type: 'object',
-            schema: {
-                "lembrar": "arrumarEsseJson"
-            }
-
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-
-        try{
-
-            let triageQuery = Triage.createQueryBuilder('triage')
-                .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
-                    'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
-                    'conduct.resultDescription AS conduct',
-                    'institution.institutionName AS institution, conduct.testType AS testType'])
-                .leftJoin('triage.conduct', 'conduct')
-                .leftJoin('triage.institution', 'institution')
-                .leftJoin('triage.therapist', 'therapist')
-                .leftJoin('therapist.institutions', 'therapistInstitutions')
-                .where('triage.institution = therapistInstitutions.id');
-
-            if(req.query.rightEar){
-                triageQuery = triageQuery.where('triage.rightEar = :rightEar', { rightEar: req.query.rightEar });
-            }
-
-            if(req.query.leftEar){
-                triageQuery = triageQuery.andWhere('triage.leftEar = :leftEar', { leftEar: req.query.leftEar });
-            }
-
-            if(req.query.evaluationDate){
-                triageQuery = triageQuery.andWhere('triage.evaluationDate like :evaluationDate', { evaluationDate: `%${req.query.evaluationDate}%` });
-            }
-
-            if(req.query.testType){
-                triageQuery = triageQuery.andWhere('conduct.testType = :testType', { testType: req.query.testType });
-            }
-
-            return res.status(HttpStatus.OK).json(await triageQuery.getRawMany());
-        } catch (e: any){
-            return res.status(HttpStatus.BAD_REQUEST).json({ fancyMessage: 'Ocorreu um erro ao tentar consultar as triagens', message: e });
-        }
-    };
-
-    private createUserName = (json: any) => {
-        return json.name.toLowerCase().replaceAll(' ', '.') + json.birthDate.replaceAll('-','');
-    };
-
-    private createPassword = () => {
-        return Buffer.from('p'+Math.random(), 'utf8').toString('base64').substring(0, 6);
-    };
+        return { httpStatus: HttpStatus.OK, result };
+    }
 }

@@ -10,7 +10,6 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-
 import { ChildBirth } from '../../controllers/baby/BabyTypes';
 import { Guardian } from '../guardian/Guardian';
 import { Triage } from '../triage/Triage';
@@ -92,8 +91,8 @@ export class Baby extends BaseEntity {
         joinColumn: { name: 'fk_bebe' }, name: 'bebe_responsavel',
     })
     @ManyToMany(() => Guardian, (guardian) => guardian.ward)
-    guardians: Guardian;
+    guardians: Guardian[];
 
     @OneToMany(() => Triage, (triage) => triage.therapist)
-    triages: Triage;
+    triages: Triage[];
 }

@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, NotFoundError } from '../AbstractHttpErrors';
+import { BadRequestError, ConflictError, NotFoundError } from '../../helpers/http/AbstractHttpErrors';
 
 export class NotFoundInstitutionError extends NotFoundError {
     constructor() {

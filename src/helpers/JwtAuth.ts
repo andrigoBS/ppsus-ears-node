@@ -1,4 +1,4 @@
-import { HttpStatus } from '../controllers/AbstractHttpErrors';
+import { HttpStatus } from './http/AbstractHttpErrors';
 import { isArray } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -18,7 +18,7 @@ export class JwtAuth {
         }
 
         try {
-            req.body.jwtObject = jwt.verify(String(token.replace('Bearer ', '')), JwtAuth.SECRET);
+            req.body.jwtObject = jwt.verify(String(token).replace('Bearer ', ''), JwtAuth.SECRET);
         } catch (err) {
             return res.status(HttpStatus.UNAUTHORIZED).send('Invalid Token');
         }
@@ -29,4 +29,8 @@ export class JwtAuth {
     public createJWToken(obj: object): string {
         return jwt.sign(obj, JwtAuth.SECRET);
     }
+}
+
+export interface JwtUserInterface {
+    jwtObject: {id: number}
 }

@@ -1,5 +1,8 @@
-import AbstractRoutes from '../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../helpers/http/AbstractRoutesTypes';
+import { ReferralService } from '../../entity/referral_service/ReferralService';
+import { ValidatorObject } from '../../helpers/validator/ValidatorObject';
+import { ValidatorRequest } from '../../helpers/validator/ValidatorRequest';
 import ReferralServiceController from './ReferralServiceController';
 
 export default class ReferralServiceRoutes extends AbstractRoutes {
@@ -9,40 +12,31 @@ export default class ReferralServiceRoutes extends AbstractRoutes {
         super();
         this.referralServiceController = new ReferralServiceController();
 
-        const { create, listType } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-
-        router.get('/types', verifyJWTMiddleware, listType);
-        router.post('/', verifyJWTMiddleware, create);
+        this.create();
+        this.listType();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['ReferralService']
-            #swagger.description = 'Endpoint para adicionar um serviço de referencia'
-            #swagger.parameters['referralService'] = {
-               in: 'body',
-               required: 'true',
-               description: 'Nome e telefone do contado',
-               type: 'object',
-                schema: {name: 'João S. da Silva', cellphone: '554130306905'}
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.referralServiceController.create(req, res);
-    };
+    private create() {
+        const config: RouteConfig = {
+            description: 'Endpoint para adicionar um serviço de referencia',
+            method: 'post',
+            params: new ValidatorRequest(new ValidatorObject('body', [
+                //TODO: colocar os fields
+            ]).required(true)),
+            path: '/',
+            withJWT: true
+        };
+        this.addRoute<ReferralService>(config, this.referralServiceController.create);
+    }
 
-    private listType = async (req: Request, res: Response) => {
-        /*
-               #swagger.tags = ['ReferralService']
-               #swagger.description = 'Tipos de serviço de referencia'
-               #swagger.security = [{
-                    "ApiKeyAuth": []
-                }]
-        */
-        return this.referralServiceController.listType(req, res);
-    };
+    private listType() {
+        const config: RouteConfig = {
+            description: 'Tipos de serviço de referencia',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/types',
+            withJWT: true
+        };
+        this.addRoute<never>(config, this.referralServiceController.listType);
+    }
 }

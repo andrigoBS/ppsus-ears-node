@@ -1,28 +1,49 @@
 import { Validator, ValidatorFunction } from './Validator';
+import { SchemaType } from './ValidatorSchemaTypes';
 
 export class ValidatorObject extends Validator<object>{
-    constructor(name: string, isRequired?: boolean) {
-        super(name, isRequired);
-    }
+    private readonly fields: Validator<any>[];
 
-    public fromObject(schema: object): ValidatorObject {
+    constructor(name: string, fields: Validator<any>[]) {
+        super(name, 'object');
+        this.fields = fields;
+
         super.addFunction(new class implements ValidatorFunction<object> {
-            execute(value: object): void {
-                for (const valueKey in schema) {
+            execute(value: any): void {
+                for (const field of fields) {
                     let valueObj = undefined;
                     try {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        valueObj = value[valueKey];
-                        // eslint-disable-next-line no-empty
-                    }catch (ignore) {}
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    schema[valueKey].execute(valueObj);
+                        valueObj = value[field.getName()];
+                    } catch (ignore) { /* empty */ }
+                    field.execute(valueObj);
                 }
             }
         });
+    }
 
-        return this;
+    public getSchema(): SchemaType[] {
+        let name = this.getName();
+
+        if(name === 'query' || name === 'path' || name === 'params') {
+            return this.fields.map(field => field.getSchema()[0]);
+        }
+
+        if(name === 'body') {
+            name = 'schema';
+        }
+
+        const valuesSchema: any = {};
+        for (const field of this.fields) {
+            valuesSchema[field.getName()] = field.getSchema()[0];
+        }
+
+        return [
+            {
+                [name]: {
+                    properties: valuesSchema,
+                    type: 'object'
+                }
+            } as unknown as SchemaType
+        ];
     }
 }

@@ -1,9 +1,8 @@
-import { Request } from 'express';
 import { Conduct } from '../../../entity/conduct/Conduct';
 
 export default class ConductRepository {
 
-    public getAll(req: Request): Promise<Conduct[] | undefined>{
+    public getAll(leftEar?: number, rightEar?: number, irda?: number, testType?: number): Promise<Conduct[] | undefined>{
         const query = Conduct.createQueryBuilder('conduct')
             .select([
                 'conduct.id AS id',
@@ -17,20 +16,20 @@ export default class ConductRepository {
             ])
             .where('conduct.therapist is null');
 
-        if(req.query.rightEar){
-            query.andWhere('conduct.rightEar = :rightEar', { rightEar: Number(req.query.rightEar) });
+        if(rightEar){
+            query.andWhere('conduct.rightEar = :rightEar', { rightEar });
         }
 
-        if(req.query.leftEar){
-            query.andWhere('conduct.leftEar = :leftEar', { leftEar: Number(req.query.leftEar) });
+        if(leftEar){
+            query.andWhere('conduct.leftEar = :leftEar', { leftEar });
         }
 
-        if(req.query.irda){
-            query.andWhere('conduct.irda = :irda', { irda: Number(req.query.irda) });
+        if(irda){
+            query.andWhere('conduct.irda = :irda', { irda });
         }
 
-        if(req.query.testType){
-            query.andWhere('conduct.testType = :testType', { testType: Number(req.query.testType) });
+        if(testType){
+            query.andWhere('conduct.testType = :testType', { testType });
         }
 
         return query.getRawMany();

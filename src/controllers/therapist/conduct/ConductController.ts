@@ -1,61 +1,38 @@
-import { HttpError, HttpStatus } from '../../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../../helpers/http/AbstractHttpErrors';
 import { Conduct } from '../../../entity/conduct/Conduct';
+import { Therapist } from '../../../entity/therapist/Therapist';
 import ConductService from './ConductService';
+import { ConductGetParamsInterface, ConductGetParamsInterfaceRequired, ConductJwt } from './ConductTypes';
 
 export default class ConductController {
-    private conductService: ConductService;
+    public async create(params: ConductJwt) {
+        const conductService = new ConductService();
 
-    constructor() {
-        this.conductService = new ConductService();
+        const therapistId = params.jwtObject.id;
+
+        const conduct = params as Conduct;
+        conduct.therapist = { id: therapistId } as Therapist;
+        const result = conductService.create(conduct);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        try{
-            const therapistId = req.body.jwtObject.id;
+    public async getAll(params: ConductGetParamsInterface) {
+        const conductService = new ConductService();
 
-            let conduct = req.body as Conduct;
-            conduct.therapist = therapistId;
-            conduct = await this.conductService.create(conduct);
+        const { irda, leftEar, rightEar, testType } = params;
+        const result = conductService.getAll(leftEar, rightEar, irda, testType);
 
-            return res.status(HttpStatus.OK).json(conduct);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getAll(req: Request, res: Response) {
-        try{
-            const conduct = await this.conductService.getAll(req);
+    public async get(params: ConductGetParamsInterfaceRequired) {
+        const conductService = new ConductService();
 
-            return res.status(HttpStatus.OK).json(conduct);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
-    }
+        const { irda, leftEar, rightEar, testType } = params;
+        const result = conductService.get(leftEar, rightEar, irda, testType);
 
-    public async get(req: Request, res: Response) {
-        try{
-            const conduct = await this.conductService.get(
-                Number(req.params.leftEar),
-                Number(req.params.rightEar),
-                Number(req.params.irda),
-                Number(req.params.testType)
-            );
-
-            return res.status(HttpStatus.OK).json(conduct);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        return { httpStatus: HttpStatus.OK, result };
     }
 
 }

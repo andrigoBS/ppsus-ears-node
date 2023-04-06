@@ -1,4 +1,4 @@
-import { HttpStatus } from '../controllers/AbstractHttpErrors';
+import { HttpStatus } from './http/AbstractHttpErrors';
 import { ValidationError } from 'class-validator';
 
 export default class ErrorHelper {

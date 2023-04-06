@@ -1,7 +1,6 @@
 import { Orientation } from '../../../entity/orientation/Orientation';
 import { NotFoundOrientationError } from './OrientationErrors';
 import OrientationRepository from './OrientationRepository';
-import { QueryOrientationDTO } from './OrientationTypes';
 
 export default class OrientationService{
     private orientationRepository: OrientationRepository;
@@ -22,7 +21,7 @@ export default class OrientationService{
         return this.orientationRepository.deleteOne(orientation);
     }
 
-    public async getAll(query: QueryOrientationDTO, therapistID: number,): Promise<Orientation[] | undefined>{
-        return this.orientationRepository.getAll(therapistID, query.description, query.listAllActives);
+    public async getAll(therapistID: number, description?: string, listAllActives?: boolean): Promise<Orientation[] | undefined>{
+        return this.orientationRepository.getAll(therapistID, description, listAllActives);
     }
 }

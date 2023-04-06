@@ -1,37 +1,21 @@
-import { HttpError, HttpStatus } from '../AbstractHttpErrors';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../helpers/http/AbstractHttpErrors';
 import { ReferralService } from '../../entity/referral_service/ReferralService';
 import ReferralServiceService from './ReferralServiceService';
 
 export default class ReferralServiceController {
-    private readonly referralServiceService: ReferralServiceService;
+    public async create(referralService: ReferralService) {
+        const referralServiceService = new ReferralServiceService();
 
-    constructor() {
-        this.referralServiceService = new ReferralServiceService();
+        const result = referralServiceService.create(referralService);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        try {
-            let referralService = req.body as ReferralService;
-            referralService = await this.referralServiceService.create(referralService);
-            return res.status(HttpStatus.OK).json(referralService);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
-    }
+    public async listType() {
+        const referralServiceService = new ReferralServiceService();
 
-    public async listType(req: Request, res: Response) {
-        try{
-            const referralServiceType = await this.referralServiceService.listType();
-            return res.status(HttpStatus.OK).send(referralServiceType);
-        }catch (e: HttpError | any){
-            if(e instanceof HttpError){
-                return res.status(e.httpStatus).json(e.messages);
-            }
-            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
-        }
+        const result = await referralServiceService.listType();
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 }

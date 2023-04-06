@@ -1,4 +1,4 @@
-import { NotFoundError, UnauthorizedError } from '../AbstractHttpErrors';
+import { NotFoundError, UnauthorizedError } from '../../helpers/http/AbstractHttpErrors';
 
 export class AuthUserError extends UnauthorizedError{
     constructor() {

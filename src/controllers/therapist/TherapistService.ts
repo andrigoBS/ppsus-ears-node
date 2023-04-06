@@ -10,7 +10,7 @@ export default class TherapistService {
         this.therapistRepository = new TherapistRepository();
     }
 
-    public async create(therapist: Therapist, emails: string[], phones: string[]): Promise<Therapist> {
+    public async create(therapist: Therapist, emails: any[], phones: any[]): Promise<Therapist> {
         therapist = await this.therapistRepository.save(therapist);
         await this.therapistRepository.saveEmails(therapist, emails);
         await this.therapistRepository.savePhones(therapist, phones);

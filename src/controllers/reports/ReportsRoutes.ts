@@ -1,5 +1,7 @@
-import AbstractRoutes from '../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../helpers/http/AbstractRoutesTypes';
+import { JwtUserInterface } from '../../helpers/JwtAuth';
+import { ValidatorRequest } from '../../helpers/validator/ValidatorRequest';
 import ReportsController from './ReportsController';
 
 export default class ReportsRoutes extends AbstractRoutes {
@@ -7,78 +9,157 @@ export default class ReportsRoutes extends AbstractRoutes {
 
     constructor() {
         super();
-
         this.reportsController = new ReportsController();
 
-        const {
-            getBabiesPassFailInstitution, getBabiesPassFailSecretary, getBabiesPassFailTherapist,
-            getEquipmentInstitution, getEquipmentSecretary, getEquipmentTherapist,
-            getIndicatorsInstitution, getIndicatorsPercentInstitution, getIndicatorsPercentSecretary,
-            getIndicatorsPercentTherapist, getIndicatorsSecretary, getIndicatorsTherapist
-        } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
+        this.getBabiesPassFailInstitution();
+        this.getBabiesPassFailSecretary();
+        this.getBabiesPassFailTherapist();
 
-        router.get('/baby-pass-fail/secretary', verifyJWTMiddleware, getBabiesPassFailSecretary);
-        router.get('/baby-pass-fail/institution', verifyJWTMiddleware, getBabiesPassFailInstitution);
-        router.get('/baby-pass-fail/therapist', verifyJWTMiddleware, getBabiesPassFailTherapist);
+        this.getEquipmentInstitution();
+        this.getEquipmentSecretary();
+        this.getEquipmentTherapist();
 
-        // router.get('/baby-come-born/:userType', verifyJWTMiddleware, getBabiesComeBorn);
+        this.getIndicatorsInstitution();
+        this.getIndicatorsPercentInstitution();
+        this.getIndicatorsPercentSecretary();
 
-        router.get('/indicators-percent/secretary', verifyJWTMiddleware, getIndicatorsPercentSecretary);
-        router.get('/indicators-percent/institution', verifyJWTMiddleware, getIndicatorsPercentInstitution);
-        router.get('/indicators-percent/therapist', verifyJWTMiddleware, getIndicatorsPercentTherapist);
-
-        router.get('/indicators/secretary', verifyJWTMiddleware, getIndicatorsSecretary);
-        router.get('/indicators/institution', verifyJWTMiddleware, getIndicatorsInstitution);
-        router.get('/indicators/therapist', verifyJWTMiddleware, getIndicatorsTherapist);
-
-        router.get('/equipment/secretary', verifyJWTMiddleware, getEquipmentSecretary);
-        router.get('/equipment/institution', verifyJWTMiddleware, getEquipmentInstitution);
-        router.get('/equipment/therapist', verifyJWTMiddleware, getEquipmentTherapist);
+        this.getIndicatorsPercentTherapist();
+        this.getIndicatorsSecretary();
+        this.getIndicatorsTherapist();
     }
 
-    private getBabiesPassFailSecretary = async (req: Request, res: Response) => {
-        return this.reportsController.getBabiesPassFailSecretary(req, res);
-    };
-    private getBabiesPassFailInstitution = async (req: Request, res: Response) => {
-        return this.reportsController.getBabiesPassFailInstitution(req, res);
-    };
-    private getBabiesPassFailTherapist = async (req: Request, res: Response) => {
-        return this.reportsController.getBabiesPassFailTherapist(req, res);
-    };
+    private getBabiesPassFailSecretary(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório passou falhou de uma Secretaria',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/baby-pass-fail/secretary',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getBabiesPassFailSecretary);
+    }
+    private getBabiesPassFailInstitution(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório passou falhou de uma Institutição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/baby-pass-fail/institution',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getBabiesPassFailInstitution);
+    }
+    private getBabiesPassFailTherapist(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório passou falhou de um Fonoaudiólogo',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/baby-pass-fail/therapist',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getBabiesPassFailTherapist);
+    }
 
-    // private getBabiesComeBorn = async (req: Request, res: Response) => {
-    //     return this.reportsController.getBabiesComeBorn(req, res);
+    // private getBabiesComeBorn(): void {
+    //     const config: RouteConfig = {
+    //         description: 'Endpoint para recuperar o relatório de bebes que nasceram',
+    //         method: 'get',
+    //         params: new ValidatorRequest(),
+    //         path: '/baby-come-born/:userType',
+    //         withJWT: true
+    //     };
+    //     this.addRoute<JwtUserInterface>(config, this.reportsController.getBabiesComeBorn);
     // };
 
-    private getIndicatorsPercentSecretary = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsPercentSecretary(req, res);
-    };
-    private getIndicatorsPercentInstitution = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsPercentInstitution(req, res);
-    };
-    private getIndicatorsPercentTherapist = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsPercentTherapist(req, res);
-    };
+    private getIndicatorsPercentSecretary(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores em porcentagem de uma Secretaria',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators-percent/secretary',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsPercentSecretary);
+    }
+    private getIndicatorsPercentInstitution(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores em porcentagem de uma Instituição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators-percent/institution',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsPercentInstitution);
+    }
+    private getIndicatorsPercentTherapist(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores em porcentagem de um Fonoaudiólogo',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators-percent/therapist',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsPercentTherapist);
+    }
 
-    private getIndicatorsSecretary = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsSecretary(req, res);
-    };
-    private getIndicatorsInstitution = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsInstitution(req, res);
-    };
-    private getIndicatorsTherapist = async (req: Request, res: Response) => {
-        return this.reportsController.getIndicatorsTherapist(req, res);
-    };
+    private getIndicatorsSecretary(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores de uma Secretaria',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators/secretary',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsSecretary);
+    }
+    private getIndicatorsInstitution(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores de uma Instituição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators/institution',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsInstitution);
+    }
+    private getIndicatorsTherapist(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos indicadores de um Fonoaudiólogo',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/indicators/therapist',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getIndicatorsTherapist);
+    }
 
-    private getEquipmentSecretary = async (req: Request, res: Response) => {
-        return this.reportsController.getEquipmentSecretary(req, res);
-    };
-    private getEquipmentInstitution = async (req: Request, res: Response) => {
-        return this.reportsController.getEquipmentInstitution(req, res);
-    };
-    private getEquipmentTherapist = async (req: Request, res: Response) => {
-        return this.reportsController.getEquipmentTherapist(req, res);
-    };
+    private getEquipmentSecretary(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos equipamentos de uma Secretaria',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/equipment/secretary',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getEquipmentSecretary);
+    }
+    private getEquipmentInstitution(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos equipamentos de uma Instituição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/equipment/institution',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getEquipmentInstitution);
+    }
+    private getEquipmentTherapist(): void {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar o relatório dos equipamentos de um Fonoaudiólogo',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/equipment/therapist',
+            withJWT: true
+        };
+        this.addRoute<JwtUserInterface>(config, this.reportsController.getEquipmentTherapist);
+    }
 }

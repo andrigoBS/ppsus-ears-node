@@ -1,59 +1,30 @@
-import AbstractController from '../../AbstractController';
-import { Request, Response } from 'express';
+import { HttpStatus } from '../../../helpers/http/AbstractHttpErrors';
 import { Equipment } from '../../../entity/equipment/Equipment';
-import { ValidatorBoolean } from '../../../helpers/validator/ValidatorBoolean';
-import { ValidatorDate } from '../../../helpers/validator/ValidatorDate';
-import { ValidatorObject } from '../../../helpers/validator/ValidatorObject';
-import { ValidatorString } from '../../../helpers/validator/ValidatorString';
 import EquipmentService from './EquipmentService';
 import { QueryEquipmentDTO } from './EquipmentTypes';
 
-export default class EquipmentController extends AbstractController{
-    private equipmentService: EquipmentService;
+export default class EquipmentController {
+    public async create(equipment: Equipment) {
+        const equipmentService = new EquipmentService();
 
-    constructor() {
-        super();
-        this.equipmentService = new EquipmentService();
+        const result = equipmentService.create(equipment);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async create(req: Request, res: Response) {
-        const validateParams = {
-            body: new ValidatorObject('body', true).fromObject({
-                brand: new ValidatorString('marca', true),
-                dateOfLastCalibration: new ValidatorDate('data da ultima calibração', true),
-                model: new ValidatorString('modelo', true),
-            }),
-        };
+    public async getAll(params: QueryEquipmentDTO) {
+        const equipmentService = new EquipmentService();
 
-        return super.genericProcess<Equipment>(req, res, validateParams, async (equipment) => {
-            return this.equipmentService.create(equipment);
-        });
+        const result = equipmentService.getAll(params);
+
+        return { httpStatus: HttpStatus.OK, result };
     }
 
-    public async getAll(req: Request, res: Response) {
-        const validateParams = {
-            query: new ValidatorObject('query', false).fromObject({
-                brand: new ValidatorString('marca', false),
-                dateOfLastCalibration: new ValidatorDate('data da ultima calibração', false),
-                listAllActives: new ValidatorBoolean('listar todos os ativos', false),
-                model: new ValidatorString('modelo', false),
-            }),
-        };
+    public async deleteOne(params: {id: number}) {
+        const equipmentService = new EquipmentService();
 
-        return super.genericProcess<QueryEquipmentDTO>(req, res, validateParams, async (params) => {
-            return this.equipmentService.getAll(params);
-        });
-    }
+        const result = equipmentService.deleteOne(params.id);
 
-    public async deleteOne(req: Request, res: Response) {
-        const validateParams = {
-            params: new ValidatorObject('params', true).fromObject({
-                id: new ValidatorString('ID', true),
-            }),
-        };
-
-        return super.genericProcess<{id: number}>(req, res, validateParams, async (params) => {
-            return this.equipmentService.deleteOne(params.id);
-        });
+        return { httpStatus: HttpStatus.OK, result };
     }
 }

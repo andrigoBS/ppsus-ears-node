@@ -1,5 +1,10 @@
-import AbstractRoutes from '../AbstractRoutes';
-import { Request, Response } from 'express';
+import AbstractRoutes from '../../helpers/http/AbstractRoutes';
+import { RouteConfig } from '../../helpers/http/AbstractRoutesTypes';
+import { InstitutionUser } from '../../entity/institution/InstitutionUser';
+import { ValidatorNumber } from '../../helpers/validator/ValidatorNumber';
+import { ValidatorObject } from '../../helpers/validator/ValidatorObject';
+import { ValidatorRequest } from '../../helpers/validator/ValidatorRequest';
+import { ValidatorString } from '../../helpers/validator/ValidatorString';
 import InstitutionController from './InstitutionController';
 
 export default class InstitutionRoutes extends AbstractRoutes {
@@ -7,94 +12,88 @@ export default class InstitutionRoutes extends AbstractRoutes {
 
     constructor() {
         super();
-        const { create, getAll, getDashboard, getInstitutionTypes, getOne } = this;
-        const { verifyJWTMiddleware } = this.getJwt();
-        const router = this.getRouter();
-        router.post('/', create);
-        router.get('/types', getInstitutionTypes);
-        router.get('/dashboard', verifyJWTMiddleware, getDashboard);
-        router.get('/', getAll);
-        router.get('/:id', getOne);
+
+        this.create();
+        this.getAll();
+        this.getOne();
+        this.getDashboard();
+        this.getInstitutionTypes();
     }
 
-    private create = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Institution']
-           #swagger.description = 'Endpoint para recuperar todos os serviços de referencia'
-           #swagger.parameters['institution'] = {
-            in: 'body',
-            required: 'true',
-            description: 'Instituição',
-            type: 'object',
-            schema: {
-                "institutionName": "nome instituicao",
-                "password": "senha",
-                "cnes": "numero cnes",
-                "cnpj": "cnpj",
-                "institutionType": 2,
-                "email": "example@gmail.com",
-                "alternativeEmail": "example2@gmail.com",
-                "institutionPhone": "123435",
-                "institutionalCellphone": "123435",
-                "cep": "33232",
-                "publicArea": "logradouro",
-                "state": "sc",
-                "city":  "floripa",
-                "number": "3242",
-                "complement": "complemento",
-                "responsibleName": "nome responsavel",
-                "responsibleRole": "cargo do responsavel"
-            }
+    private create() {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar todos os serviços de referencia',
+            method: 'post',
+            params: new ValidatorRequest(new ValidatorObject('body', [
+                new ValidatorString('institutionName').required(true).withDescription('Nome da instituição'),
+                new ValidatorString('password').required(true).withDescription('Senha'),
+                new ValidatorString('cnes').withDescription('CNES'),
+                new ValidatorString('cnpj').withDescription('CNPJ'),
+                // new ValidatorString('institutionType').withDescription('Tipo de instituição'),
+                // new ValidatorString('email').withDescription('Email'),
+                // new ValidatorString('alternativeEmail').withDescription('Email alternativo'),
+                // new ValidatorString('institutionPhone').withDescription('Telefone'),
+                // new ValidatorString('institutionalCellphone').withDescription('Telefone institucional'),
+                new ValidatorString('cep').withDescription('CEP'),
+                new ValidatorString('publicArea').withDescription('Logradouro'),
+                // "state": "sc",
+                // "city":  "floripa",
+                // "number": "3242",
+                // "complement": "complemento",
+                // "responsibleName": "nome responsavel",
+                // "responsibleRole": "cargo do responsavel"
+                //TODO: ajustar parametros
+            ]).withDescription('Institution').required(true)),
+            path: '/',
+            withJWT: false
+        };
+        this.addRoute<InstitutionUser>(config, this.institutionController.create);
+    }
 
-           }
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.institutionController.create(req, res);
-    };
+    private getOne() {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar uma instituição',
+            method: 'get',
+            params: new ValidatorRequest(undefined, undefined, new ValidatorObject('params', [
+                new ValidatorNumber('id').min(1).required(true).withExample(1)
+            ])),
+            path: '/:id',
+            withJWT: false
+        };
+        this.addRoute<{id: number}>(config, this.institutionController.getOne);
+    }
 
-    private getOne = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Institution']
-           #swagger.description = 'Endpoint para recuperar uma instituição'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.institutionController.getOne(req, res);
-    };
+    private getAll() {
+        console.log(this.institutionController);
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar todas as instituições',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/',
+            withJWT: false
+        };
+        this.addRoute<never>(config, this.institutionController.getAll);
+    }
 
-    private getAll = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Institution']
-           #swagger.description = 'Endpoint para recuperar uma instituição'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.institutionController.getAll(req, res);
-    };
+    private getDashboard() {
+        const config: RouteConfig = {
+            description: 'Endpoint para recuperar todos os reports do dashboard de uma instituição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/dashboard',
+            withJWT: true
+        };
+        this.addRoute<never>(config, this.institutionController.getDashboard);
+    }
 
-    private getDashboard = async (req: Request, res: Response) => {
-        /*
-           #swagger.tags = ['Institution']
-           #swagger.description = 'Endpoint para recuperar todos os reports do dashboard de uma instituição'
-           #swagger.security = [{
-                "ApiKeyAuth": []
-            }]
-        */
-        return this.institutionController.getDashboard(req, res);
-    };
-
-    private getInstitutionTypes = async (req: Request, res: Response) => {
-        /*
-            #swagger.tags = ['Institution']
-            #swagger.description = 'Tipos de instituição'
-            #swagger.security = [{
-                "ApiKeyAuth": []
-            }
-        */
-        return this.institutionController.getInstitutionTypes(req, res);
-    };
+    private getInstitutionTypes() {
+        const config: RouteConfig = {
+            description: 'Tipos de instituição',
+            method: 'get',
+            params: new ValidatorRequest(),
+            path: '/types',
+            withJWT: false
+        };
+        this.addRoute<never>(config, this.institutionController.getInstitutionTypes);
+    }
 }

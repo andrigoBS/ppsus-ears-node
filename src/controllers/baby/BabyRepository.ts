@@ -1,6 +1,10 @@
 import { Baby } from '../../entity/baby/Baby';
 
 export default class BabyRepository {
+    public async save(baby: Baby): Promise<Baby> {
+        return Baby.save(baby);
+    }
+
     public async getAllBabies(): Promise<Baby[]> {
         return Baby.createQueryBuilder('baby')
             .select(['baby.id AS id', 'baby.name AS name', 'baby.weight AS weight',

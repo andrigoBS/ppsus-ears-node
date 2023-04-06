@@ -14,7 +14,7 @@ export default class SwaggerGenerateHelper {
             info: {
                 description: '',
                 title: process.env.SERVER_NAME,
-                version: '1.0.0'
+                version: '3.0.0'
             },
             paths: path,
             produces: ['application/json'],

@@ -16,10 +16,10 @@ export default class ZoneRoutes extends AbstractRoutes {
 
         this.createZoneUser();
         this.deleteZone();
+        this.recoverZone();
         this.getAll();
         this.getAllWithCities();
         this.getById();
-        this.recoverZone();
     }
 
     private getAll(): void {

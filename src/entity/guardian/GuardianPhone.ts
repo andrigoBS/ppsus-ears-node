@@ -1,5 +1,4 @@
 import { Entity, JoinColumn, ManyToOne } from 'typeorm';
-
 import { PhoneTemplate as Phone } from '../decorators/templates/PhoneTemplate';
 import { Guardian } from './Guardian';
 

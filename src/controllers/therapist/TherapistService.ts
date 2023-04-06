@@ -1,4 +1,5 @@
 import { Therapist } from '../../entity/therapist/Therapist';
+import { DuplicateEmail, DuplicatePhone } from '../GenericsErrors';
 import { NotFoundTherapistError, OnFindTherapistError } from './TherapistErrors';
 import TherapistRepository from './TherapistRepository';
 import { TherapistIdName, TherapistXP, TherapistXPString } from './TherapistTypes';
@@ -12,8 +13,16 @@ export default class TherapistService {
 
     public async create(therapist: Therapist, emails: any[], phones: any[]): Promise<Therapist> {
         therapist = await this.therapistRepository.save(therapist);
-        await this.therapistRepository.saveEmails(therapist, emails);
-        await this.therapistRepository.savePhones(therapist, phones);
+        try {
+            await this.therapistRepository.saveEmails(therapist, emails);
+        }catch (e: any) {
+            throw new DuplicateEmail(e.message); //TODO: não ta funcionando, ta sempre caindo aqui
+        }
+        try {
+            await this.therapistRepository.savePhones(therapist, phones);
+        }catch (e: any) {
+            throw new DuplicatePhone(e.message);
+        }
         return therapist;
     }
 

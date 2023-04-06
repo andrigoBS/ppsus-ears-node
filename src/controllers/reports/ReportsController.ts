@@ -9,8 +9,10 @@ export default class ReportsController {
         const result = await reportsService.getBabiesPassFailSecretary(params.jwtObject.id);
         return { httpStatus: HttpStatus.OK, result };
     }
-    public async getBabiesPassFailInstitution(params: JwtUserInterface) {
+    public async getBabiesPassFailInstitution(params: any) {
         const reportsService = new ReportsService();
+
+        console.log(params); //TODO: tirar
 
         const result = await reportsService.getBabiesPassFailInstitution(params.jwtObject.id);
         return { httpStatus: HttpStatus.OK, result };

@@ -76,7 +76,7 @@ export default abstract class AbstractRoutes {
                 result = { httpStatus: HttpStatus.INTERNAL_SERVER_ERROR, result: { message: e.message } };
             }
             console.error(e);
-            this.logger.request(path, userId, result.httpStatus, paramsLog, e.stackTrace);
+            this.logger.request(path, userId, result.httpStatus, paramsLog, e.stack || e);
         }
 
         this.logger.request(path, userId, result.httpStatus, paramsLog, result.result);

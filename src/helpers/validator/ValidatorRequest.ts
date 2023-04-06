@@ -20,7 +20,7 @@ export class ValidatorRequest {
         const queryResult = this.query?.execute(query) || {};
         const paramsResult = this.params?.execute(params) || {};
 
-        return { ...queryResult, ...paramsResult, ...bodyResult } as T;
+        return { ...body, ...query, ...params, ...bodyResult, ...queryResult, ...paramsResult } as T;
     }
 
     public getSchema(): SchemaType[] {

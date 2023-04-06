@@ -40,7 +40,7 @@ export abstract class Validator<T> {
             this.pipeline.forEach(func => func.execute(value));
         } else {
             if(this.isRequired) {
-                throw new FieldRequiredError(this.name);
+                throw new FieldRequiredError(this.description || this.name);
             }
         }
         return value;

@@ -14,10 +14,10 @@ export default class InstitutionRoutes extends AbstractRoutes {
         super();
 
         this.create();
-        this.getAll();
-        this.getOne();
         this.getDashboard();
         this.getInstitutionTypes();
+        this.getAll();
+        this.getOne();
     }
 
     private create() {
@@ -25,25 +25,9 @@ export default class InstitutionRoutes extends AbstractRoutes {
             description: 'Endpoint para recuperar todos os serviços de referencia',
             method: 'post',
             params: new ValidatorRequest(new ValidatorObject('body', [
-                new ValidatorString('institutionName').required(true).withDescription('Nome da instituição'),
                 new ValidatorString('password').required(true).withDescription('Senha'),
-                new ValidatorString('cnes').withDescription('CNES'),
-                new ValidatorString('cnpj').withDescription('CNPJ'),
-                // new ValidatorString('institutionType').withDescription('Tipo de instituição'),
-                // new ValidatorString('email').withDescription('Email'),
-                // new ValidatorString('alternativeEmail').withDescription('Email alternativo'),
-                // new ValidatorString('institutionPhone').withDescription('Telefone'),
-                // new ValidatorString('institutionalCellphone').withDescription('Telefone institucional'),
-                new ValidatorString('cep').withDescription('CEP'),
-                new ValidatorString('publicArea').withDescription('Logradouro'),
-                // "state": "sc",
-                // "city":  "floripa",
-                // "number": "3242",
-                // "complement": "complemento",
-                // "responsibleName": "nome responsavel",
-                // "responsibleRole": "cargo do responsavel"
                 //TODO: ajustar parametros
-            ]).withDescription('Institution').required(true)),
+            ]).withDescription('Instituição').required(true)),
             path: '/',
             withJWT: false
         };

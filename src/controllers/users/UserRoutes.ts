@@ -11,6 +11,7 @@ export default class UserRoutes extends AbstractRoutes {
     constructor() {
         super();
         this.userController = new UserController();
+
         this.login();
     }
 

@@ -14,8 +14,8 @@ export default class ConductRoutes extends AbstractRoutes {
         this.conductController = new ConductController();
 
         this.create();
-        this.get();
         this.getAll();
+        this.get();
     }
 
     private create(): void {

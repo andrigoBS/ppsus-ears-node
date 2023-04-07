@@ -1,4 +1,7 @@
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Institution, } from '../../entity/institution/Institution';
+import { InstitutionEmail } from '../../entity/institution/InstitutionEmail';
+import { InstitutionPhone } from '../../entity/institution/InstitutionPhone';
 import { DuplicateInstitutionError, InstitutionTypeError, NotFoundInstitutionError, NotFoundOneInstitutionError } from './InstitutionErrors';
 import InstitutionRepository from './InstitutionRepository';
 import { InstitutionPayload, InstitutionString, InstitutionType } from './InstitutionTypes';
@@ -61,7 +64,7 @@ export default class InstitutionService {
         ));
     }
 
-    public async create(institution: InstitutionPayload): Promise<Institution | { id: number }> {
+    public async create(institution: InstitutionPayload, transaction?: EntityManager): Promise<Institution | { id: number }> {
         if(!institution){
             throw new NotFoundOneInstitutionError();
         }
@@ -74,6 +77,14 @@ export default class InstitutionService {
 
         await this.noSimilarOrError(institution);
 
-        return this.institutionRepository.save(institution as Institution);
+        return this.institutionRepository.save(institution as Institution, transaction);
+    }
+
+    public saveEmails(id: number, emails: string[], transaction?: EntityManager): Promise<InstitutionEmail[]>{
+        return this.institutionRepository.saveEmails(id, emails, transaction);
+    }
+
+    public savePhones(id: number, phones: string[], transaction?: EntityManager): Promise<InstitutionPhone[]>{
+        return this.institutionRepository.savePhones(id, phones, transaction);
     }
 }

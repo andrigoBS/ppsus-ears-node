@@ -1,4 +1,5 @@
 import { HttpStatus } from '../../helpers/http/AbstractHttpErrors';
+import { getConnection } from 'typeorm';
 import { Institution } from '../../entity/institution/Institution';
 import { InstitutionUser } from '../../entity/institution/InstitutionUser';
 import UserService from '../users/UserService';
@@ -6,16 +7,29 @@ import InstitutionService from './InstitutionService';
 
 export default class InstitutionController {
     public async create(institutionUser: InstitutionUser) {
-        if(!institutionUser.institution.id) {
-            const institutionService = new InstitutionService();
-
-            const institution = await institutionService.create(institutionUser.institution);
-            institutionUser.institution = { id: institution.id } as Institution;
-        }
+        const institutionService = new InstitutionService();
         const userService = new UserService();
 
-        const result = await userService.save<InstitutionUser>('institution', institutionUser);
-        return { httpStatus: HttpStatus.OK, result };
+        const queryRunner = getConnection().createQueryRunner();
+        await queryRunner.startTransaction();
+
+        const manager = queryRunner.manager;
+        try {
+            if(!institutionUser.institution.id) {
+                const institution = await institutionService.create(institutionUser.institution, manager);
+                institutionUser.institution = { id: institution.id } as Institution;
+            }
+
+            const result = await userService.save<InstitutionUser>('institution', institutionUser, manager);
+            result.emails = await institutionService.saveEmails(result.id, institutionUser.emails as unknown as string[], manager);
+            result.phones = await institutionService.savePhones(result.id, institutionUser.phones as unknown as string[], manager);
+
+            await queryRunner.commitTransaction();
+            return { httpStatus: HttpStatus.OK, result };
+        }catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }
     }
 
     public async getOne(params: {id: number}) {

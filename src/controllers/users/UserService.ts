@@ -1,3 +1,4 @@
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import { NotFoundUserError } from './UserErrors';
@@ -11,10 +12,10 @@ export default class UserService{
         this.userRepository = new UserRepository();
     }
 
-    public async save<Type>(userType: string, user: UserTemplate): Promise<Type>{
+    public async save<Type>(userType: string, user: UserTemplate, transaction?: EntityManager): Promise<Type>{
         user.password = CryptoHelper.encrypt(user.password);
 
-        return this.userRepository.save<Type>(MappingUser[userType as UserString], user);
+        return this.userRepository.save<Type>(MappingUser[userType as UserString], user, transaction);
     }
 
     public async findOne(userType: string, authObj: AuthUser) {

@@ -1,3 +1,4 @@
+import { getConnection } from 'typeorm';
 import { Guardian } from '../../entity/guardian/Guardian';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import GuardianRepository from './GuardianRepository';
@@ -18,11 +19,25 @@ export default class GuardianService {
     }
 
     public async create(guardian: Guardian, generateUser: boolean): Promise<Guardian> {
-        if(generateUser) {
-            guardian.login = this.createUserName(guardian.name, guardian.birthDate);
-            guardian.password = CryptoHelper.encrypt(this.createPassword());
+        const queryRunner = getConnection().createQueryRunner();
+        await queryRunner.startTransaction();
+
+        const manager = queryRunner.manager;
+        try {
+            if(generateUser) {
+                guardian.login = this.createUserName(guardian.name, guardian.birthDate);
+                guardian.password = CryptoHelper.encrypt(this.createPassword());
+            }
+            guardian = await this.guardianRepository.save(guardian, manager);
+            guardian.emails = await this.guardianRepository.saveEmails(guardian.id, guardian.emails as unknown as string[], manager);
+            guardian.phones = await this.guardianRepository.savePhones(guardian.id, guardian.phones as unknown as string[], manager);
+
+            await queryRunner.commitTransaction();
+            return guardian;
+        }catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
         }
-        return this.guardianRepository.save(guardian);
     }
 
     private createUserName(name: string, birthDate: Date): string {

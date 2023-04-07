@@ -39,6 +39,7 @@ export default class ZoneController {
         const userService = new UserService();
 
         const result = await userService.save<SecretaryUser>('secretary', params);
+        //TODO: salvar os emails e phones e testar essa rota melhor
 
         return { httpStatus: HttpStatus.OK, result };
     }

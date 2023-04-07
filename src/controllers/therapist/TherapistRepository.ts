@@ -1,6 +1,8 @@
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Therapist } from '../../entity/therapist/Therapist';
 import { TherapistEmail } from '../../entity/therapist/TherapistEmail';
 import { TherapistPhone } from '../../entity/therapist/TherapistPhone';
+import { DuplicateEmail, DuplicatePhone } from '../TemplateErrors';
 
 export default class TherapistRepository {
 
@@ -24,29 +26,46 @@ export default class TherapistRepository {
         return query.getRawOne();
     }
 
-    public save(therapist: Therapist): Promise<Therapist>{
+    public save(therapist: Therapist, transaction?: EntityManager): Promise<Therapist>{
+        if(transaction) {
+            return transaction.getRepository(Therapist).save(therapist);
+        }
         return Therapist.save(therapist);
     }
 
-    public saveEmails(therapist: Therapist,  emails: string[]): Promise<TherapistEmail[]>{
-        return TherapistEmail.save(
-            emails.map((email) => {
-                const entity = new TherapistEmail();
-                entity.email = email;
-                entity.therapist = therapist;
-                return entity;
-            })
-        );
+    public saveEmails(id: number, emails: string[], transaction?: EntityManager): Promise<TherapistEmail[]>{
+        const entities = emails.filter(email => email && email.length > 1).map((email) => {
+            const entity = new TherapistEmail();
+            entity.email = email;
+            entity.therapist = { id } as Therapist;
+            return entity;
+        });
+
+        try {
+            if(transaction) {
+                return transaction.getRepository(TherapistEmail).save(entities);
+            }
+            return TherapistEmail.save(entities);
+        } catch (e: any) {
+            throw new DuplicateEmail(e.message);
+        }
     }
 
-    public savePhones(therapist: Therapist,  phones: string[]): Promise<TherapistPhone[]>{
-        return TherapistPhone.save(
-            phones.map((number) => {
-                const entity = new TherapistPhone();
-                entity.phoneNumber = number;
-                entity.therapist = therapist;
-                return entity;
-            })
-        );
+    public savePhones(id: number, phones: string[], transaction?: EntityManager): Promise<TherapistPhone[]>{
+        const entities = phones.filter(phone => phone && phone.length > 1).map((number) => {
+            const entity = new TherapistPhone();
+            entity.phoneNumber = number;
+            entity.therapist = { id } as Therapist;
+            return entity;
+        });
+
+        try {
+            if(transaction) {
+                return transaction.getRepository(TherapistPhone).save(entities);
+            }
+            return TherapistPhone.save(entities);
+        } catch (e: any) {
+            throw new DuplicatePhone(e.message);
+        }
     }
 }

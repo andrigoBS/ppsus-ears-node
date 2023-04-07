@@ -1,10 +1,16 @@
 import { getRepository } from 'typeorm';
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import { AuthUser, MappingUser, User } from './UserTypes';
 
 export class UserRepository{
-    public async save<Type>(userType: MappingUser, user: UserTemplate): Promise<Type>{
+    public async save<Type>(userType: MappingUser, user: UserTemplate, transaction?: EntityManager): Promise<Type>{
+        if(transaction) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return transaction.getRepository<Type>(userType).save(user);
+        }
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return getRepository<Type>(userType).save(user);

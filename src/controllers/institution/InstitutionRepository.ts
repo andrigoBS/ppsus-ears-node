@@ -1,4 +1,9 @@
+import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { Institution } from '../../entity/institution/Institution';
+import { InstitutionEmail } from '../../entity/institution/InstitutionEmail';
+import { InstitutionPhone } from '../../entity/institution/InstitutionPhone';
+import { InstitutionUser } from '../../entity/institution/InstitutionUser';
+import { DuplicateEmail, DuplicatePhone } from '../TemplateErrors';
 
 export default class InstitutionRepository {
 
@@ -30,7 +35,46 @@ export default class InstitutionRepository {
         return query.execute();
     }
 
-    public async save(institution: Institution): Promise<Institution>{
+    public async save(institution: Institution, transaction?: EntityManager): Promise<Institution>{
+        if(transaction) {
+            return transaction.getRepository(Institution).save(institution);
+        }
         return Institution.save(institution);
+    }
+
+    public saveEmails(id: number, emails: string[], transaction?: EntityManager): Promise<InstitutionEmail[]>{
+        const entities = emails.filter(email => email && email.length > 1).map((email) => {
+            const entity = new InstitutionEmail();
+            entity.email = email;
+            entity.user = { id } as InstitutionUser;
+            return entity;
+        });
+
+        try {
+            if(transaction) {
+                return transaction.getRepository(InstitutionEmail).save(entities);
+            }
+            return InstitutionEmail.save(entities);
+        } catch (e: any) {
+            throw new DuplicateEmail(e.message);
+        }
+    }
+
+    public savePhones(id: number, phones: string[], transaction?: EntityManager): Promise<InstitutionPhone[]>{
+        const entities = phones.filter(phone => phone && phone.length > 1).map((number) => {
+            const entity = new InstitutionPhone();
+            entity.phoneNumber = number;
+            entity.user = { id } as InstitutionUser;
+            return entity;
+        });
+
+        try {
+            if(transaction) {
+                return transaction.getRepository(InstitutionPhone).save(entities);
+            }
+            return InstitutionPhone.save(entities);
+        } catch (e: any) {
+            throw new DuplicatePhone(e.message);
+        }
     }
 }

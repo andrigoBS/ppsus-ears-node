@@ -46,7 +46,7 @@ export default class InstitutionRepository {
         const entities = emails.filter(email => email && email.length > 1).map((email) => {
             const entity = new InstitutionEmail();
             entity.email = email;
-            entity.user = { id } as InstitutionUser;
+            entity.user = { id } as InstitutionUser;//TODO: adicionar nos emails e phones o campo isMain
             return entity;
         });
 

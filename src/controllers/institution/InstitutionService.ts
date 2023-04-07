@@ -10,8 +10,8 @@ export default class InstitutionService {
         this.institutionRepository = new InstitutionRepository();
     }
 
-    public async noSimilarOrError({ cnes, cnpj, institutionName }: InstitutionPayload): Promise<void> {
-        const results = await this.institutionRepository.findIdsSimilar(institutionName, cnes, cnpj, 1);
+    public async noSimilarOrError({ cnes, institutionName }: InstitutionPayload): Promise<void> {
+        const results = await this.institutionRepository.findIdsSimilar(institutionName, cnes, 1);
         const institution2 = results[0];
         if(institution2){
             throw new DuplicateInstitutionError(institution2.id.toString());

@@ -2,12 +2,11 @@ import { Institution } from '../../entity/institution/Institution';
 
 export default class InstitutionRepository {
 
-    public async findIdsSimilar(institutionName: string, cnes: string, cnpj: string, limit?: number): Promise<{ id: number }[]>{
+    public async findIdsSimilar(institutionName: string, cnes: string, limit?: number): Promise<{ id: number }[]>{
         let query = Institution
             .createQueryBuilder('i')
             .where('i.institutionName = :institutionName', { institutionName })
             .orWhere('i.cnes = :cnes', { cnes })
-            .orWhere('i.cnpj = :cnpj', { cnpj })
             .select(['i.id AS id'])
         ;
         if(limit) {

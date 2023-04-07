@@ -21,8 +21,8 @@ export default class ZoneController {
         const cityService = new CityService();
 
         const state = await secretaryService.getStateIdByUserId(params.jwtObject.id);
-        const zones = await zoneService.getZonesByStateId(state.id);
-        const result = await cityService.getCitiesWithAndWithoutZone(zones, state.id);
+        const zones = await zoneService.getZonesByStateId(state);
+        const result = await cityService.getCitiesWithAndWithoutZone(zones, state);
 
         return { httpStatus: HttpStatus.OK, result };
     }

@@ -38,7 +38,7 @@ export default class ConductRoutes extends AbstractRoutes {
             params: new ValidatorRequest(undefined, new ValidatorObject('query', [
                 new ValidatorNumber('leftEar').min(0).max(1).withExample(0).withDescription('Passou orelha esquerda'),
                 new ValidatorNumber('rightEar').min(0).max(1).withExample(0).withDescription('Passou orelha direita'),
-                new ValidatorNumber('irda').min(1).withExample(1).withDescription('ID do IRDA'),
+                new ValidatorNumber('irda').min(0).withExample(1).withDescription('ID do IRDA'),
                 new ValidatorNumber('testType').min(1).withExample(1).withDescription('ID do tipo de teste'),
             ]).required(false)),
             path: '/',
@@ -54,7 +54,7 @@ export default class ConductRoutes extends AbstractRoutes {
             params: new ValidatorRequest(undefined, undefined, new ValidatorObject('params', [
                 new ValidatorNumber('leftEar').min(0).max(1).required(true).withExample(0).withDescription('Passou orelha esquerda'),
                 new ValidatorNumber('rightEar').min(0).max(1).required(true).withExample(0).withDescription('Passou orelha direita'),
-                new ValidatorNumber('irda').min(1).required(true).withExample(1).withDescription('ID do IRDA'),
+                new ValidatorNumber('irda').min(0).required(true).withExample(1).withDescription('ID do IRDA'),
                 new ValidatorNumber('testType').min(1).required(true).withExample(1).withDescription('ID do tipo de teste'),
             ]).required(true)),
             path: '/:leftEar/:rightEar/:irda/:testType',

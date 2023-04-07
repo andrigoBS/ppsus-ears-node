@@ -36,8 +36,8 @@ export default class IndicatorRoutes extends AbstractRoutes {
             description: 'Endpoint para pegar todos os indicadores',
             method: 'get',
             params: new ValidatorRequest(undefined, new ValidatorObject('query', [
-                new ValidatorString('name').required(true).withExample('indicador1')
-            ])),
+                new ValidatorString('name').required(false).withExample('indicador1').withDescription('nome')
+            ]).required(false)),
             path: '/',
             withJWT: true
         };

@@ -7,7 +7,7 @@ export default class EquipmentController {
     public async create(equipment: Equipment) {
         const equipmentService = new EquipmentService();
 
-        const result = equipmentService.create(equipment);
+        const result = await equipmentService.create(equipment);
 
         return { httpStatus: HttpStatus.OK, result };
     }
@@ -15,7 +15,7 @@ export default class EquipmentController {
     public async getAll(params: QueryEquipmentDTO) {
         const equipmentService = new EquipmentService();
 
-        const result = equipmentService.getAll(params);
+        const result = await equipmentService.getAll(params);
 
         return { httpStatus: HttpStatus.OK, result };
     }
@@ -23,7 +23,7 @@ export default class EquipmentController {
     public async deleteOne(params: {id: number}) {
         const equipmentService = new EquipmentService();
 
-        const result = equipmentService.deleteOne(params.id);
+        const result = await equipmentService.deleteOne(params.id);
 
         return { httpStatus: HttpStatus.OK, result };
     }

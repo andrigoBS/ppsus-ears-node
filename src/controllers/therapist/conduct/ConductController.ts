@@ -12,7 +12,7 @@ export default class ConductController {
 
         const conduct = params as Conduct;
         conduct.therapist = { id: therapistId } as Therapist;
-        const result = conductService.create(conduct);
+        const result = await conductService.create(conduct);
 
         return { httpStatus: HttpStatus.OK, result };
     }
@@ -21,8 +21,9 @@ export default class ConductController {
         const conductService = new ConductService();
 
         const { irda, leftEar, rightEar, testType } = params;
-        const result = conductService.getAll(leftEar, rightEar, irda, testType);
+        const result = await conductService.getAll(leftEar, rightEar, irda, testType);
 
+        console.log('result', result);
         return { httpStatus: HttpStatus.OK, result };
     }
 
@@ -30,7 +31,7 @@ export default class ConductController {
         const conductService = new ConductService();
 
         const { irda, leftEar, rightEar, testType } = params;
-        const result = conductService.get(leftEar, rightEar, irda, testType);
+        const result = await conductService.get(leftEar, rightEar, irda, testType);
 
         return { httpStatus: HttpStatus.OK, result };
     }

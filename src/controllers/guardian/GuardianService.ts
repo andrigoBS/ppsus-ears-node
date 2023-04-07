@@ -26,7 +26,8 @@ export default class GuardianService {
     }
 
     private createUserName(name: string, birthDate: Date): string {
-        return name.toLowerCase().replaceAll(' ', '.') + birthDate.getDay().toString() + birthDate.getMonth().toString() + birthDate.getFullYear().toString();
+        const birthDateSliced = birthDate.toString().split('-');
+        return name.toLowerCase().replaceAll(' ', '.') + birthDateSliced[2] + birthDateSliced[1] + birthDateSliced[0];
     }
 
     private createPassword(): string {

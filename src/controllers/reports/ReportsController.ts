@@ -12,8 +12,6 @@ export default class ReportsController {
     public async getBabiesPassFailInstitution(params: any) {
         const reportsService = new ReportsService();
 
-        console.log(params); //TODO: tirar
-
         const result = await reportsService.getBabiesPassFailInstitution(params.jwtObject.id);
         return { httpStatus: HttpStatus.OK, result };
     }

@@ -10,7 +10,7 @@ COPY package*.json /usr/src/app/
 COPY src /usr/src/app/src
 COPY tsconfig.json /usr/src/app/tsconfig.json
 RUN npm install
-RUN npm run build:prod
+RUN npm run build
 
 FROM node:lts-alpine
 ENV NODE_ENV production

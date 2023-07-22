@@ -10,7 +10,7 @@ export default class GenericLogger {
     public request(path: string, userId: number | undefined, code: number, paramsLog: ParamsLogInterface, result: any): void {
         const now = new Date(Date.now());
         const date = `${now.getDay()}_${now.getMonth()}_${now.getFullYear()}`;
-        const pathDir = `../logs${path}/${date}`.replace(':', '');
+        const pathDir = `logs${path}/${date}`.replace(':', '');
         const fullPath = `${pathDir}/${userId}.txt`;
 
         let file: Buffer = Buffer.from('');

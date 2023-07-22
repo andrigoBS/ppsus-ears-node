@@ -17,7 +17,6 @@ export default class SwaggerGenerateHelper {
                 version: '3.0.0'
             },
             paths: path,
-            produces: ['application/json'],
             schemes: ['http'],
             securityDefinitions: {
                 apiKeyAuth: {
@@ -37,10 +36,11 @@ export default class SwaggerGenerateHelper {
         };
     }
 
-    public createRouteDocs(description: string, paramsSchema: object, tagPrefix: string, withJWT: boolean, withAuthHeader?: boolean) {
+    public createRouteDocs(description: string, paramsSchema: object, tagPrefix: string, withJWT: boolean, withAuthHeader?: boolean, responseType?: string) {
         const aux: any = {
             description: description,
             parameters: paramsSchema,
+            produces: [responseType || 'application/json'],
             responses: {
                 200: {
                     description: 'successful operation',

@@ -2,6 +2,7 @@ import AbstractRoutes from '../../../helpers/http/AbstractRoutes';
 import { RouteConfig } from '../../../helpers/http/AbstractRoutesTypes';
 import { ValidatorObject } from '../../../helpers/validator/ValidatorObject';
 import { ValidatorRequest } from '../../../helpers/validator/ValidatorRequest';
+import TriageReportsRoutes from './reports/TriageReportsRoutes';
 import TriageController from './TriageController';
 import { QueryTriageDTO, TriageJwt } from './TriageTypes';
 
@@ -12,6 +13,7 @@ export default class TriageRoutes extends AbstractRoutes {
         super();
         this.triageController = new TriageController();
 
+        this.addSubRoute('/reports', 'Reports', new TriageReportsRoutes());
         this.create();
         this.getAll();
         this.triageTypes();

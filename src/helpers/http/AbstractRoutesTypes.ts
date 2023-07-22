@@ -9,7 +9,8 @@ export interface RouteConfig {
     description: string,
     params: ValidatorRequest,
     withJWT: boolean,
-    withAuthHeader?: boolean
+    withAuthHeader?: boolean,
+    resultType?: string,
 }
 
 export interface ResponseHttpController {

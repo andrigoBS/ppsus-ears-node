@@ -27,7 +27,13 @@ export default abstract class AbstractRoutes {
 
         const funcGeneric = async (req: Request, res: Response) => {
             const result = await this.genericProcess<T>(req, config.params, func);
-            return res.status(result.httpStatus).json(result.result);
+            const responseStatus = res.status(result.httpStatus);
+
+            if(config.resultType) {
+                return responseStatus.contentType(config.resultType).send(result.result);
+            }
+
+            return responseStatus.json(result.result);
         };
 
         new MethodMapping(this.router).setRoute(config, funcGeneric);
@@ -50,7 +56,8 @@ export default abstract class AbstractRoutes {
                 route.params.getSchema(),
                 tagPrefix,
                 route.withJWT,
-                route.withAuthHeader
+                route.withAuthHeader,
+                route.resultType,
             );
         });
 

@@ -1,4 +1,5 @@
 import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage';
+import { NotFoundOneTriageError } from './TriageErrors';
 import TriageRepository from './TriageRepository';
 import { QueryTriageDTO } from './TriageTypes';
 
@@ -21,5 +22,15 @@ export default class TriageService {
 
     public async getAll(params: QueryTriageDTO) {
         return this.triageRepository.getAll(params);
+    }
+
+    public async findById(id: number) {
+        const triage = await this.triageRepository.findById(id);
+
+        if(!triage) {
+            throw new NotFoundOneTriageError();
+        }
+
+        return triage;
     }
 }

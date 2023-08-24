@@ -16,7 +16,7 @@ import { Triage } from '../triage/Triage';
 
 /**
  * Bebê que será submetido aos exames e, eventualmente,
- * encaminhado à um serviço de referência.
+ * encaminhado a um serviço de referência.
  */
 @Entity('bebe')
 export class Baby extends BaseEntity {

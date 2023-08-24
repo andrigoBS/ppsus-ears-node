@@ -20,8 +20,8 @@ export default class ZoneRepository {
         ;
     }
 
-    public async getById(id: number): Promise<Zone | undefined> {
-        return Zone.findOne(id);
+    public async getById(id: number): Promise<Zone | null> {
+        return Zone.findOne({ where: { id } });
     }
 
     public async deleteZone(id: number): Promise<Zone> {

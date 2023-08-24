@@ -13,10 +13,11 @@ export default class TriageRoutes extends AbstractRoutes {
         super();
         this.triageController = new TriageController();
 
-        this.addSubRoute('/reports', 'Reports', new TriageReportsRoutes());
         this.create();
         this.getAll();
         this.triageTypes();
+
+        this.addSubRoute('/reports', 'Reports', new TriageReportsRoutes());
     }
 
     private create(): void {

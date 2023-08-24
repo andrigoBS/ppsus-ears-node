@@ -29,7 +29,7 @@ export default abstract class AbstractRoutes {
             const result = await this.genericProcess<T>(req, config.params, func);
             const responseStatus = res.status(result.httpStatus);
 
-            if(config.resultType) {
+            if(config.resultType && result.httpStatus < 400) {
                 return responseStatus.contentType(config.resultType).send(result.result);
             }
 

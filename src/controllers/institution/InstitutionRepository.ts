@@ -20,7 +20,7 @@ export default class InstitutionRepository {
         return query.execute();
     }
 
-    public async findOne(options: object): Promise<Institution | undefined>{
+    public async findOne(options: object): Promise<Institution | null>{
         return Institution.findOne(options);
     }
 

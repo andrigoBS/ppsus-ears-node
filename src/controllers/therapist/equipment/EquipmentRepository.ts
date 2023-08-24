@@ -10,8 +10,8 @@ export default class EquipmentRepository {
         return equipment.save();
     }
 
-    public async getOne(idEquipment: number): Promise<Equipment | undefined> {
-        return Equipment.findOne(idEquipment);
+    public async getOne(idEquipment: number): Promise<Equipment | null> {
+        return Equipment.findOne({ where: { id: idEquipment } });
     }
 
     public getAll(model?: string, brand?: string, dateOfLastCalibration?: string, listAllActives?: boolean): Promise<Equipment[] | undefined>{

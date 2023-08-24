@@ -9,6 +9,6 @@ export default class StateRepository {
     }
 
     public async getById(id: number) {
-        return State.findOne(id);
+        return State.findOne({ where: { id } });
     }
 }

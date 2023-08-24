@@ -8,10 +8,13 @@ export default class TriageRepository {
 
     public async getAll(query: QueryTriageDTO): Promise<Triage[]> {
         let triageQuery = Triage.createQueryBuilder('triage')
-            .select(['triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
+            .select([
+                'triage.id AS id',
+                'triage.leftEar AS leftEar', 'triage.rightEar AS rightEar',
                 'triage.evaluationDate AS evaluationDate', 'triage.type AS type',
                 'conduct.resultDescription AS conduct',
-                'institution.institutionName AS institution, conduct.testType AS testType'])
+                'institution.institutionName AS institution, conduct.testType AS testType'
+            ])
             .leftJoin('triage.conduct', 'conduct')
             .leftJoin('triage.institution', 'institution')
             .leftJoin('triage.therapist', 'therapist')
@@ -35,5 +38,20 @@ export default class TriageRepository {
         }
 
         return triageQuery.getRawMany();
+    }
+
+    public async findById(id: number): Promise<Triage | null> {
+        return Triage.findOne({
+            relations: [
+                'baby',
+                'baby.birthMother',
+                'equipment',
+                'orientation',
+                'conduct'
+            ],
+            where: {
+                id
+            }
+        });
     }
 }

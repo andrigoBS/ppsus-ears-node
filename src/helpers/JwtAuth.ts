@@ -1,7 +1,7 @@
 import { HttpStatus } from './http/AbstractHttpErrors';
 import { isArray } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 export class JwtAuth {
     private static readonly SECRET: string = process.env.JWT_SECRET || 'ppsus..!';

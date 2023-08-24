@@ -48,7 +48,6 @@ export default class InstitutionRoutes extends AbstractRoutes {
     }
 
     private getAll() {
-        console.log(this.institutionController);
         const config: RouteConfig = {
             description: 'Endpoint para recuperar todas as instituições',
             method: 'get',

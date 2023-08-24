@@ -17,6 +17,8 @@ export class UserRepository{
     }
 
     public async findOne(userType: MappingUser, authObj: AuthUser): Promise<User | undefined> {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
         let query = getRepository<User>(userType)
             .createQueryBuilder('u')
             .select('u.id','id')

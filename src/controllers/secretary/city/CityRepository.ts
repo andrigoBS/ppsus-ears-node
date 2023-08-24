@@ -14,8 +14,8 @@ export default class CityRepository {
         return query.execute();
     }
 
-    public async getById(id: number): Promise<City | undefined> {
-        return City.findOne(id);
+    public async getById(id: number): Promise<City | null> {
+        return City.findOne({ where: { id } });
     }
 
     public async updateCityZone(city: City): Promise<City> {

@@ -73,7 +73,7 @@ export class Triage extends BaseEntity {
     @ManyToOne(() => Baby, { nullable: false })
     baby: Baby;
 
-    @JoinTable ({ inverseJoinColumn: { name: 'fk_indicador' },
+    @JoinTable({ inverseJoinColumn: { name: 'fk_indicador' },
         joinColumn: { name: 'fk_triagem' }, name: 'triagem_indicador',
     })
     @ManyToMany(() => Indicator, (indicator) => indicator.triages)

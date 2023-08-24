@@ -10,8 +10,8 @@ export default class OrientationRepository {
         return orientation.save();
     }
 
-    public async getOne(idOrientation: number): Promise<Orientation | undefined> {
-        return Orientation.findOne(idOrientation);
+    public async getOne(idOrientation: number): Promise<Orientation | null> {
+        return Orientation.findOne({ where: { id: idOrientation } });
     }
 
     public async getAll(therapistID: number, description?: string, listAllActives?: boolean): Promise<Orientation[] | undefined>{

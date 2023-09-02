@@ -59,7 +59,7 @@ export default class CityRoutes extends AbstractRoutes {
                 ])
             ),
             path: '/:id',
-            withJWT: false
+            withJWT: true
         };
         this.addRoute<{id: number, zone: {id: number}}>(config, this.cityController.updateCityZone);
     }

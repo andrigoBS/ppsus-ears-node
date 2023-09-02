@@ -54,7 +54,7 @@ export default class ZoneRoutes extends AbstractRoutes {
                 new ValidatorNumber('id').min(1).required(true).withExample(1)
             ])),
             path: '/:id',
-            withJWT: false
+            withJWT: true
         };
         this.addRoute<{id: number}>(config, this.zoneController.getById);
     }
@@ -80,7 +80,7 @@ export default class ZoneRoutes extends AbstractRoutes {
                 new ValidatorNumber('id').min(1).required(true).withExample(1)
             ])),
             path: '/:id',
-            withJWT: false
+            withJWT: true
         };
         this.addRoute<{id: number}>(config, this.zoneController.deleteZone);
     }

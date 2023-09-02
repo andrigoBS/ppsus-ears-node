@@ -42,7 +42,7 @@ export default class InstitutionRoutes extends AbstractRoutes {
                 new ValidatorNumber('id').min(1).required(true).withExample(1)
             ])),
             path: '/:id',
-            withJWT: false
+            withJWT: true
         };
         this.addRoute<{id: number}>(config, this.institutionController.getOne);
     }

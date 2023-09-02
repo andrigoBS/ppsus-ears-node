@@ -69,7 +69,7 @@ export default class TriageReportsRoutes extends AbstractRoutes {
             ])),
             path: '/:triageId/test',
             resultType: 'application/pdf',
-            withJWT: false
+            withJWT: true
         };
         this.addRoute<{triageId: number}>(config, this.controller.fileTest);
     }

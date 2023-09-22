@@ -1,10 +1,8 @@
 import Cors from 'cors';
-import Dotenv from 'dotenv';
 import Express, { Application } from 'express';
-import 'reflect-metadata';
 import SwaggerUI from 'swagger-ui-express';
-import { createConnection, getConnectionOptions } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import DataSource from './config/DataSource';
+import EnvConfig from './config/EnvConfig';
 import Routes from './controllers/Routes';
 import SwaggerGenerateHelper from './helpers/SwaggerGenerateHelper';
 
@@ -21,8 +19,8 @@ export default class Server {
         return this;
     }
 
-    public setUpDotEnv(envFileName: string): Server {
-        Dotenv.config({ path: envFileName });
+    public configEnv(): Server {
+        new EnvConfig().configEnv();
         return this;
     }
 
@@ -36,21 +34,8 @@ export default class Server {
         return this;
     }
 
-    /* connect db. see .env for typeorm config */
     public configDatabase(): Server {
-        getConnectionOptions()
-            .then((envOptions) => {
-                const additionalOptions: any = { namingStrategy: new SnakeNamingStrategy() };
-                if (process.env.CLEARDB_DATABASE_URL) { // heroku db url
-                    additionalOptions.url = process.env.CLEARDB_DATABASE_URL;
-                }
-                return { ...envOptions, ...additionalOptions };
-            })
-            .then(createConnection)
-            .then(() => console.log('DB Connect'))
-            .catch(console.error)
-        ;
-
+        DataSource.initialize().then(() => console.log('DB Connect')).catch(console.error);
         return this;
     }
 

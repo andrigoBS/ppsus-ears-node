@@ -1,5 +1,6 @@
 import fs from 'fs';
 import fse from 'fs-extra';
+import EnvConfig from '../config/EnvConfig';
 
 class Build {
     public clearBuild(): Build {
@@ -13,15 +14,7 @@ class Build {
     }
 
     public CopyEnv(): Build {
-        let envFileName = '.env.development';
-
-        if(fs.existsSync('.env.production')) {
-            envFileName = '.env.production';
-        }
-
-        if(fs.existsSync('.env')) {
-            envFileName = '.env';
-        }
+        const envFileName = new EnvConfig().getEnvFileName();
 
         fse.copySync(envFileName, 'build/.env', { overwrite: true });
 

@@ -19,3 +19,6 @@ COPY --from=build /usr/src/app/build /usr/src/node
 RUN npm ci --only=production
 EXPOSE 80
 CMD ["npm", "start"]
+
+
+

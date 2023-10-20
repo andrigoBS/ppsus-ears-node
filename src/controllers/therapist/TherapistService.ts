@@ -1,8 +1,8 @@
-import { getConnection } from 'typeorm';
 import { Therapist } from '../../entity/therapist/Therapist';
 import { NotFoundTherapistError, OnFindTherapistError } from './TherapistErrors';
 import TherapistRepository from './TherapistRepository';
 import { TherapistIdName, TherapistXP, TherapistXPString } from './TherapistTypes';
+import dataSource from "../../config/DataSource";
 
 export default class TherapistService {
     private therapistRepository: TherapistRepository;
@@ -12,7 +12,7 @@ export default class TherapistService {
     }
 
     public async create(therapist: Therapist, emails: any[], phones: any[]): Promise<Therapist> {
-        const queryRunner = getConnection().createQueryRunner();
+        const queryRunner = dataSource.createQueryRunner();
         await queryRunner.startTransaction();
 
         const manager = queryRunner.manager;

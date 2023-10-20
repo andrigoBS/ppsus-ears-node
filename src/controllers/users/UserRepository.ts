@@ -1,8 +1,8 @@
-import { getRepository } from 'typeorm';
 import { EntityManager } from 'typeorm/entity-manager/EntityManager';
 import { UserTemplate } from '../../entity/decorators/templates/UserTemplate';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import { AuthUser, MappingUser, User } from './UserTypes';
+import dataSource from '../../config/DataSource';
 
 export class UserRepository{
     public async save<Type>(userType: MappingUser, user: UserTemplate, transaction?: EntityManager): Promise<Type>{
@@ -13,13 +13,13 @@ export class UserRepository{
         }
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        return getRepository<Type>(userType).save(user);
+        return dataSource.getRepository<Type>(userType).save(user);
     }
 
     public async findOne(userType: MappingUser, authObj: AuthUser): Promise<User | undefined> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
-        let query = getRepository<User>(userType)
+        let query = dataSource.getRepository<User>(userType)
             .createQueryBuilder('u')
             .select('u.id','id')
             .addSelect('u.name','name')

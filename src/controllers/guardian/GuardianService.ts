@@ -1,7 +1,7 @@
-import { getConnection } from 'typeorm';
 import { Guardian } from '../../entity/guardian/Guardian';
 import CryptoHelper from '../../helpers/CryptoHelper';
 import GuardianRepository from './GuardianRepository';
+import dataSource from '../../config/DataSource';
 
 export default class GuardianService {
     private guardianRepository: GuardianRepository;
@@ -19,7 +19,7 @@ export default class GuardianService {
     }
 
     public async create(guardian: Guardian, generateUser: boolean): Promise<Guardian> {
-        const queryRunner = getConnection().createQueryRunner();
+        const queryRunner = dataSource.createQueryRunner();
         await queryRunner.startTransaction();
 
         const manager = queryRunner.manager;

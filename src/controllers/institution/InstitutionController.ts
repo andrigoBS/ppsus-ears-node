@@ -1,16 +1,16 @@
 import { HttpStatus } from '../../helpers/http/AbstractHttpErrors';
-import { getConnection } from 'typeorm';
 import { Institution } from '../../entity/institution/Institution';
 import { InstitutionUser } from '../../entity/institution/InstitutionUser';
 import UserService from '../users/UserService';
 import InstitutionService from './InstitutionService';
+import dataSource from '../../config/DataSource'
 
 export default class InstitutionController {
     public async create(institutionUser: InstitutionUser) {
         const institutionService = new InstitutionService();
         const userService = new UserService();
 
-        const queryRunner = getConnection().createQueryRunner();
+        const queryRunner = dataSource.createQueryRunner();
         await queryRunner.startTransaction();
 
         const manager = queryRunner.manager;

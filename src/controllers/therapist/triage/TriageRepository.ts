@@ -1,8 +1,12 @@
 import { Triage } from '../../../entity/triage/Triage';
 import { QueryTriageDTO } from './TriageTypes';
+import {EntityManager} from "typeorm/entity-manager/EntityManager";
 
 export default class TriageRepository {
-    public async create(triage: Triage): Promise<Triage> {
+    public async create(triage: Triage, transaction?: EntityManager): Promise<Triage> {
+        if(transaction) {
+            return transaction.getRepository(Triage).save(triage);
+        }
         return Triage.save(triage);
     }
 

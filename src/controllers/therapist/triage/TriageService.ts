@@ -2,6 +2,7 @@ import { Triage, TriageString, TriageType } from '../../../entity/triage/Triage'
 import { NotFoundOneTriageError } from './TriageErrors';
 import TriageRepository from './TriageRepository';
 import { QueryTriageDTO } from './TriageTypes';
+import {EntityManager} from "typeorm/entity-manager/EntityManager";
 
 export default class TriageService {
     private triageRepository: TriageRepository;
@@ -10,8 +11,8 @@ export default class TriageService {
         this.triageRepository = new TriageRepository();
     }
 
-    public async create(triage: Triage) {
-        return this.triageRepository.create(triage);
+    public async create(triage: Triage, transaction?: EntityManager) {
+        return this.triageRepository.create(triage, transaction);
     }
 
     public async triageTypes() {

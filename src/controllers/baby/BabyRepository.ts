@@ -1,7 +1,11 @@
 import { Baby } from '../../entity/baby/Baby';
+import {EntityManager} from "typeorm/entity-manager/EntityManager";
 
 export default class BabyRepository {
-    public async save(baby: Baby): Promise<Baby> {
+    public async save(baby: Baby, transaction?: EntityManager): Promise<Baby> {
+        if(transaction) {
+            return transaction.getRepository(Baby).save(baby);
+        }
         return Baby.save(baby);
     }
 

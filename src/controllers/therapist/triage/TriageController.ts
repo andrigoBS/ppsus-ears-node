@@ -7,6 +7,7 @@ import BabyService from '../../baby/BabyService';
 import GuardianService from '../../guardian/GuardianService';
 import TriageService from './TriageService';
 import { QueryTriageDTO, TriageJwt } from './TriageTypes';
+import dataSource from "../../../config/DataSource";
 
 export default class TriageController {
     public async create(triageJson: TriageJwt) {
@@ -18,19 +19,31 @@ export default class TriageController {
 
         triageJson.therapist = { id: triageJson.jwtObject.id } as Therapist;
 
-        triageJson.baby.birthMother = await guardianService.create(triageJson.baby.birthMother, true);
-        if(triageJson.baby.guardians){
-            triageJson.baby.guardians = await guardianService.bulkCreate(triageJson.baby.guardians, true);
+        const queryRunner = dataSource.createQueryRunner();
+        await queryRunner.startTransaction();
+
+        const manager = queryRunner.manager;
+        try {
+            triageJson.baby.birthMother = await guardianService.addGuardianToTransaction(triageJson.baby.birthMother, true, manager);
+            if(triageJson.baby.guardians){
+                triageJson.baby.guardians = await guardianService.bulkCreate(triageJson.baby.guardians, true, manager);
+            }
+
+            triageJson.baby = await babyService.create(triageJson.baby, true, manager);
+
+            if(triageJson.indicators){
+                triageJson.indicators = triageJson.indicators.map((id) => ({ id: (id as unknown as number) } as Indicator));
+            }
+
+            const result = await triageService.create(triageJson as Triage, manager);
+
+            await queryRunner.commitTransaction();
+
+            return { httpStatus: HttpStatus.OK, result };
+        }catch (err) {
+            await queryRunner.rollbackTransaction();
+            throw err;
         }
-
-        triageJson.baby = await babyService.create(triageJson.baby, true);
-
-        if(triageJson.indicators){
-            triageJson.indicators = triageJson.indicators.map((id) => ({ id: (id as unknown as number) } as Indicator));
-        }
-
-        const result = await triageService.create(triageJson as Triage);
-        return { httpStatus: HttpStatus.OK, result };
     }
 
     public async getAll(params: QueryTriageDTO) {

@@ -15,9 +15,7 @@ export abstract class EmailTemplate extends BaseEntity {
     id: number;
 
     @IsEmail()
-    @Column({ comment: 'Endereço de email para contato', length: 255, name: 'email', type: 'varchar',
-        unique: true,
-    })
+    @Column({ comment: 'Endereço de email para contato', length: 255, name: 'email', type: 'varchar' })
     email: string;
 
     @Column({ comment: 'Marca o email principal da conta', default: false, name: 'is_principal',

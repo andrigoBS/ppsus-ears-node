@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner, TableColumn} from 'typeorm';
+import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class CreateCache1695362633163 implements MigrationInterface {
     name = 'CreateCache1695362633163';
@@ -9,7 +9,7 @@ export class CreateCache1695362633163 implements MigrationInterface {
             type: 'varchar',
         }), new TableColumn({
             comment: 'CNPJ do servico de referencia', length: '14', name: 'cnpj',
-            type: 'varchar',
+            type: 'varchar'
         }));
     }
 

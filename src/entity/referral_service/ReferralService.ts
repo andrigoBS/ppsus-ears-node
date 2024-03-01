@@ -43,7 +43,7 @@ export class ReferralService extends BaseEntity {
     })
     cnpj: string;
 
-    @Column({ length: 7, name: 'cnes', nullable: true, type: 'varchar' })
+    @Column({ length: 11, name: 'cnes', nullable: true, type: 'varchar' })
     cnes: string;
 
     @Column({ comment: 'Tipo de Serviço', enum: ReferralServiceType, name: 'tipo_servico', type: 'enum',

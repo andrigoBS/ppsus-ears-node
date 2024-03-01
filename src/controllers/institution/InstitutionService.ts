@@ -75,6 +75,13 @@ export default class InstitutionService {
 
         institution.institutionType = await this.getInstitutionType(institution.institutionType as InstitutionString);
 
+        if(institution.cnpj && institution.cnpj.length > 14) {
+            institution.cnpj = institution.cnpj
+                .replaceAll('.', '')
+                .replaceAll('-', '')
+                .replaceAll('/', '');
+        }
+
         await this.noSimilarOrError(institution);
 
         return this.institutionRepository.save(institution as Institution, transaction);

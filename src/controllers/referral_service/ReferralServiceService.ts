@@ -9,6 +9,12 @@ export default class ReferralServiceService {
     }
 
     public async create(referralService: ReferralService) {
+        if(referralService.cnpj && referralService.cnpj.length > 14) {
+            referralService.cnpj = referralService.cnpj
+                .replaceAll('.', '')
+                .replaceAll('-', '')
+                .replaceAll('/', '');
+        }
         return this.referralServiceRepository.create(referralService);
     }
 

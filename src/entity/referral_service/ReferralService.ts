@@ -1,6 +1,6 @@
 import { ValidateNested } from 'class-validator';
 import {
-    BaseEntity, BeforeInsert, BeforeUpdate,
+    BaseEntity,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
@@ -78,15 +78,4 @@ export class ReferralService extends BaseEntity {
         cascade: ['soft-remove', 'recover', 'remove'],
     })
     phones: Phone[];
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    validateCNPJ(): void {
-        if(this.cnpj && this.cnpj.length > 14) {
-            this.cnpj = this.cnpj
-                .replace('.', '')
-                .replace('-', '')
-                .replace('/', '');
-        }
-    }
 }

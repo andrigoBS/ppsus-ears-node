@@ -1,8 +1,6 @@
 import { ValidateNested } from 'class-validator';
 import {
     BaseEntity,
-    BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
     ManyToMany,
@@ -63,14 +61,4 @@ export class Institution extends BaseEntity {
     @OneToMany(() => Triage, (triage) => triage.therapist)
     triages: Triage;
 
-    @BeforeInsert()
-    @BeforeUpdate()
-    validateCNPJ(): void {
-        if(this.cnpj && this.cnpj.length > 14) {
-            this.cnpj = this.cnpj
-                .replace('.', '')
-                .replace('-', '')
-                .replace('/', '');
-        }
-    }
 }

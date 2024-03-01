@@ -1,6 +1,6 @@
 import { ValidateNested } from 'class-validator';
 import {
-    BaseEntity,
+    BaseEntity, BeforeInsert, BeforeUpdate,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
@@ -38,7 +38,7 @@ export class ReferralService extends BaseEntity {
     })
     name: string;
 
-    @Column({ comment: 'CNPJ do servico de referencia', length: 13, name: 'cnpj', nullable: true,
+    @Column({ comment: 'CNPJ do servico de referencia', length: 14, name: 'cnpj', nullable: true,
         type: 'varchar',
     })
     cnpj: string;
@@ -79,4 +79,14 @@ export class ReferralService extends BaseEntity {
     })
     phones: Phone[];
 
+    @BeforeInsert()
+    @BeforeUpdate()
+    validateCNPJ(): void {
+        if(this.cnpj && this.cnpj.length > 14) {
+            this.cnpj = this.cnpj
+                .replace('.', '')
+                .replace('-', '')
+                .replace('/', '');
+        }
+    }
 }

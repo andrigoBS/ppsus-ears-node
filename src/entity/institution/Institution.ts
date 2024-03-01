@@ -1,5 +1,14 @@
 import { ValidateNested } from 'class-validator';
-import { BaseEntity, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    BaseEntity,
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import { InstitutionType } from '../../controllers/institution/InstitutionTypes';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { Therapist } from '../therapist/Therapist';
@@ -53,4 +62,15 @@ export class Institution extends BaseEntity {
 
     @OneToMany(() => Triage, (triage) => triage.therapist)
     triages: Triage;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    validateCNPJ(): void {
+        if(this.cnpj && this.cnpj.length > 14) {
+            this.cnpj = this.cnpj
+                .replace('.', '')
+                .replace('-', '')
+                .replace('/', '');
+        }
+    }
 }

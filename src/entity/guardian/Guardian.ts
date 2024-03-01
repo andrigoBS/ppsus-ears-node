@@ -1,5 +1,5 @@
 import { ValidateNested } from 'class-validator';
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { Baby } from '../baby/Baby';
 import { AddressComponent as Address } from '../decorators/components/Address';
 import { UserTemplate as User } from '../decorators/templates/UserTemplate';
@@ -38,4 +38,14 @@ export class Guardian extends User {
     })
     phones: Phone[];
 
+    @BeforeInsert()
+    @BeforeUpdate()
+    validateCPF(): void {
+        if(this.cpf && this.cpf.length > 11) {
+            this.cpf = this.cpf
+                .replace('.', '')
+                .replace('-', '')
+                .replace('/', '');
+        }
+    }
 }
